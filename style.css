@@ -1,0 +1,195 @@
+/* Estilo para el menú de selección de años */
+#selectCountry,
+#selectStartYear,
+#selectEndYear {
+    width: auto; /* Ajusta el ancho automáticamente según el contenido */
+    display: inline-block; /* Muestra las opciones en línea */
+    padding: 5px 10px; /* Espaciado interno para las opciones */
+    margin-right: 10px; /* Espaciado entre las opciones */
+    border: 1px solid #ccc; /* Borde alrededor del menú */
+    border-radius: 5px; /* Bordes redondeados */
+    background-color: #fff; /* Fondo blanco */
+    color: #333; /* Color de texto */
+}
+
+
+/* Comienzo edicion botones */
+/* Comienzo edicion botones */
+#filterButton {
+    display: inline-block; /* Muestra el botón en línea */
+    padding: 5px 10px; /* Espaciado interno para el botón */
+    background-color: #007bff; /* Fondo azul */
+    color: #fff; /* Color de texto blanco */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    
+}
+
+/* Cambia el color del botón al pasar el cursor sobre él */
+#filterButton:hover {
+    background-color: #0056b3;
+}
+
+#resetButton {
+    display: inline-block; /* Muestra el botón en línea */
+    padding: 5px 10px; /* Espaciado interno para el botón */
+    background-color: #007bff; /* Fondo azul */
+    color: #fff; /* Color de texto blanco */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    
+}
+
+/* Cambia el color del botón al pasar el cursor sobre él */
+#resetButton:hover {
+    background-color: #0056b3;
+}
+
+#fullscreen-button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    border-radius: 5px;
+
+
+}
+
+#fullscreen-button:hover {
+    background-color: #0056b3;
+}
+
+
+
+
+/* FIN edicion botones */
+/* FIN edicion botones */
+
+/* Estilo para la lista de casillas de verificación */
+.checkbox-list {
+    max-height: 200px; /* Altura máxima de la lista */
+    overflow-y: scroll; /* Agregar una barra de desplazamiento vertical si es necesario */
+}
+
+/* Estilo para las casillas de verificación */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 12px; /* Ancho deseado de la casilla de verificación */
+    height: 12px; /* Altura deseada de la casilla de verificación */
+    margin-right: 8px; /* Espacio entre la casilla y el texto */
+}
+
+/* Estilo para el texto junto a las casillas de verificación */
+.checkbox-label label {
+    font-size: 12px; /* Tamaño de fuente del texto */
+    color: #333; /* Color del texto */
+    cursor: pointer; /* Cambiar el cursor al pasar sobre el texto */
+}
+
+/* Estilo para la lista de casillas de verificación */
+.checkbox-list {
+    margin-bottom: 5px;
+    max-height: 270px; /* Altura máxima de la lista */
+    max-width: 200px;
+    overflow-y: scroll; /* Agregar una barra de desplazamiento vertical si es necesario */
+
+}
+
+/* Estilo para las casillas de verificación */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    
+}
+.checkbox-label:hover {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    background: rgb(209, 207, 207);
+    cursor: pointer;
+    border-radius: 5px;
+    
+}
+
+
+.checkbox-label input[type="checkbox"] {
+    width: 12px; /* Ancho deseado de la casilla de verificación */
+    height: 12px; /* Altura deseada de la casilla de verificación */
+    margin-right: 8px; /* Espacio entre la casilla y el texto */
+}
+
+/* Estilo para el texto junto a las casillas de verificación */
+.checkbox-label label {
+    font-size: 12px; /* Tamaño de fuente del texto */
+    color: #333; /* Color del texto */
+    cursor: pointer; /* Cambiar el cursor al pasar sobre el texto */
+}
+
+/* Estilo para el cuadro de búsqueda */
+#countrySearch {
+    width: 50%;
+    padding: 8px;
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+body {
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: flex-start; /* Align the content to the top */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    
+}
+
+
+
+
+/* Style for the fullscreen overlay */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 1.7); /* Semi-transparent black background */
+    z-index: 1000; /* Make sure it's on top of everything */
+}
+
+
+
+/* Center the content within the overlay */
+#debate_1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-height: 80%;
+    max-width: 95%;
+    background-color: #fff; /* White background for the content */
+
+}
+
+/*additional layer on top of debate_1 when fullscreen activated*/
+.center-content {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100%; /* Occupy the full screen height */
+}
+
+
+
+
