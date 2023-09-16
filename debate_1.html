@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Curso de Plotly.js - Clase 1</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Incluir el archivo JavaScript de tu gráfico personalizado -->
+    <script type="module" src="python.mjs"></script>
+    
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+<body>
+
+
+    <div id="overlay">
+        <div id='debate_1'>
+                <!-- Sección1 parte izquierda de la pantalla -->
+            <div class="left-section">
+                <h3>Select countries:</h3>
+                <label for="selectStartYear">Start Year:</label>
+                <select id="selectStartYear"></select>
+                <label for="selectEndYear">End Year:</label>
+                <select id="selectEndYear"></select>
+                <button id="filterButton">Update</button>
+                <input type="text" id="countrySearch" placeholder="Search countries...">
+                <div id="countrySelection" class="checkbox-list">
+                    <!-- Aquí se generarán las casillas de verificación de los países -->
+                </div>
+                <button id="resetButton">Reset Countries</button>
+
+            </div>
+            
+                <!-- Sección2 parte derecha de la pantalla -->
+            <div class="right-section">
+                <div id="chart1"></div>
+                <button id="fullscreen-button">Full Screen</button>
+            </div>
+        </div>
+    </div>
+    
+    
+</body>
+</html>
