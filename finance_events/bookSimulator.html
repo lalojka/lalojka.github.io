@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Book</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #book {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .page {
+            max-width: 400px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            position: absolute;
+            left: 0;
+            transform: scaleX(1);
+            transform-origin: right;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .page.hidden {
+            transform: scaleX(0);
+        }
+
+        .page.hidden2 {
+            transform: scaleX(0);
+            left: -400px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="book">
+        <div class="page" id="page1">
+            <h1>Rapid Economic Growth (Early 1990s)</h1>
+            <p>The affected Asian economies, including Thailand, South Korea, Indonesia, Malaysia, and others, experienced rapid economic growth in the early 1990s. This growth was fueled by foreign investments, particularly in real estate and infrastructure.</p>
+            <iframe width="600" height="450" src="https://lookerstudio.google.com/embed/reporting/5186bd6e-d27f-4d52-a71e-76ebade5c3ab/page/p_ygys20vdad" frameborder="0" style="border:0" allowfullscreen></iframe>
+            <button id="nextPage">Next Page</button>
+        </div>
+        <div class="page hidden hidden2" id="page2">
+            <h1>Current Account Deficits (Mid-1990s)</h1>
+            <p>Current account deficits began to emerge in these countries as they imported more than they exported. This led to a reliance on foreign capital to finance the deficits.</p>
+            <iframe width="600" height="450" src="https://lookerstudio.google.com/embed/reporting/5186bd6e-d27f-4d52-a71e-76ebade5c3ab/page/p_f26souhkad" frameborder="0" style="border:0" allowfullscreen></iframe>
+            <button id="prevPage">Previous Page</button>
+            <button id="nextPage2">Next Page</button>
+        </div>
+        <div class="page hidden hidden2" id="page3">
+            <h1>Overvalued Currencies (1996-1997)</h1>
+            <iframe width="600" height="450" src="https://lookerstudio.google.com/embed/reporting/5186bd6e-d27f-4d52-a71e-76ebade5c3ab/page/p_zlorq9vdad" frameborder="0" style="border:0" allowfullscreen></iframe>
+            <p>This is the content of page 3.</p>
+
+            <button id="prevPage2">Previous Page</button>
+            <button id="nextPage3">Next Page</button>
+        </div>
+        <div class="page hidden hidden2" id="page4">
+            <h1>Page 4</h1>
+            <iframe width="600" height="450" src="https://lookerstudio.google.com/embed/reporting/5186bd6e-d27f-4d52-a71e-76ebade5c3ab/page/p_v19crpkiad" frameborder="0" style="border:0" allowfullscreen></iframe>
+            <p>This is the content of page 4.</p>
+            <button id="prevPage3">Previous Page</button>
+            <button id="nextPage4">Next Page</button>
+        </div>
+        <div class="page hidden hidden2" id="page5">
+            <h1>Page 5</h1>
+            <p>This is the content of page 5.</p>
+            <button id="prevPage4">Previous Page</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const pages = [...document.querySelectorAll(".page")];
+            const nextPageButtons = [...document.querySelectorAll("button[id^='nextPage']")];
+            const prevPageButtons = [...document.querySelectorAll("button[id^='prevPage']")];
+            let currentPage = 0;
+
+            function showPage(pageIndex) {
+                pages.forEach((page, index) => {
+                    if (index === pageIndex) {
+                        page.classList.remove("hidden");
+                        page.classList.remove("hidden2");
+                    } else {
+                        page.classList.add("hidden");
+                        if (index < pageIndex) {
+                            page.classList.add("hidden2");
+                        }
+                    }
+                });
+            }
+
+            nextPageButtons.forEach((button, index) => {
+                button.addEventListener("click", function () {
+                    if (currentPage < pages.length - 1) {
+                        currentPage++;
+                        showPage(currentPage);
+                    }
+                });
+            });
+
+            prevPageButtons.forEach((button, index) => {
+                button.addEventListener("click", function () {
+                    if (currentPage > 0) {
+                        currentPage--;
+                        showPage(currentPage);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
