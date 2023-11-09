@@ -2,9 +2,27 @@
 <html>
 <head>
     <title>Reproductor de Video</title>
+    <style>
+        body {
+            background-color: black;
+            text-align: center;
+            padding-top: 0; /* Elimina el espacio superior */
+            margin: 0; /* Elimina márgenes */
+            height: 100vh; /* El 100% de la altura de la ventana del navegador */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        video {
+
+            height: 100%; /* El 100% de la altura de la ventana */
+            width: auto; /* Ancho automático para mantener la relación de aspecto original */
+        }
+    </style>
 </head>
-<body style="background-color: black; text-align: center; padding-top: 50px;">
-    <video controls autoplay style="max-width: 100%;">
+<body>
+    <video controls autoplay>
         <source src="VID-20230929-WA0003.mp4" type="video/mp4">
         Tu navegador no admite la reproducción de videos.
     </video>
