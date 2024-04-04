@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" style="max-width: 320px; max-height: 480px; overflow: hidden;">
+<head>
+    <meta charset="UTF-8">
+    <title>Título de tu página</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+    <div class="container">
+        
+        <button id="cta-button">Saber Más</button>
+        <img src="resources/images/320x480_AON_Ofertas.jpg" alt="Imagen Promocional" />
+    </div>
+
+    <script src="main.js"></script>
+    <script src="resources/scripts/utils.js"></script>
+    <script src="resources/scripts/cambio.js"></script> <!-- Agregar el nuevo script aquí -->
+
+    <!-- Llama a la función para agregar el reloj -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            agregarReloj(); // Añade un reloj en tiempo real al cargar la página
+            saludar();
+
+
+        });
+    </script>
+</body>
+</html>
