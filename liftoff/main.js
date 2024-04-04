@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     ctaButton.addEventListener('click', function() {
         // Añade un evento de clic al botón
-        var destinationUrl = "https://www.htp-data.com"; // URL de destino a la que quieres dirigir a los usuarios
+        var destinationUrl = "https://www.winclap.com"; // URL de destino a la que quieres dirigir a los usuarios
         
         // Intenta usar mraid.open() si está en un entorno compatible con MRAID
         if (typeof mraid !== 'undefined' && mraid.open) {
