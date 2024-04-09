@@ -3,9 +3,9 @@ const messages = [
     { sender: "Julian", text: "¡Sí! ¡Arranco!" },
     { sender: "Julian", text: "julian:300" },
     { sender: "Marcos", text: "julian:300,marcos:400" },
-    { sender: "Fernando", text: "julian:300,marcos:400,\nfernando:0" },
-    { sender: "Carlos", text: "julian:300,marcos:400,\nfernando:0,carlos:1000" },
-    { sender: "Leandro", text: "julian:300,marcos:400,\nfernando:0,carlos:1000,\nleandro:0" },
+    { sender: "Fernando", text: "julian:300,marcos:400,<br><br>fernando:0" },
+    { sender: "Carlos", text: "julian:300,marcos:400,<br><br>fernando:0,carlos:1000" },
+    { sender: "Leandro", text: "julian:300,marcos:400,<br><br>fernando:0,carlos:1000,<br><br>leandro:0" },
     { sender: "Leandro", text: "¿Ya sumaron todos los gastos?" },
     { sender: "Leandro", text: "Les comparto la división:<br><br>Total gastado: 1700<br>Cantidad de personas: 5<br>Gasto promedio por persona: 340<br><br>Julian debe pagarle 40 a Marcos<br>Fernando debe pagarle 20 a Marcos y 320 a Carlos<br>Leandro debe pagarle 340 a carlos<br><br>" }
 
