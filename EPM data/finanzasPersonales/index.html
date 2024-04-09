@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan Financiero Mensual</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Plan Financiero Mensual</h1>
+    <div class="inputs-container">
+      <div class="columna">
+        <label for="salario">Salario Neto de impuestos:</label>
+        <input type="number" id="salario" placeholder="Salario Neto de impuestos">
+        <label for="gastoFijo">Gastos fijos:</label>
+        <input type="number" id="gastoFijo" placeholder="Gastos fijos">
+        <label for="gastoVariable">Gastos variables:</label>
+        <input type="number" id="gastoVariable" placeholder="Gastos variables">
+        <label for="inversiones">Inversiones:</label>
+        <input type="number" id="inversiones" placeholder="Inversiones">
+        <label for="ahorro"  >Ahorro:</label>
+        <input type="number" id="ahorro" placeholder="El ahorro se calcula de manera automática" readonly>
+      </div>
+      <div class="columna">
+        <label for="ingresoExtra1">Ingreso Extra 1:</label>
+        <div class="input-container">
+          <input type="number" id="ingresoExtra1" placeholder="Ingreso Extra 1">
+          <select id="mesIngresoExtra1"></select>
+        </div>
+        <label for="ingresoExtra2">Ingreso Extra 2:</label>
+        <div class="input-container">
+          <input type="number" id="ingresoExtra2" placeholder="Ingreso Extra 2">
+          <select id="mesIngresoExtra2"></select>
+        </div>
+        <label for="ingresoExtra3">Ingreso Extra 3:</label>
+        <div class="input-container">
+          <input type="number" id="ingresoExtra3" placeholder="Ingreso Extra 3">
+          <select id="mesIngresoExtra3"></select>
+        </div>
+        <label for="ingresoExtra4">Ingreso Extra 4:</label>
+        <div class="input-container">
+          <input type="number" id="ingresoExtra4" placeholder="Ingreso Extra 4">
+          <select id="mesIngresoExtra4"></select>
+        </div>
+        <label for="ingresoExtra5">Ingreso Extra 5:</label>
+        <div class="input-container">
+          <input type="number" id="ingresoExtra5" placeholder="Ingreso Extra 5">
+          <select id="mesIngresoExtra5"></select>
+        </div>
+      </div>
+      <div class="columna">
+        <label for="gastoExtra1">Gasto Extra 1:</label>
+        <div class="input-container">
+          <input type="number" id="gastoExtra1" placeholder="Gasto Extra 1">
+          <select id="mesGastoExtra1"></select>
+        </div>
+        <label for="gastoExtra2">Gasto Extra 2:</label>
+        <div class="input-container">
+          <input type="number" id="gastoExtra2" placeholder="Gasto Extra 2">
+          <select id="mesGastoExtra2"></select>
+        </div>
+        <label for="gastoExtra3">Gasto Extra 3:</label>
+        <div class="input-container">
+          <input type="number" id="gastoExtra3" placeholder="Gasto Extra 3">
+          <select id="mesGastoExtra3"></select>
+        </div>
+        <label for="gastoExtra4">Gasto Extra 4:</label>
+        <div class="input-container">
+          <input type="number" id="gastoExtra4" placeholder="Gasto Extra 4">
+          <select id="mesGastoExtra4"></select>
+        </div>
+        <label for="gastoExtra5">Gasto Extra 5:</label>
+        <div class="input-container">
+          <input type="number" id="gastoExtra5" placeholder="Gasto Extra 5">
+          <select id="mesGastoExtra5"></select>
+        </div>
+      </div>
+      
+    </div>
+    <button onclick="calcularPlan(); agregarColumnaTotal(); aplicarFormatoAhorro(); calcularTotalAhorroAcumuladoPorMes();verificarAhorroSuficientePorMes()">Calcular</button>
+
+    <table id="tabla">
+      <thead>
+        <tr>
+          <th>Parámetros</th>
+          <th>Enero</th>
+          <th>Febrero</th>
+          <th>Marzo</th>
+          <th>Abril</th>
+          <th>Mayo</th>
+          <th>Junio</th>
+          <th>Julio</th>
+          <th>Agosto</th>
+          <th>Septiembre</th>
+          <th>Octubre</th>
+          <th>Noviembre</th>
+          <th>Diciembre</th>
+          <th>Anual</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Los resultados se llenarán aquí -->
+      </tbody>
+    </table>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

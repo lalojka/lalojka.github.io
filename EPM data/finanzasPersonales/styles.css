@@ -1,0 +1,55 @@
+.container {
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  .inputs-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .columna {
+    width: 33%;
+  }
+  
+  .inputs-container .columna {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .inputs-container .columna label {
+    margin-bottom: 5px;
+  }
+  
+  .inputs-container .columna .input-container {
+    display: flex;
+    width: 100%;
+  }
+  
+  .inputs-container .columna .input-container input, .inputs-container .columna .input-container select {
+    width: 50%;
+    margin-bottom: 10px;
+  }
+  
+  button {
+    display: block;
+    margin: 20px auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  table, th, td {
+    border: 1px solid black;
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: center;
+  }
+  
+  
+  
