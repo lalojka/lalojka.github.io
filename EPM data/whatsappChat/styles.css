@@ -5,7 +5,7 @@ body {
 }
 
 #chat-container {
-    max-width: 600px;
+    max-width: 480px;
     margin: 20px auto;
     padding: 20px;
     border: 1px solid #ccc;
@@ -57,12 +57,12 @@ body {
 .incoming {
     text-align: left;
     background-color: #f2f2f2; /* Color de fondo para los mensajes entrantes */
-    width: 60%; /* Ancho del mensaje entrante */
+    width: 288px; /* Ancho del mensaje entrante */
 }
 
 .outgoing {
     margin-left: auto; /* Alinear a la derecha */
     text-align: left;
     background-color: #dcf8c6; /* Color de fondo para los mensajes salientes */
-    width: 60%; /* Ancho del mensaje saliente */
+    width: 288px; /* Ancho del mensaje saliente */
 }
