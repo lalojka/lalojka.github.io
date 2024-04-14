@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Botón Armar Plan Financiero</title>
+  <style>
+    #botonArmarPlan {
+      background-color: #083963; /* Color de fondo */
+      color: white; /* Color del texto */
+      border: none; /* Sin borde */
+      padding: 10px 20px; /* Espaciado interno */
+      font-size: 16px; /* Tamaño de fuente */
+      cursor: pointer; /* Cursor al pasar */
+      border-radius: 5px; /* Bordes redondeados */
+
+    }
+  </style>
+</head>
+<body>
+  <button id="botonArmarPlan">Armar Plan Financiero</button>
+  <script>
+    // Función que se ejecuta al hacer clic en el botón "Armar Plan Financiero"
+    function abrirIndexEnPantallaCompleta() {
+      // Abrir index.html en pantalla completa
+      window.location.href = 'index.html';
+    }
+
+    // Obtener el botón "Armar Plan Financiero" por su ID
+    const botonArmarPlan = document.getElementById('botonArmarPlan');
+
+    // Agregar un event listener al botón para ejecutar la función al hacer clic
+    botonArmarPlan.addEventListener('click', abrirIndexEnPantallaCompleta);
+  </script>
+</body>
+</html>

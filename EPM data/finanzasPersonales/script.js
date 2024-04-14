@@ -245,41 +245,31 @@ function aplicarFormatoAhorro() {
 // Array para almacenar los mensajes por mes
 let mensajesPorMes = [];
 
+let alertaMostrada = false;
+
 function verificarAhorroSuficientePorMes() {
   const tablaBody = document.querySelector('tbody');
   const filaTotalAhorroAcumulado = tablaBody.querySelector('tr:last-child');
   const valoresAhorroAcumulado = Array.from(filaTotalAhorroAcumulado.querySelectorAll('td')).slice(1); // Obtener los valores de ahorro acumulado por mes
   
-  valoresAhorroAcumulado.forEach((valor, index) => {
-    const mes = meses[index];
-    const valorAhorro = parseFloat(valor.textContent.replace(',', ''));
-    if (valorAhorro < 0) {
-      // Verificar si ya existe un mensaje para este mes
-      const mensajeExistente = mensajesPorMes[index];
-      if (mensajeExistente) {
-        // Si existe, actualizar el mensaje
-        mensajeExistente.innerHTML = `<p>No te alcanza el dinero en ${mes}</p>`;
-      } else {
-        // Si no existe, crear un nuevo mensaje y agregarlo al array
-        const mensaje = document.createElement('div');
-        mensaje.innerHTML = `<p>No te alcanza el dinero en ${mes}</p>`;
-        document.querySelector('.container').appendChild(mensaje);
-        mensajesPorMes[index] = mensaje;
+  // Verificar si ya se ha mostrado la alerta
+  if (!alertaMostrada) {
+    valoresAhorroAcumulado.forEach((valor, index) => {
+      const mes = meses[index];
+      const valorAhorro = parseFloat(valor.textContent.replace(',', ''));
+      if (valorAhorro < 0) {
+        // Mostrar mensaje de alerta con SweetAlert2
+        alertaMostrada = true; // Establecer la variable de control como verdadera para evitar mostrar más alertas
+        Swal.fire({
+          icon: 'error',
+          title: 'El dinero no te alcanzará',
+          html: `El dinero no te alcanzará en ${mes}.<br>Debes modificar algunas variables para poder cumplir con tus objetivos financieros`,
+          confirmButtonColor: '#3085d6', // Cambia el color del botón "OK" a azul
+        });
       }
-    } else {
-      // Si el valor es positivo, eliminar el mensaje si existe
-      const mensajeExistente = mensajesPorMes[index];
-      if (mensajeExistente) {
-        mensajeExistente.remove();
-        mensajesPorMes[index] = undefined;
-      }
-    }
-  });
+    });
+  }
 }
-
-
-
-
 
 
 
