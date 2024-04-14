@@ -1,12 +1,19 @@
-// Función que se ejecuta al hacer clic en el botón "Armar Plan Financiero"
-function abrirPlanEnPantallaCompleta() {
-    // Solicitar el modo de pantalla completa para el elemento raíz del documento
-    document.documentElement.requestFullscreen();
+function abrirPlanFinanciero() {
+  // Selecciona el contenedor del plan financiero
+  const planFinanciero = document.querySelector('.container');
+
+  // Quita la clase 'hidden' para mostrar el contenedor
+  planFinanciero.classList.remove('hidden');
+
+  // Verifica si el navegador admite el modo de pantalla completa
+  if (planFinanciero.requestFullscreen) {
+    // Solicita abrir en pantalla completa
+    planFinanciero.requestFullscreen();
+  } else if (planFinanciero.mozRequestFullScreen) { /* Firefox */
+    planFinanciero.mozRequestFullScreen();
+  } else if (planFinanciero.webkitRequestFullscreen) { /* Chrome, Safari y Opera */
+    planFinanciero.webkitRequestFullscreen();
+  } else if (planFinanciero.msRequestFullscreen) { /* Internet Explorer / Edge */
+    planFinanciero.msRequestFullscreen();
   }
-  
-  // Obtener el botón "Armar Plan Financiero" por su ID
-  const botonArmarPlan = document.getElementById('botonArmarPlan');
-  
-  // Agregar un event listener al botón para ejecutar la función al hacer clic
-  botonArmarPlan.addEventListener('click', abrirPlanEnPantallaCompleta);
-  
+}
