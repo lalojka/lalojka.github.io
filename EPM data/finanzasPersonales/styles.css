@@ -40,10 +40,10 @@
 }
 
 button {
-  display: block;
-  margin: 20px auto;
-  background: #083963
-  
+  border-radius: 5px;
+  background-color: #083963;
+  color: white;
+  font-weight: bold;
 
 }
 
@@ -60,5 +60,13 @@ th, td {
   padding: 8px;
   text-align: center;
 }
+
+#btnArmarPlanFinanciero {
+  border-radius: 5px;
+  background-color: #083963;
+  color: white;
+  font-weight: bold;
+}
+
 
 
