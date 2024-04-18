@@ -1,3 +1,5 @@
+
+
 // Obtener referencia a los selectores de mes
 const mesesSelects = document.querySelectorAll('select');
 
@@ -41,6 +43,23 @@ function calcularPlan() {
   const mesGastoExtra3 = document.getElementById('mesGastoExtra3').value;
   const mesGastoExtra4 = document.getElementById('mesGastoExtra4').value;
   const mesGastoExtra5 = document.getElementById('mesGastoExtra5').value;
+
+  // Validar que los valores ingresados sean mayores o iguales a cero
+  if (salario < 0 || gastoFijo < 0 || gastoVariable < 0 || inversiones < 0 ||
+    ingresoExtra1 < 0 || ingresoExtra2 < 0 || ingresoExtra3 < 0 || ingresoExtra4 < 0 || ingresoExtra5 < 0 ||
+    gastoExtra1 < 0 || gastoExtra2 < 0 || gastoExtra3 < 0 || gastoExtra4 < 0 || gastoExtra5 < 0) {
+  // Mostrar un mensaje de error utilizando SweetAlert2
+  Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text: 'Por favor, asegúrate de ingresar valores mayores o iguales a cero.',
+    confirmButtonColor: '#3085d6', // Cambia el color del botón "OK" a azul
+  });
+  // Detener la ejecución de la función
+  return;
+}
+
+
 
   const subtotalAhorro = salario - gastoFijo - gastoVariable - inversiones;
 
@@ -170,8 +189,12 @@ function calcularTotalAhorroAcumuladoPorMes() {
   meses.forEach((mes, index) => {
     let totalAhorroAcumulado = 0;
     for (let i = 0; i <= index; i++) {
-      const valorMes = parseFloat(filas[filas.length - 1].querySelector(`td:nth-child(${i + 2})`).textContent.replace(',', ''));
-      totalAhorroAcumulado += valorMes;
+      const valorMes = filas[filas.length - 1].querySelector(`td:nth-child(${i + 2})`).textContent;
+      if (valorMes.includes('M')) {
+        totalAhorroAcumulado += parseFloat(valorMes.replace(/[,M]/g, '')) * 1000000; // Convertir millones a su equivalente numérico
+      } else {
+        totalAhorroAcumulado += parseFloat(valorMes.replace(/[,]/g, '')); // Eliminar comas y convertir a número
+      }
     }
     const columnaMes = document.createElement('td');
     columnaMes.textContent = formatoNumero(totalAhorroAcumulado);
@@ -191,7 +214,13 @@ function agregarColumnaTotal() {
     
     // Sumamos los valores de cada celda en la fila (excepto la primera que es el nombre del parámetro)
     fila.querySelectorAll('td:not(:first-child)').forEach(celda => {
-      total += parseFloat(celda.textContent.replace(',', '').trim()) || 0; // Convertimos el texto de la celda a número y sumamos
+      let valor = celda.textContent.trim(); // Obtener el contenido de la celda sin espacios al inicio o al final
+      
+      if (valor.includes('M')) {
+        total += parseFloat(valor.replace(/[,M]/g, '')) * 1000000; // Convertir millones a su equivalente numérico
+      } else {
+        total += parseFloat(valor.replace(/[,]/g, '')) || 0; // Convertir el texto de la celda a número y sumar
+      }
     });
 
     // Creamos una nueva celda para mostrar el total y la agregamos al final de la fila
@@ -205,6 +234,7 @@ function agregarColumnaTotal() {
     }
   });
 }
+
 
 
 function aplicarFormatoAhorro() {
@@ -254,20 +284,32 @@ function verificarAhorroSuficientePorMes() {
   
   // Verificar si ya se ha mostrado la alerta
   if (!alertaMostrada) {
+    let primerMesNegativo = '';
+    
     valoresAhorroAcumulado.forEach((valor, index) => {
       const mes = meses[index];
       const valorAhorro = parseFloat(valor.textContent.replace(',', ''));
-      if (valorAhorro < 0) {
-        // Mostrar mensaje de alerta con SweetAlert2
-        alertaMostrada = true; // Establecer la variable de control como verdadera para evitar mostrar más alertas
-        Swal.fire({
-          icon: 'error',
-          title: 'El dinero no te alcanzará',
-          html: `El dinero no te alcanzará en ${mes}.<br>Debes modificar algunas variables para poder cumplir con tus objetivos financieros`,
-          confirmButtonColor: '#3085d6', // Cambia el color del botón "OK" a azul
-        });
+      
+      if (valorAhorro < 0 && !primerMesNegativo) {
+        primerMesNegativo = mes;
       }
     });
+    
+    // Mostrar mensaje de alerta solo si se encontró un mes con valor negativo
+    if (primerMesNegativo) {
+      alertaMostrada = true; // Establecer la variable de control como verdadera para evitar mostrar más alertas
+      
+      Swal.fire({
+        icon: 'error',
+        title: 'El dinero no te alcanzará',
+        html: `El dinero no te alcanzará en ${primerMesNegativo}.<br>Debes modificar algunas variables para poder cumplir con tus objetivos financieros`,
+        confirmButtonColor: '#3085d6', // Cambia el color del botón "OK" a azul
+      });
+    }
+    // Restablecer la variable alertaMostrada a false
+    alertaMostrada = false;
+
+
   }
 }
 
@@ -275,8 +317,13 @@ function verificarAhorroSuficientePorMes() {
 
 
 
-
 // Función para formatear números con separador de miles y sin decimales
 function formatoNumero(numero) {
-  return numero.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // Convertir el número a formato abreviado si es mayor o igual a 1000
+  if (Math.abs(numero) >= 1000000) {
+    const millones = (numero / 1000000).toFixed(1);
+    return millones % 1 === 0 ? millones.slice(0, -2) + 'M' : millones + 'M'; // Representar en millones
+  } else {
+    return numero.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Formato con comas para números menores a 1000
+  }
 }
