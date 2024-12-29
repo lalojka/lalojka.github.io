@@ -98,7 +98,28 @@ document.getElementById("buttonProbar").addEventListener("click", () => {
 
 document.getElementById("botonCopiar").addEventListener("click", () => {
     const resultado = document.getElementById("resultado").textContent;
-    navigator.clipboard.writeText(resultado).then(() => {
-        alert("¡Resultado copiado al portapapeles!");
-    });
+
+    // Crear un elemento de texto temporal
+    const textArea = document.createElement("textarea");
+    textArea.value = resultado;
+    document.body.appendChild(textArea);
+
+    // Seleccionar el texto y copiarlo
+    textArea.select();
+    textArea.setSelectionRange(0, 99999); // Para móviles
+
+    try {
+        const success = document.execCommand("copy");
+        if (success) {
+            alert("¡Resultado copiado al portapapeles!");
+        } else {
+            alert("Error al copiar el texto. Intenta nuevamente.");
+        }
+    } catch (err) {
+        alert("Tu navegador no soporta la funcionalidad de copiar al portapapeles.");
+    }
+
+    // Eliminar el elemento temporal
+    document.body.removeChild(textArea);
 });
+
