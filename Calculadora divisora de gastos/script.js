@@ -97,11 +97,15 @@ document.getElementById("buttonProbar").addEventListener("click", () => {
 });
 
 document.getElementById("botonCopiar").addEventListener("click", () => {
+    // Obtener el texto del resultado
     const resultado = document.getElementById("resultado").textContent;
+
+    // Agregar el mensaje de agradecimiento y el enlace
+    const textoParaCopiar = `${resultado}\n\nGracias por utilizar la Calculadora para Dividir gastos a través del link: https://www.epm-data.com/post/calculadora-para-dividir-gastos`;
 
     // Crear un elemento de texto temporal
     const textArea = document.createElement("textarea");
-    textArea.value = resultado;
+    textArea.value = textoParaCopiar;
     document.body.appendChild(textArea);
 
     // Seleccionar el texto y copiarlo
@@ -111,15 +115,15 @@ document.getElementById("botonCopiar").addEventListener("click", () => {
     try {
         const success = document.execCommand("copy");
         if (success) {
-            alert("¡Resultado copiado al portapapeles!");
+            // Cambiar el contenido del resultado
+            document.getElementById("resultado").textContent = "Resultado copiado correctamente.";
         } else {
-            alert("Error al copiar el texto. Intenta nuevamente.");
+            document.getElementById("resultado").textContent = "Error al copiar el texto. Intenta nuevamente.";
         }
     } catch (err) {
-        alert("Tu navegador no soporta la funcionalidad de copiar al portapapeles.");
+        document.getElementById("resultado").textContent = "Tu navegador no soporta la funcionalidad de copiar al portapapeles.";
     }
 
     // Eliminar el elemento temporal
     document.body.removeChild(textArea);
 });
-
