@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirigiendo...</title>
+</head>
+<body>
+  <h2>Procesando token...</h2>
+  <script>
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    const token = params.get("access_token");
+
+    if (token) {
+      console.log("Access Token:", token);
+      document.body.innerHTML += `<p><strong>Token obtenido:</strong> ${token}</p>`;
+    } else {
+      console.log("No se encontró access_token");
+      document.body.innerHTML += `<p>No se encontró el token en la URL</p>`;
+    }
+  </script>
+</body>
+</html>
