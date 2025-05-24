@@ -1,28 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Website</title>
-  </head>
-  <body>
-    <main>
-      <ul>
-        <li><a href="https://lalojka.github.io/">Home</a></li>
-        <li><a href="https://lalojka.github.io/debate_1.html">Grafico 1</a></li>
-        <li><a href="https://lalojka.github.io/grafico2-page.html">Grafico 2</a></li>
-        <li><a href="https://lalojka.github.io/NE-CON-GOVT-CN.json">NE-CON-GOVT-CN</a></li>
-        <li><a href="https://lalojka.github.io/WDI_source/CM-MKT-LCAP-CD.json">CM-MKT-LCAP-CD</a></li>
-        <li><a href="https://lalojka.github.io/finance_events/financeEvents1_chart1.csv">base de datos financeEvents1_chart1(descargar)</a></li>
-        <li><a href="https://lalojka.github.io/liftoff/indexLiftoff.html"> liftoff html</a></li>
-      </ul>
-    </main>
-
-    <iframe src="prueba.html" frameborder="0"></iframe>
-    
-    <h1>Mi gráfico D33.js</h1>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="grafico.js"></script>
-  </body>
+<html>
+<head><title>Login Facebook</title></head>
+<body>
+  <button id="login-btn">Login con Facebook</button>
+  <script src="js/oauth.js"></script>
+  <script>
+    document.getElementById("login-btn").onclick = function() {
+      oauthLogin();
+    }
+  </script>
+</body>
 </html>
