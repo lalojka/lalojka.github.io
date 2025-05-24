@@ -1,4 +1,4 @@
-const appId = "TU_FACEBOOK_APP_ID";
+const appId = "493451440039423";
 const redirectUri = "https://lalojka.github.io/redirect.html";
 
 function oauthLogin() {
