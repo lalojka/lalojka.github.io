@@ -6,7 +6,7 @@ function oauthLogin() {
     `client_id=${appId}` +
     `&redirect_uri=${encodeURIComponent(redirectUri)}` +
     `&response_type=token` +
-    `&scope=public_profile,email`;
+    `&scope=public_profile`;
 
   window.location = fbAuthUrl;
 }
@@ -24,8 +24,8 @@ async function getUserProfile() {
     return;
   }
 
-  const res = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name,email`);
+  const res = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=id,name`);
   const data = await res.json();
   console.log(data);
-  alert(`Hola ${data.name}, email: ${data.email || "no disponible"}`);
+  alert(`Hola ${data.name} || "no disponible"}`);
 }
