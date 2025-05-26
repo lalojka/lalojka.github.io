@@ -1,5 +1,5 @@
 const appId = "493451440039423";
-const redirectUri = "https://lalojka.github.io/redirect.html";
+const redirectUri = "https://app.epm-marketing.com/redirect.html";
 
 function oauthLogin() {
   const fbAuthUrl = `https://www.facebook.com/v17.0/dialog/oauth?` +
