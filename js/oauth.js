@@ -3,17 +3,24 @@ const appId = '493451440039423';
 function statusChangeCallback(response) {
   const statusDiv = document.getElementById("status");
   if (response.status === 'connected') {
-    // Logged into your app and Facebook.
+    // Usuario logueado en tu app y en Facebook
     sessionStorage.setItem('fb_access_token', response.authResponse.accessToken);
     statusDiv.textContent = "Ya has iniciado sesión.";
     getUserProfile();
   } else if (response.status === 'not_authorized') {
-    // Logged into Facebook, but not your app
+    // Logueado en Facebook, pero no en tu app
     statusDiv.textContent = "Por favor inicia sesión en esta app con Facebook.";
   } else {
-    // Not logged into Facebook
+    // No logueado en Facebook
     statusDiv.textContent = "Por favor inicia sesión en Facebook.";
   }
+}
+
+// HAZ ESTA FUNCIÓN GLOBAL para el botón oficial
+window.checkLoginState = function() {
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
 }
 
 function fbLogin() {
@@ -43,16 +50,16 @@ async function getUserProfile() {
   });
 }
 
-// FB SDK will call window.fbAsyncInit when loaded
+// Inicializar el SDK de Facebook
 window.fbAsyncInit = function() {
   FB.init({
     appId      : appId,
     cookie     : true,
     xfbml      : true,
-    version    : 'v19.0'
+    version    : 'v22.0' // Usa la versión que tengas en tu HTML
   });
   FB.AppEvents.logPageView();
-  // Check login status on page load!
+  // Chequear estado al cargar la página
   FB.getLoginStatus(function(response) {
     statusChangeCallback(response);
   });
