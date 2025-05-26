@@ -1,12 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head><title>Login Facebook</title></head>
+<head>
+  <title>Login Facebook</title>
+</head>
 <body>
-  <button id="login-btn">Login con Facebook 2</button>
+  <button id="login-btn">Login con Facebook</button>
+  <div id="status"></div>
+
+  <!-- Facebook SDK root -->
+  <div id="fb-root"></div>
+  <!-- Load Facebook SDK for JavaScript -->
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '493451440039423',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v19.0'
+      });
+      FB.AppEvents.logPageView();
+    };
+
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
+
   <script src="js/oauth.js"></script>
   <script>
     document.getElementById("login-btn").onclick = function() {
-      oauthLogin();
+      fbLogin();
     }
   </script>
 </body>
