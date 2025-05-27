@@ -1,25 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Login Facebook</title>
+  <meta charset="UTF-8">
+  <title>Iniciar sesión | EPM App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f6f8fa; text-align: center; margin: 0; }
+    .container { max-width: 350px; margin: 80px auto; background: #fff; padding: 32px 24px 24px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-radius: 10px; }
+    h1 { font-size: 1.7em; margin-bottom: 0.35em; }
+    p { margin-bottom: 2em; color: #666; }
+    .alt-login { margin: 24px 0 8px 0; }
+    .register-link, .legal-links { font-size: 0.97em; color: #888; margin-top: 22px; display: block; }
+    .register-link a, .legal-links a { color: #0072ff; text-decoration: none; margin: 0 6px; }
+    .register-link a:hover, .legal-links a:hover { text-decoration: underline; }
+    #status { margin: 20px 0 0 0; color: #444; min-height: 22px; }
+    .logo { margin-bottom: 25px; }
+  </style>
 </head>
 <body>
-  <div id="fb-root"></div>
-  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0&appId=493451440039423"></script>
-
-  <div id="status"></div>
-  <!-- Facebook Login Button -->
-  <div 
-    class="fb-login-button" 
-    data-width="" 
-    data-size="large" 
-    data-button-type="login_with" 
-    data-layout="default" 
-    data-auto-logout-link="true" 
-    data-use-continue-as="false" 
-    data-onlogin="checkLoginState();">
+  <div class="container">
+    <div class="logo">
+      <img src="logo.png" alt="EPM App Logo" style="height:48px;">
+    </div>
+    <h1>Bienvenido de nuevo</h1>
+    <p>Te ayudamos a integrar tus métricas de Facebook e Instagram con Google Sheets.<br>
+      ¡Automatizá tus reportes diarios fácil y rápido!</p>
+    
+    <div id="fb-root"></div>
+    <div 
+      class="fb-login-button"
+      data-width=""
+      data-size="large"
+      data-button-type="login_with"
+      data-layout="default"
+      data-auto-logout-link="true"
+      data-use-continue-as="false"
+      data-onlogin="checkLoginState();">
+    </div>
+    <div id="status"></div>
+    
+    <div class="alt-login">
+      <button style="margin-top:14px; padding:10px 22px; border-radius:6px; background:#eee; color:#999; border:none; cursor:not-allowed;" disabled>Iniciar sesión con Apple (próximamente)</button>
+    </div>
+    <div class="register-link">
+      ¿Nuevo en EPM App?
+      <a href="mailto:hola@epm-marketing.com?subject=Registro EPM App">Registrarse</a>
+    </div>
+    <div class="legal-links">
+      <a href="terms.html" target="_blank">Términos de servicio</a> |
+      <a href="privacy-policy.html" target="_blank">Política de privacidad</a>
+    </div>
   </div>
-
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0&appId=493451440039423"></script>
   <script src="js/oauth.js"></script>
 </body>
 </html>
