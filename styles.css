@@ -1,10 +1,274 @@
-/* CSS básico opcional */
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
+/* EPM APP Styles - Modern, clean, responsive */
+
+:root {
+  --blue: #083963;
+  --light-blue: #5DA9DD;
+  --orange: #EB8957;
+  --cream: #EBE4DD;
+  --white: #fff;
+  --text: #1a2330;
 }
-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  color: var(--text);
+  background: var(--cream);
+}
+
+.container {
+  width: 90%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 12px;
+}
+
+/* Header */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  background: var(--blue);
+  color: var(--white);
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(8,57,99,0.04);
+}
+.header-content {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 68px;
+}
+.logo { height: 38px; }
+.header nav a {
+  color: var(--white);
+  text-decoration: none;
+  margin: 0 16px;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.header nav a:hover,
+.header nav .cta-header {
+  color: var(--orange); 
+}
+.header nav .cta-header {
+  background: var(--orange);
+  color: var(--white) !important;
+  border-radius: 5px;
+  padding: 6px 18px;
+  margin-left: 12px;
+  font-weight: 600;
+  transition: background 0.18s;
+}
+.header nav .cta-header:hover {
+  background: var(--light-blue);
+}
+
+@media (max-width: 800px) {
+  .header-content { flex-direction: column; height: auto; }
+  .header nav { margin-top: 8px; }
+  .header { height: auto; }
+}
+
+/* Spacing for fixed header */
+body { padding-top: 72px; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(120deg, var(--blue) 60%, var(--light-blue) 100%);
+  color: var(--white);
+  padding: 68px 0 38px 0;
+}
+.hero-content {
+  display: flex; align-items: center; gap: 38px;
+}
+.hero-text {
+  flex: 1;
+}
+.hero-img img {
+  max-width: 340px;
+  border-radius: 10px;
+  box-shadow: 0 6px 28px 0 rgba(8,57,99,0.13);
+}
+.hero h1 {
+  font-size: 2.4em;
+  margin-bottom: 0.6em;
+}
+.cta-main {
+  margin-top: 22px;
+  display: inline-block;
+  padding: 13px 36px;
+  background: var(--orange);
+  color: var(--white);
+  border-radius: 7px;
+  font-size: 1.2em;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.cta-main:hover {
+  background: var(--light-blue);
+}
+
+/* About */
+.about {
+  background: var(--white);
+  padding: 72px 0 42px 0;
+  text-align: center;
+}
+.about-img {
+  margin-top: 20px;
+  max-width: 400px;
+  width: 100%;
+}
+
+/* How it Works */
+.how {
+  background: var(--cream);
+  padding: 70px 0 40px 0;
+}
+.how .steps {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.step {
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(8,57,99,0.06);
+  padding: 28px 20px;
+  flex: 1 1 240px;
+  max-width: 280px;
+  min-width: 200px;
+  text-align: center;
+}
+.step img {
+  max-width: 70px;
+  margin-bottom: 18px;
+}
+.step h3 { margin: 12px 0 8px; }
+
+/* Who is it for */
+.who {
+  background: var(--white);
+  padding: 70px 0 42px 0;
+  text-align: center;
+}
+.audiences { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
+.audience {
+  background: var(--cream);
+  border-radius: 8px;
+  padding: 22px 16px;
+  max-width: 220px;
+  min-width: 170px;
+  margin: 8px;
+}
+.audience img { max-width: 48px; margin-bottom: 12px; }
+.audience h4 { margin: 6px 0 8px; }
+
+/* Pricing */
+.pricing {
+  background: var(--light-blue);
+  color: var(--white);
+  padding: 70px 0 50px 0;
+  text-align: center;
+}
+.pricing-card {
+  background: var(--white);
+  color: var(--blue);
+  display: inline-block;
+  padding: 38px 34px 32px 34px;
+  border-radius: 14px;
+  margin-top: 24px;
+  min-width: 260px;
+  box-shadow: 0 2px 10px rgba(8,57,99,0.09);
+}
+.price {
+  font-size: 2.8em;
+  font-weight: bold;
+  color: var(--blue);
+}
+.tag {
+  background: var(--orange);
+  color: var(--white);
+  border-radius: 3px;
+  padding: 2px 12px;
+  font-size: 0.95em;
+  margin-left: 15px;
+}
+
+.pricing-card ul { 
+  padding: 0; 
+  text-align: left; 
+  margin: 18px 0 16px 0; 
+  list-style: none; 
+}
+.pricing-card li { 
+  margin-bottom: 8px; 
+  padding-left: 24px;
+  position: relative;
+}
+.pricing-card li::before {
+  content: "✓";
+  color: var(--orange);
+  position: absolute;
+  left: 0;
+}
+.pricing-card .cta-main { margin-top: 18px; }
+
+/* FAQ */
+.faq {
+  background: var(--white);
+  padding: 70px 0 42px 0;
+}
+.faq-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.faq-item {
+  margin-bottom: 18px;
+}
+.faq-item h4 {
+  margin: 0 0 5px 0;
+  color: var(--blue);
+}
+
+/* Get Started/Login */
+.get-started {
+  background: var(--cream);
+  padding: 70px 0 44px 0;
+  text-align: center;
+}
+.beta-banner {
+  background: var(--orange);
+  color: var(--white);
+  border-radius: 5px;
+  display: inline-block;
+  padding: 7px 18px;
+  margin-bottom: 20px;
+  font-size: 1.07em;
+}
+.get-started-helper {
+  display: block;
+  margin-top: 18px;
+  color: #888;
+  font-size: 0.97em;
+}
+
+/* Footer */
+.footer {
+  background: var(--blue);
+  color: var(--white);
+  padding: 24px 0 8px 0;
+  text-align: center;
+}
+.footer-content { display: flex; align-items: center; justify-content: center; flex-direction: column; }
+.logo-footer { height: 30px; margin-bottom: 10px; }
+.footer a { color: var(--light-blue); margin: 0 8px; text-decoration: none; }
+.footer a:hover { color: var(--orange); }
+.footer-note { margin-top: 10px; color: #eee; font-size: 0.95em; }
+
+@media (max-width: 900px) {
+  .hero-content, .how .steps, .audiences { flex-direction: column; gap: 24px; }
+  .about-img { max-width: 260px; }
 }

@@ -1,56 +1,202 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Iniciar sesión | EPM App</title>
+  <title>EPM APP – Automate Your Social Media Metrics</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: Arial, sans-serif; background: #f6f8fa; text-align: center; margin: 0; }
-    .container { max-width: 350px; margin: 80px auto; background: #fff; padding: 32px 24px 24px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-radius: 10px; }
-    h1 { font-size: 1.7em; margin-bottom: 0.35em; }
-    p { margin-bottom: 2em; color: #666; }
-    .alt-login { margin: 24px 0 8px 0; }
-    .register-link, .legal-links { font-size: 0.97em; color: #888; margin-top: 22px; display: block; }
-    .register-link a, .legal-links a { color: #0072ff; text-decoration: none; margin: 0 6px; }
-    .register-link a:hover, .legal-links a:hover { text-decoration: underline; }
-    #status { margin: 20px 0 0 0; color: #444; min-height: 22px; }
-    .logo { margin-bottom: 25px; }
-  </style>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Favicon, Open Graph, etc. puedes agregar aquí -->
 </head>
 <body>
-  <div style="background:#ffe082;color:#444;padding:8px 0;font-weight:bold;">
-    Versión beta: esta aplicación se encuentra en desarrollo y algunas funcionalidades pueden no estar disponibles.
-  </div>
-  <div class="container">
-    <div class="logo">
-      <img src="logo.png" alt="EPM App Logo" style="height:48px;">
+  <!-- Floating Header -->
+  <header class="header">
+    <div class="container header-content">
+      <img src="img/logo.png" alt="EPM APP Logo" class="logo">
+      <nav>
+        <a href="#about">About</a>
+        <a href="#how">How it Works</a>
+        <a href="#who">Who is it for?</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="#get-started" class="cta-header">Get Started</a>
+      </nav>
     </div>
-    <h1>Bienvenido de nuevo</h1>
-    <p>Te ayudamos a integrar tus métricas de Facebook e Instagram con Google Sheets.<br>
-      ¡Automatizá tus reportes diarios fácil y rápido!</p>
-    
-    <div id="fb-root"></div>
-    <div 
-      class="fb-login-button"
-      data-width=""
-      data-size="large"
-      data-button-type="login_with"
-      data-layout="default"
-      data-auto-logout-link="true"
-      data-use-continue-as="false"
-      data-onlogin="checkLoginState();">
+  </header>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1>Automate Your Social Media Metrics in Google Sheets</h1>
+        <p>
+          EPM APP lets you seamlessly connect your Facebook and Instagram accounts and export daily metrics to Google Sheets. Perfect for agencies, businesses, and creators who want to save time and focus on what matters.
+        </p>
+        <a href="#get-started" class="cta-main">Get Started for Free</a>
+      </div>
+      <div class="hero-img">
+        <img src="img/hero-illustration.png" alt="Dashboard Illustration" />
+      </div>
     </div>
-    <div id="status"></div>
-    
-    <div class="alt-login">
-      <button style="margin-top:14px; padding:10px 22px; border-radius:6px; background:#eee; color:#999; border:none; cursor:not-allowed;" disabled>Iniciar sesión con Google (próximamente)</button>
+  </section>
+  
+  <!-- About Section -->
+  <section class="about" id="about">
+    <div class="container">
+      <h2>About EPM APP</h2>
+      <p>
+        EPM APP is a SaaS platform designed to automate the export of your Facebook and Instagram metrics directly into Google Sheets. No more manual copy-paste, no more wasted hours. Connect, authorize, and let your reports update themselves.
+      </p>
+      <img src="img/about-illustration.png" alt="About illustration" class="about-img">
     </div>
-    <div class="legal-links">
-      <a href="terms.html" target="_blank">Términos de servicio</a> |
-      <a href="privacy-policy.html" target="_blank">Política de privacidad</a>
+  </section>
+  
+  <!-- How it Works Section -->
+  <section class="how" id="how">
+    <div class="container">
+      <h2>How it Works</h2>
+      <div class="steps">
+        <div class="step">
+          <img src="img/step1.png" alt="Step 1">
+          <h3>1. Sign in with Facebook</h3>
+          <p>Securely connect your Facebook and Instagram accounts using Facebook Login.</p>
+        </div>
+        <div class="step">
+          <img src="img/step2.png" alt="Step 2">
+          <h3>2. Connect your Google Sheet</h3>
+          <p>Authorize access to your preferred Google Spreadsheet where metrics will be updated.</p>
+        </div>
+        <div class="step">
+          <img src="img/step3.png" alt="Step 3">
+          <h3>3. Set & Forget</h3>
+          <p>Choose the metrics you want and let EPM APP automatically export and update them daily.</p>
+        </div>
+      </div>
     </div>
-  </div>
-  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v22.0&appId=493451440039423"></script>
+  </section>
+  
+  <!-- Who is it for Section -->
+  <section class="who" id="who">
+    <div class="container">
+      <h2>Who is it for?</h2>
+      <div class="audiences">
+        <div class="audience">
+          <img src="img/agency.png" alt="Agency">
+          <h4>Agencies</h4>
+          <p>Manage multiple clients’ social media analytics with ease and professionalism.</p>
+        </div>
+        <div class="audience">
+          <img src="img/business.png" alt="Business">
+          <h4>Businesses</h4>
+          <p>Track your brand’s performance and make data-driven decisions effortlessly.</p>
+        </div>
+        <div class="audience">
+          <img src="img/creator.png" alt="Creator">
+          <h4>Creators</h4>
+          <p>Automate your reporting so you can focus on creating and engaging with your audience.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Pricing Section -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <h2>Pricing</h2>
+      <div class="pricing-card">
+        <div class="price-free">
+          <span class="price">$0</span>
+          <span class="tag">Forever Free</span>
+        </div>
+        <ul>
+          <li>Unlimited accounts</li>
+          <li>All features included</li>
+          <li>Daily updates</li>
+          <li>No credit card required</li>
+        </ul>
+        <a href="#get-started" class="cta-main">Get Started</a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- FAQ Section -->
+  <section class="faq" id="faq">
+    <div class="container">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>Is EPM APP really free?</h4>
+          <p>Yes! EPM APP is free for everyone, with all features included. No hidden costs.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Is my data safe?</h4>
+          <p>Absolutely. We never store your Facebook or Google passwords. All authentications are handled securely via OAuth by Facebook and Google.</p>
+        </div>
+        <div class="faq-item">
+          <h4>What metrics can I export?</h4>
+          <p>You can export a wide range of metrics from Facebook Pages and Instagram Business accounts, including reach, engagement, followers, and more.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Can I manage multiple pages?</h4>
+          <p>Yes! EPM APP lets you connect and manage as many Facebook and Instagram accounts as you wish.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Get Started / Login Section -->
+  <section class="get-started" id="get-started">
+    <div class="container">
+      <h2>Get Started Now</h2>
+      <p class="beta-banner"><b>Beta:</b> EPM APP is in public beta. New features coming soon!</p>
+      <!-- Facebook Login Button -->
+      <div id="fb-root"></div>
+      <div 
+        class="fb-login-button"
+        data-width=""
+        data-size="large"
+        data-button-type="login_with"
+        data-layout="default"
+        data-auto-logout-link="true"
+        data-use-continue-as="false"
+        data-onlogin="checkLoginState();">
+      </div>
+      <div id="status"></div>
+      <small class="get-started-helper">
+        By signing in, you agree to our <a href="terms.html" target="_blank">Terms of Service</a> and <a href="privacy-policy.html" target="_blank">Privacy Policy</a>.
+      </small>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <img src="img/logo.png" alt="EPM APP Logo" class="logo-footer">
+      <div>
+        <a href="terms.html" target="_blank">Terms of Service</a> | 
+        <a href="privacy-policy.html" target="_blank">Privacy Policy</a>
+      </div>
+      <div class="footer-note">© 2025 EPM APP</div>
+    </div>
+  </footer>
+  
+  <!-- Facebook SDK & App Logic -->
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '493451440039423',
+        xfbml      : true,
+        version    : 'v22.0'
+      });
+      FB.AppEvents.logPageView();
+    };
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
   <script src="js/oauth.js"></script>
 </body>
 </html>
