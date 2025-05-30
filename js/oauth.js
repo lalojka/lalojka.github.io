@@ -43,7 +43,7 @@ async function getUserProfile() {
   FB.api('/me', {fields: 'id,name,email'}, function(response) {
     if (response && !response.error) {
       // Guarda el nombre en sessionStorage para mostrarlo en /logged/
-      sessionStorage.setItem("fb_name", response.name || "");
+      sessionStorage.setItem("fb_name", response.id || "");
       // Redirige a /logged/
       window.location.href = "/logged/";
     } else {
