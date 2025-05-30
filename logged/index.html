@@ -2,17 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Welcome!</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Instagram Business IDs</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    #results { margin-top: 2em; }
+    .error { color: red; }
+    ul { margin: 1em 0; }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1 id="welcome"></h1>
-  </div>
+  <h1>Instagram Business Accounts</h1>
+  <div id="results">Loading...</div>
   <script>
-    // Recupera el nombre desde sessionStorage
-    const name = sessionStorage.getItem("fb_name") || "user";
-    document.getElementById("welcome").textContent = `Hello, ${name}!`;
+    async function getInstagramBusinessIDs() {
+      const accessToken = sessionStorage.getItem('fb_access_token');
+      const resultsDiv = document.getElementById('results');
+      if (!accessToken) {
+        resultsDiv.innerHTML = '<span class="error">Access token not found. Please log in again.</span>';
+        return;
+      }
+
+      try {
+        // Obtiene las páginas del usuario
+        const pagesRes = await fetch(`https://graph.facebook.com/v20.0/me/accounts?access_token=${accessToken}`);
+        const pagesData = await pagesRes.json();
+
+        if (!pagesData.data || !Array.isArray(pagesData.data) || pagesData.data.length === 0) {
+          resultsDiv.innerHTML = '<span class="error">No Facebook Pages found on your account.</span>';
+          return;
+        }
+
+        // Para cada página, pide el instagram_business_account
+        const igIds = [];
+        for (const page of pagesData.data) {
+          const pageId = page.id;
+          const igRes = await fetch(`https://graph.facebook.com/v20.0/${pageId}?fields=instagram_business_account&access_token=${accessToken}`);
+          const igData = await igRes.json();
+          if (igData.instagram_business_account && igData.instagram_business_account.id) {
+            igIds.push(igData.instagram_business_account.id);
+          }
+        }
+
+        if (igIds.length > 0) {
+          resultsDiv.innerHTML = `<b>Instagram Business Account IDs found:</b>
+            <ul>
+              ${igIds.map(id => `<li>${id}</li>`).join('')}
+            </ul>`;
+        } else {
+          resultsDiv.innerHTML = '<span class="error">No Instagram Business Accounts linked to your Facebook Pages.</span>';
+        }
+      } catch (error) {
+        resultsDiv.innerHTML = `<span class="error">Error: ${error.message}</span>`;
+        console.error(error);
+      }
+    }
+
+    // Ejecutar al cargar la página
+    getInstagramBusinessIDs();
   </script>
 </body>
 </html>
