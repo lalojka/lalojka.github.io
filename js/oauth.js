@@ -15,7 +15,6 @@ const EXTRAS = encodeURIComponent('{"setup":{"channel":"IG_API_ONBOARDING"}}');
 // Construcción de la URL de login
 function buildFacebookLoginUrl() {
   return `https://www.facebook.com/v23.0/dialog/oauth?client_id=${APP_ID}` +
-    `&display=page` +
     `&redirect_uri=${REDIRECT_URI}` +
     `&response_type=token` +
     `&scope=${SCOPE}`;
