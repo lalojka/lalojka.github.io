@@ -3,16 +3,16 @@ const appId = '493451440039423';
 function statusChangeCallback(response) {
   const statusDiv = document.getElementById("status");
   if (response.status === 'connected') {
-    // User is logged in to your app and Facebook
+    // Usuario logueado en tu app y en Facebook
     sessionStorage.setItem('fb_access_token', response.authResponse.accessToken);
     statusDiv.textContent = "You are logged in.";
     getUserProfile(); // Ahora, esta función hará el redirect.
   } else if (response.status === 'not_authorized') {
-    // Logged into Facebook but not your app
-    statusDiv.textContent = "Please log in to this app with Facebook.";
+    // Logueado en Facebook, pero no en tu app
+    statusDiv.textContent = "Por favor inicia sesión en esta app con Facebook.";
   } else {
-    // Not logged into Facebook
-    statusDiv.textContent = "Please log in to Facebook.";
+    // No logueado en Facebook
+    statusDiv.textContent = "Por favor inicia sesión en Facebook.";
   }
 }
 
@@ -23,7 +23,17 @@ window.checkLoginState = function() {
   });
 }
 
-function getUserProfile() {
+function fbLogin() {
+  if (typeof FB === "undefined") {
+    alert("Facebook SDK no está cargado aún. Por favor espera.");
+    return;
+  }
+  FB.login(function(response) {
+    statusChangeCallback(response);
+  }, {scope: "public_profile,email"});
+}
+
+async function getUserProfile() {
   const token = sessionStorage.getItem("fb_access_token");
   if (!token) {
     alert("You are not logged in.");

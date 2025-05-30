@@ -272,3 +272,19 @@ body { padding-top: 72px; }
   .hero-content, .how .steps, .audiences { flex-direction: column; gap: 24px; }
   .about-img { max-width: 260px; }
 }
+
+/* Facebook Login Button Fix */
+.fb-login-button {
+  min-width: 300px !important;
+  width: 300px !important;
+  display: inline-block !important;
+  margin: 0 auto 18px auto !important;
+  /* El !important es necesario porque Facebook usa estilos inline */
+}
+/* Contenedor directo del botón, si lo usas */
+#fb-login-container {
+  width: 320px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
