@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8"> <!-- Codificación -->  
   <meta name="description" content="EPM APP automates your social media metrics."> <!-- SEO -->
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' *.facebook.com *.fbcdn.net *.facebook.net connect.facebook.net 127.0.0.1:* blob: data: 'wasm-unsafe-eval' https://*.google-analytics.com *.google.com;">  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Responsive -->
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' *.facebook.com *.fbcdn.net *.facebook.net connect.facebook.net;">
+  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Responsive -->
   <link rel="stylesheet" href="styles.css">
   <title>EPM APP – Automate Your Social Media Metrics</title>
   <!-- Favicon, Open Graph, etc. puedes agregar aquí -->
@@ -182,25 +183,6 @@
     </div>
   </footer>
   
-  <!-- Facebook SDK & App Logic -->
-  <script>
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId      : '493451440039423',
-        cookie     : true,
-        xfbml      : true,
-        version    : 'v22.0'
-      });
-      FB.AppEvents.logPageView();
-    };
-    (function(d, s, id){
-       var js, fjs = d.getElementsByTagName(s)[0];
-       if (d.getElementById(id)) {return;}
-       js = d.createElement(s); js.id = id;
-       js.src = "https://connect.facebook.net/en_US/sdk.js";
-       fjs.parentNode.insertBefore(js, fjs);
-     }(document, 'script', 'facebook-jssdk'));
-  </script>
   <script src="js/oauth.js"></script>
 </body>
 </html>
