@@ -26,7 +26,7 @@
     }
 
     async function fetchFacebookAccounts(accessToken) {
-      const endpoint = `https://graph.facebook.com/v23.0/me/accounts?fields=id,name,access_token,instagram_business_account&access_token=${accessToken}`;
+      const endpoint = `https://graph.facebook.com/v23.0/me/accounts?fields=id,name&access_token=${accessToken}`;
       const response = await fetch(endpoint);
       return response.json();
     }
