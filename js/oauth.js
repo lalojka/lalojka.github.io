@@ -9,10 +9,7 @@ const SCOPE = [
   'instagram_manage_insights'
 ].join(',');
 
-// El parámetro "extras" debe ir URI encoded
-const EXTRAS = encodeURIComponent('{"setup":{"channel":"IG_API_ONBOARDING"}}');
-
-// Construcción de la URL de login
+// Construcción de la URL de login (¡simple y efectiva!)
 function buildFacebookLoginUrl() {
   return `https://www.facebook.com/v23.0/dialog/oauth?client_id=${APP_ID}` +
     `&redirect_uri=${REDIRECT_URI}` +
