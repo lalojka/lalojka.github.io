@@ -1,1 +1,69 @@
-<!DOCTYPE html> <html> <head> <title>Login Callback</title> </head> <body> <h1>Callback recibido!</h1> <p>URL actual:</p> <pre id="url"></pre> <p>Hash fragment:</p> <pre id="hash"></pre> <p>Query parameters:</p> <pre id="query"></pre> <script> document.getElementById('url').textContent = window.location.href; document.getElementById('hash').textContent = window.location.hash || 'Ninguno'; document.getElementById('query').textContent = window.location.search || 'Ninguno'; // Log everything to console console.log('Full URL:', window.location.href); console.log('Hash:', window.location.hash); console.log('Search:', window.location.search); // Check for errors in URL const urlParams = new URLSearchParams(window.location.search); const hashParams = new URLSearchParams(window.location.hash.substring(1)); if (urlParams.get('error') || hashParams.get('error')) { const error = urlParams.get('error') || hashParams.get('error'); const description = urlParams.get('error_description') || hashParams.get('error_description'); document.body.innerHTML += ` <div style="color: red; border: 2px solid red; padding: 20px; margin: 20px 0;"> <h3>Error detectado:</h3> <p><strong>Error:</strong> ${error}</p> <p><strong>Descripción:</strong> ${description || 'Sin descripción'}</p> </div> `; } if (hashParams.get('access_token')) { document.body.innerHTML += ` <div style="color: green; border: 2px solid green; padding: 20px; margin: 20px 0;"> <h3>¡Token recibido!</h3> <p><strong>Access Token:</strong> ${hashParams.get('access_token').substring(0, 20)}...</p> </div> `; } </script> </body> </html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Instagram Business Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    #results { margin-top: 2em; }
+    pre { background: #f4f4f4; padding: 1em; border-radius: 5px; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Instagram Business Dashboard</h1>
+  <div id="results">Procesando autenticación...</div>
+  <script>
+    // Extrae parámetros del hash de la URL
+    function getHashParams() {
+      const hash = window.location.hash.substr(1);
+      const params = {};
+      hash.split('&').forEach(pair => {
+        const [key, value] = pair.split('=');
+        if (key) params[key] = decodeURIComponent(value ?? '');
+      });
+      return params;
+    }
+
+    async function fetchFacebookAccounts(accessToken) {
+      const endpoint = `https://graph.facebook.com/v23.0/me/accounts?fields=id,name,access_token,instagram_business_account&access_token=${accessToken}`;
+      const response = await fetch(endpoint);
+      return response.json();
+    }
+
+    async function main() {
+      const resultsDiv = document.getElementById('results');
+      const params = getHashParams();
+      const accessToken = params.access_token;
+
+      if (!accessToken) {
+        resultsDiv.innerHTML = `<span class="error">
+          No se encontró el token de acceso en la URL.<br>
+          Por favor, inicia sesión nuevamente.
+        </span>
+        <pre>${JSON.stringify(params, null, 2)}</pre>`;
+        return;
+      }
+
+      resultsDiv.innerHTML = "Consultando páginas y cuentas de Instagram Business...";
+
+      try {
+        const data = await fetchFacebookAccounts(accessToken);
+
+        if (data.error) {
+          resultsDiv.innerHTML = `<span class="error">Error al consultar la API:</span>
+          <pre>${JSON.stringify(data.error, null, 2)}</pre>`;
+        } else {
+          resultsDiv.innerHTML = `<b>Respuesta de la API:</b>
+          <pre>${JSON.stringify(data, null, 2)}</pre>`;
+        }
+      } catch (err) {
+        resultsDiv.innerHTML = `<span class="error">Error de red o inesperado:</span>
+        <pre>${err.message}</pre>`;
+      }
+    }
+
+    main();
+  </script>
+</body>
+</html>
