@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Facebook Pages API Response</title>
+  <title>Instagram Business Dashboard</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 2em; }
     #results { margin-top: 2em; }
@@ -11,30 +11,59 @@
   </style>
 </head>
 <body>
-  <h1>Respuesta cruda de Facebook Pages API</h1>
-  <div id="results">Cargando...</div>
+  <h1>Instagram Business Dashboard</h1>
+  <div id="results">Procesando autenticación...</div>
   <script>
-    async function fetchPages() {
-      const accessToken = sessionStorage.getItem('fb_access_token');
+    // Función para extraer parámetros del hash de la URL
+    function getHashParams() {
+      const hash = window.location.hash.substr(1);
+      const params = {};
+      hash.split('&').forEach(pair => {
+        const [key, value] = pair.split('=');
+        if (key) params[key] = decodeURIComponent(value ?? '');
+      });
+      return params;
+    }
+
+    async function fetchFacebookAccounts(longLivedToken) {
+      const endpoint = `https://graph.facebook.com/v23.0/me/accounts?fields=id,name,access_token,instagram_business_account&access_token=${longLivedToken}`;
+      const response = await fetch(endpoint);
+      return response.json();
+    }
+
+    async function main() {
       const resultsDiv = document.getElementById('results');
-      if (!accessToken) {
-        resultsDiv.innerHTML = '<span class="error">Access token not found. Please log in again.</span>';
+      const params = getHashParams();
+      const longLivedToken = params.long_lived_token;
+
+      if (!longLivedToken) {
+        resultsDiv.innerHTML = `<span class="error">
+          No se encontró el token de acceso en la URL.<br>
+          Por favor, inicia sesión nuevamente.
+        </span>
+        <pre>${JSON.stringify(params, null, 2)}</pre>`;
         return;
       }
 
+      resultsDiv.innerHTML = "Consultando cuentas...";
+
       try {
-        const response = await fetch(`https://graph.facebook.com/v20.0/me/accounts?access_token=${accessToken}`);
-        const data = await response.json();
-        resultsDiv.innerHTML = `<b>Respuesta cruda de la API:</b>
+        const data = await fetchFacebookAccounts(longLivedToken);
+
+        if (data.error) {
+          resultsDiv.innerHTML = `<span class="error">Error al consultar la API:</span>
+          <pre>${JSON.stringify(data.error, null, 2)}</pre>`;
+        } else {
+          resultsDiv.innerHTML = `<b>Respuesta cruda de la API:</b>
           <pre>${JSON.stringify(data, null, 2)}</pre>`;
-        console.log("Respuesta cruda de Facebook API:", data);
-      } catch (error) {
-        resultsDiv.innerHTML = `<span class="error">Error: ${error.message}</span>`;
-        console.error(error);
+        }
+      } catch (err) {
+        resultsDiv.innerHTML = `<span class="error">Error de red o inesperado:</span>
+        <pre>${err.message}</pre>`;
       }
     }
 
-    fetchPages();
+    main();
   </script>
 </body>
 </html>

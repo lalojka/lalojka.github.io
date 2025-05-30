@@ -1,69 +1,32 @@
-const appId = '493451440039423';
+// js/oauth.js
 
-function statusChangeCallback(response) {
-  const statusDiv = document.getElementById("status");
-  if (response.status === 'connected') {
-    // Usuario logueado en tu app y en Facebook
-    sessionStorage.setItem('fb_access_token', response.authResponse.accessToken);
-    statusDiv.textContent = "You are logged in.";
-    getUserProfile(); // Ahora, esta función hará el redirect.
-  } else if (response.status === 'not_authorized') {
-    // Logueado en Facebook, pero no en tu app
-    statusDiv.textContent = "Por favor inicia sesión en esta app con Facebook.";
-  } else {
-    // No logueado en Facebook
-    statusDiv.textContent = "Por favor inicia sesión en Facebook.";
+// Parámetros de tu app
+const APP_ID = '493451440039423';
+const REDIRECT_URI = encodeURIComponent('https://app.epm-marketing.com/logged/');
+const SCOPE = [
+  'instagram_basic',
+  'instagram_manage_insights',
+  'pages_show_list',
+  'pages_read_engagement'
+].join(',');
+
+// El parámetro "extras" debe ir URI encoded y entrecomillado
+const EXTRAS = encodeURIComponent('{"setup":{"channel":"IG_API_ONBOARDING"}}');
+
+// Construcción de la URL de login
+function buildFacebookLoginUrl() {
+  return `https://www.facebook.com/v23.0/dialog/oauth?client_id=${APP_ID}` +
+    `&display=page` +
+    `&extras=${EXTRAS}` +
+    `&redirect_uri=${REDIRECT_URI}` +
+    `&response_type=token` +
+    `&scope=${SCOPE}`;
+}
+
+// Asigna la URL al botón cuando cargue la página
+window.addEventListener('DOMContentLoaded', () => {
+  const loginBtn = document.getElementById('fb-login-btn');
+  if (loginBtn) {
+    loginBtn.setAttribute('href', buildFacebookLoginUrl());
   }
-}
-
-// Make this function global for the official button to call
-window.checkLoginState = function() {
-  FB.getLoginStatus(function(response) {
-    statusChangeCallback(response);
-  });
-}
-
-function fbLogin() {
-  if (typeof FB === "undefined") {
-    alert("Facebook SDK no está cargado aún. Por favor espera.");
-    return;
-  }
-  FB.login(function(response) {
-    statusChangeCallback(response);
-  }, {scope: "public_profile,email"});
-}
-
-async function getUserProfile() {
-  const token = sessionStorage.getItem("fb_access_token");
-  if (!token) {
-    alert("You are not logged in.");
-    return;
-  }
-  // Pedimos también el nombre
-  FB.api('/me', {fields: 'id,name,email'}, function(response) {
-    if (response && !response.error) {
-      // Guarda el nombre en sessionStorage para mostrarlo en /logged/
-      sessionStorage.setItem("fb_name", response.email || "");
-      // Redirige a /logged/
-      window.location.href = "/logged/";
-    } else {
-      alert("Error retrieving profile.");
-      console.error(response.error);
-    }
-  });
-}
-
-// Initialize the Facebook SDK
-window.fbAsyncInit = function() {
-  FB.init({
-    appId      : appId,
-    cookie     : true,
-    xfbml      : true,
-    version    : 'v22.0'
-  });
-  FB.AppEvents.logPageView();
-  // Optionally, check login status when the page loads
-  FB.getLoginStatus(function(response) {
-    statusChangeCallback(response);
-  });
-};
+});
