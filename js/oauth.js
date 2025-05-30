@@ -3,15 +3,12 @@ const appId = '493451440039423';
 function statusChangeCallback(response) {
   const statusDiv = document.getElementById("status");
   if (response.status === 'connected') {
-    // Usuario logueado en tu app y en Facebook
     sessionStorage.setItem('fb_access_token', response.authResponse.accessToken);
     statusDiv.textContent = "Ya has iniciado sesión.";
     getUserProfile();
   } else if (response.status === 'not_authorized') {
-    // Logueado en Facebook, pero no en tu app
     statusDiv.textContent = "Por favor inicia sesión en esta app con Facebook.";
   } else {
-    // No logueado en Facebook
     statusDiv.textContent = "Por favor inicia sesión en Facebook.";
   }
 }
@@ -33,7 +30,7 @@ function fbLogin() {
   }, {scope: "public_profile,email"});
 }
 
-async function getUserProfile() {
+function getUserProfile() {
   const token = sessionStorage.getItem("fb_access_token");
   if (!token) {
     alert("No estás logueado");
@@ -56,7 +53,7 @@ window.fbAsyncInit = function() {
     appId      : appId,
     cookie     : true,
     xfbml      : true,
-    version    : 'v22.0' // Usa la versión que tengas en tu HTML
+    version    : 'v22.0'
   });
   FB.AppEvents.logPageView();
   // Chequear estado al cargar la página
@@ -64,3 +61,12 @@ window.fbAsyncInit = function() {
     statusChangeCallback(response);
   });
 };
+
+// Cargar el SDK de Facebook de forma asíncrona (esto NO es inline)
+(function(d, s, id){
+   var js, fjs = d.getElementsByTagName(s)[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement(s); js.id = id;
+   js.src = "https://connect.facebook.net/en_US/sdk.js";
+   fjs.parentNode.insertBefore(js, fjs);
+ }(document, 'script', 'facebook-jssdk'));
