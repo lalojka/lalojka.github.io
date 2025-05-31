@@ -11,6 +11,7 @@ const SCOPE = [
   'instagram_content_publish',
   'pages_read_engagement',
   'instagram_basic',
+  'business_management',
   'instagram_manage_insights'
 ].join(',');
 
