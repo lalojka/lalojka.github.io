@@ -33,12 +33,9 @@
       return response.json();
     }
 
-    async function fetchInstagramInsights(instagramBusinessId, accessToken) {
-      // Fechas y métricas de ejemplo (puedes parametrizarlo)
-      const since = 1748459970;
-      const until = 1748546370;
+    async function fetchInstagramInsights(instagramBusinessId, accessToken, since, until) {
       const metrics = [
-        'views', // <-- agregué impressions, asegúrate de pedirla en el endpoint
+        'views',
         'profile_views',
         'reach',
         'website_clicks',
@@ -48,45 +45,47 @@
         'replies',
         'accounts_engaged'
       ].join(',');
-      const endpoint = `https://graph.facebook.com/v20.0/${instagramBusinessId}/insights?metric=${metrics}&period=day&since=${since}&until=${until}&metric_type=total_value&access_token=${accessToken}`;
+      const endpoint =
+        `https://graph.facebook.com/v20.0/${instagramBusinessId}/insights?` +
+        `metric=${metrics}&period=day&since=${since}&until=${until}&metric_type=total_value&access_token=${accessToken}`;
       const response = await fetch(endpoint);
       return response.json();
     }
 
-    // Transforma insights.data en una tabla pivoteada por fechas
-    function buildPivotInsightsTable(insightsData) {
-      // 1. Obtener todas las métricas devueltas
-      const metrics = insightsData.map(d => d.name);
-      // 2. Construir mapa fecha => { metric1: value1, metric2: value2, ... }
-      const dateMap = {};
-      insightsData.forEach(metricObj => {
-        if (!Array.isArray(metricObj.values)) return;
-        metricObj.values.forEach(v => {
-          // Puede venir 'end_time' (fin de periodo) y a veces 'start_time'
-          const from = v.start_time ? v.start_time.slice(0,10) : '';
-          const to = v.end_time ? v.end_time.slice(0,10) : '';
-          const key = from + '_' + to;
-          if (!dateMap[key]) dateMap[key] = { From: from, Fecha: to }; // Columnas para fechas
-          dateMap[key][metricObj.name] = (typeof v.value === "object" && v.value !== null) ? JSON.stringify(v.value) : v.value;
-        });
-      });
-      // 3. Ordenar las fechas
-      const rows = Object.values(dateMap).sort((a,b) => (a.From > b.From ? 1 : -1));
-      // 4. Construir la tabla
+    // Formatea la tabla estilo Google Sheets: since, until, luego los titles y valores
+    function buildSheetStyleTable(insightsData, sinceDateStr, untilDateStr) {
+      if (!Array.isArray(insightsData) || insightsData.length === 0) {
+        return "<em>No hay datos para mostrar.</em>";
+      }
+      // Headers: since, until, titles de las métricas
+      const headers = ['From', 'Fecha'].concat(insightsData.map(m => m.title));
+      // Valores: fechas, luego cada total_value.value
+      const values = [sinceDateStr, untilDateStr].concat(
+        insightsData.map(m => m.total_value?.value ?? '')
+      );
       let html = "<table><thead><tr>";
-      html += "<th>From</th><th>Fecha</th>";
-      metrics.forEach(m => { html += `<th>${m}</th>`; });
-      html += "</tr></thead><tbody>";
-      rows.forEach(row => {
-        html += "<tr>";
-        html += `<td>${row.From}</td><td>${row.Fecha}</td>`;
-        metrics.forEach(m => {
-          html += `<td>${row[m] !== undefined ? row[m] : ""}</td>`;
-        });
-        html += "</tr>";
-      });
-      html += "</tbody></table>";
+      headers.forEach(h => html += `<th>${h}</th>`);
+      html += "</tr></thead><tbody><tr>";
+      values.forEach(v => html += `<td>${v}</td>`);
+      html += "</tr></tbody></table>";
       return html;
+    }
+
+    // Calcula fechas tipo tu script de Google Apps Script
+    function getSinceUntilDays(daysSince = 2, daysUntil = 1) {
+      const today = new Date();
+      const sinceDate = new Date(today);
+      sinceDate.setDate(today.getDate() - daysSince);
+      const untilDate = new Date(today);
+      untilDate.setDate(today.getDate() - daysUntil);
+      const pad = n => n.toString().padStart(2, '0');
+      const fmt = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+      return {
+        sinceUnix: Math.floor(sinceDate.getTime() / 1000),
+        untilUnix: Math.floor(untilDate.getTime() / 1000),
+        sinceStr: fmt(sinceDate),
+        untilStr: fmt(untilDate)
+      };
     }
 
     async function main() {
@@ -122,16 +121,19 @@
           return;
         }
 
+        // Calcula fechas como en tu Apps Script
+        const { sinceUnix, untilUnix, sinceStr, untilStr } = getSinceUntilDays();
+
         resultsDiv.innerHTML = `Consultando insights de Instagram Business (ID: <b>${igBusinessId}</b>)...`;
 
-        const insights = await fetchInstagramInsights(igBusinessId, accessToken);
+        const insights = await fetchInstagramInsights(igBusinessId, accessToken, sinceUnix, untilUnix);
 
         if (insights.error) {
           resultsDiv.innerHTML += `<br><span class="error">Error al consultar insights:</span>
           <pre>${JSON.stringify(insights.error, null, 2)}</pre>`;
         } else {
           resultsDiv.innerHTML += `<br><b>Tabla de insights:</b><br>
-            ${buildPivotInsightsTable(insights.data)}
+            ${buildSheetStyleTable(insights.data, sinceStr, untilStr)}
             <details>
               <summary>Ver respuesta cruda</summary>
               <pre>${JSON.stringify(insights, null, 2)}</pre>
