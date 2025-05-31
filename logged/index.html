@@ -11,14 +11,24 @@
     table { border-collapse: collapse; margin: 1em 0; }
     th, td { border: 1px solid #ccc; padding: 0.5em 1em; text-align: center; }
     th { background: #f0f0f0; }
+    #progress-bar-container {
+      width: 100%; background: #eee; border-radius: 8px; height: 24px; margin-bottom: 18px; overflow: hidden;
+    }
+    #progress-bar {
+      height: 100%; width: 0; background: #4caf50; transition: width 0.3s; color: #fff; font-weight: bold; display: flex; align-items: center; justify-content: center;
+    }
+    #progress-text { margin-top: 3px; font-size: 0.95em; color: #555; }
   </style>
 </head>
 <body>
   <h1>Instagram Business Dashboard</h1>
+  <div id="progress-bar-container" style="display:none">
+    <div id="progress-bar">0%</div>
+  </div>
+  <div id="progress-text"></div>
   <div id="results">Procesando autenticación...</div>
   <table id="insights-table" style="display:none"></table>
   <script>
-    // MÉTRICAS a consultar
     const METRICS = [
       'views',
       'profile_views',
@@ -31,7 +41,6 @@
       'accounts_engaged'
     ];
 
-    // Devuelve {sinceUnix, untilUnix, sinceStr, untilStr} para el día i (0 = hoy, -1 = ayer, etc)
     function getSinceUntilForDay(today, i) {
       const sinceDate = new Date(today);
       sinceDate.setDate(today.getDate() - i);
@@ -72,7 +81,6 @@
       return response.json();
     }
 
-    // Inicializa la tabla solo con los headers
     function initTable(metrics) {
       const table = document.getElementById("insights-table");
       table.innerHTML = "";
@@ -90,17 +98,30 @@
       table.appendChild(tbody);
     }
 
-    // Agrega una fila a la tabla
-    function appendRowToTable(row) {
+    function renderTableRows(rows) {
       const table = document.getElementById("insights-table");
       let tbody = table.querySelector("tbody");
-      let tr = document.createElement("tr");
-      row.forEach(cell => {
-        let td = document.createElement("td");
-        td.textContent = cell !== undefined ? cell : "";
-        tr.appendChild(td);
+      tbody.innerHTML = "";
+      rows.forEach(row => {
+        let tr = document.createElement("tr");
+        row.forEach(cell => {
+          let td = document.createElement("td");
+          td.textContent = cell !== undefined ? cell : "";
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
       });
-      tbody.appendChild(tr);
+    }
+
+    function updateProgressBar(current, total) {
+      const barContainer = document.getElementById('progress-bar-container');
+      const bar = document.getElementById('progress-bar');
+      const text = document.getElementById('progress-text');
+      barContainer.style.display = "block";
+      let percent = Math.round((current / total) * 100);
+      bar.style.width = percent + "%";
+      bar.textContent = percent + "%";
+      text.textContent = `Días cargados: ${current} / ${total}`;
     }
 
     async function main() {
@@ -137,19 +158,22 @@
         }
 
         // Rango de días
-        const daysSince = 30; // Cambia a 30 si quieres el mes completo
-        const daysUntil = 1; // hasta ayer (para excluir el día de hoy)
+        const daysSince = 30;
+        const daysUntil = 1;
         const today = new Date();
+        const totalDays = daysSince - daysUntil;
 
-        resultsDiv.innerHTML = `Consultando insights diarios de Instagram Business (ID: <b>${igBusinessId}</b>)...<br>La tabla se irá llenando automáticamente.<br><br>`;
+        resultsDiv.innerHTML = `Consultando insights diarios de Instagram Business (ID: <b>${igBusinessId}</b>)...<br>La tabla se llenará en orden.<br><br>`;
 
         initTable(METRICS);
 
-        // Para mejor UX, dispara todas las requests a la vez (no en serie)
-        // Si prefieres en serie (una por una), usa for (...) await ... como antes
+        let rows = [];
+        let completed = 0;
+
         let promises = [];
         for (let i = daysSince; i > daysUntil; i--) {
           const { sinceUnix, untilUnix, sinceStr, untilStr } = getSinceUntilForDay(today, i);
+
           promises.push(
             (async () => {
               try {
@@ -167,16 +191,22 @@
                     }
                   });
                 }
-                appendRowToTable(row);
+                rows.push(row);
               } catch (e) {
                 let row = [sinceStr, untilStr].concat(METRICS.map(() => "Error"));
-                appendRowToTable(row);
+                rows.push(row);
+              } finally {
+                completed++;
+                updateProgressBar(completed, totalDays);
               }
             })()
           );
         }
-        // Espera a que terminen todas (para saber que está completa la tabla, si quisieras)
         await Promise.all(promises);
+
+        // ORDENAR por fecha ASC (columna 0, "From")
+        rows.sort((a, b) => a[0].localeCompare(b[0]));
+        renderTableRows(rows);
 
       } catch (err) {
         resultsDiv.innerHTML = `<span class="error">Error de red o inesperado:</span>
