@@ -17,6 +17,35 @@
   <h1>Instagram Business Dashboard</h1>
   <div id="results">Procesando autenticación...</div>
   <script>
+    // MÉTRICAS a consultar
+    const METRICS = [
+      'views',
+      'profile_views',
+      'reach',
+      'website_clicks',
+      'likes',
+      'comments',
+      'shares',
+      'replies',
+      'accounts_engaged'
+    ];
+
+    // Devuelve {sinceUnix, untilUnix, sinceStr, untilStr} para el día i (0 = hoy, -1 = ayer, etc)
+    function getSinceUntilForDay(today, i) {
+      const sinceDate = new Date(today);
+      sinceDate.setDate(today.getDate() - i);
+      const untilDate = new Date(today);
+      untilDate.setDate(today.getDate() - (i - 1));
+      const pad = n => n.toString().padStart(2, '0');
+      const fmt = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+      return {
+        sinceUnix: Math.floor(sinceDate.getTime() / 1000),
+        untilUnix: Math.floor(untilDate.getTime() / 1000),
+        sinceStr: fmt(sinceDate),
+        untilStr: fmt(untilDate)
+      };
+    }
+
     function getHashParams() {
       const hash = window.location.hash.substr(1);
       const params = {};
@@ -33,59 +62,29 @@
       return response.json();
     }
 
-    async function fetchInstagramInsights(instagramBusinessId, accessToken, since, until) {
-      const metrics = [
-        'views',
-        'profile_views',
-        'reach',
-        'website_clicks',
-        'likes',
-        'comments',
-        'shares',
-        'replies',
-        'accounts_engaged'
-      ].join(',');
-      const endpoint =
+    async function fetchInstagramInsightsForDay(instagramBusinessId, accessToken, since, until) {
+      // Consulta todas las métricas de un día (period=day, metric_type=total_value)
+      const metricParams = `metric=${METRICS.join(',')}`;
+      const url =
         `https://graph.facebook.com/v20.0/${instagramBusinessId}/insights?` +
-        `metric=${metrics}&period=day&since=${since}&until=${until}&metric_type=total_value&access_token=${accessToken}`;
-      const response = await fetch(endpoint);
+        `${metricParams}&period=day&since=${since}&until=${until}&metric_type=total_value&access_token=${accessToken}`;
+      const response = await fetch(url);
       return response.json();
     }
 
-    // Formatea la tabla estilo Google Sheets: since, until, luego los titles y valores
-    function buildSheetStyleTable(insightsData, sinceDateStr, untilDateStr) {
-      if (!Array.isArray(insightsData) || insightsData.length === 0) {
-        return "<em>No hay datos para mostrar.</em>";
-      }
-      // Headers: since, until, titles de las métricas
-      const headers = ['From', 'Fecha'].concat(insightsData.map(m => m.title));
-      // Valores: fechas, luego cada total_value.value
-      const values = [sinceDateStr, untilDateStr].concat(
-        insightsData.map(m => m.total_value?.value ?? '')
-      );
+    // Construye la tabla como en Google Sheets
+    function buildDailyTable(rows, metrics) {
       let html = "<table><thead><tr>";
-      headers.forEach(h => html += `<th>${h}</th>`);
-      html += "</tr></thead><tbody><tr>";
-      values.forEach(v => html += `<td>${v}</td>`);
-      html += "</tr></tbody></table>";
+      html += "<th>From</th><th>Fecha</th>";
+      metrics.forEach(m => html += `<th>${m}</th>`);
+      html += "</tr></thead><tbody>";
+      rows.forEach(row => {
+        html += "<tr>";
+        row.forEach(cell => html += `<td>${cell !== undefined ? cell : ""}</td>`);
+        html += "</tr>";
+      });
+      html += "</tbody></table>";
       return html;
-    }
-
-    // Calcula fechas tipo tu script de Google Apps Script
-    function getSinceUntilDays(daysSince = 30, daysUntil = 1) {
-      const today = new Date();
-      const sinceDate = new Date(today);
-      sinceDate.setDate(today.getDate() - daysSince);
-      const untilDate = new Date(today);
-      untilDate.setDate(today.getDate() - daysUntil);
-      const pad = n => n.toString().padStart(2, '0');
-      const fmt = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-      return {
-        sinceUnix: Math.floor(sinceDate.getTime() / 1000),
-        untilUnix: Math.floor(untilDate.getTime() / 1000),
-        sinceStr: fmt(sinceDate),
-        untilStr: fmt(untilDate)
-      };
     }
 
     async function main() {
@@ -121,24 +120,46 @@
           return;
         }
 
-        // Calcula fechas como en tu Apps Script
-        const { sinceUnix, untilUnix, sinceStr, untilStr } = getSinceUntilDays();
+        // Rango de días
+        const daysSince = 7; // Cambia a 30 si quieres el mes completo
+        const daysUntil = 1; // hasta ayer (para excluir el día de hoy)
+        const today = new Date();
 
-        resultsDiv.innerHTML = `Consultando insights de Instagram Business (ID: <b>${igBusinessId}</b>)...`;
+        resultsDiv.innerHTML = `Consultando insights diarios de Instagram Business (ID: <b>${igBusinessId}</b>)...<br>Esto puede tardar unos segundos.<br><br>`;
 
-        const insights = await fetchInstagramInsights(igBusinessId, accessToken, sinceUnix, untilUnix);
+        // Armar las filas
+        let allRows = [];
 
-        if (insights.error) {
-          resultsDiv.innerHTML += `<br><span class="error">Error al consultar insights:</span>
-          <pre>${JSON.stringify(insights.error, null, 2)}</pre>`;
-        } else {
-          resultsDiv.innerHTML += `<br><b>Tabla de insights:</b><br>
-            ${buildSheetStyleTable(insights.data, sinceStr, untilStr)}
-            <details>
-              <summary>Ver respuesta cruda</summary>
-              <pre>${JSON.stringify(insights, null, 2)}</pre>
-            </details>`;
+        for (let i = daysSince; i > daysUntil; i--) {
+          const { sinceUnix, untilUnix, sinceStr, untilStr } = getSinceUntilForDay(today, i);
+
+          try {
+            // Esperar la petición para cada día
+            const insights = await fetchInstagramInsightsForDay(igBusinessId, accessToken, sinceUnix, untilUnix);
+
+            if (insights.error) {
+              allRows.push([sinceStr, untilStr].concat(METRICS.map(() => "Error")));
+              continue;
+            }
+
+            // Armar la fila: fechas y cada métrica buscada
+            const row = [sinceStr, untilStr];
+            METRICS.forEach(metricName => {
+              const metricData = insights.data?.find(item => item.name === metricName);
+              if (metricData && metricData.total_value && metricData.total_value.value !== undefined) {
+                row.push(metricData.total_value.value);
+              } else {
+                row.push(""); // Si no hay datos, deja la celda vacía
+              }
+            });
+            allRows.push(row);
+
+          } catch (e) {
+            allRows.push([sinceStr, untilStr].concat(METRICS.map(() => "Error")));
+          }
         }
+
+        resultsDiv.innerHTML += buildDailyTable(allRows, METRICS);
 
       } catch (err) {
         resultsDiv.innerHTML = `<span class="error">Error de red o inesperado:</span>
