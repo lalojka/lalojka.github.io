@@ -72,7 +72,7 @@
     }
 
     // Calcula fechas tipo tu script de Google Apps Script
-    function getSinceUntilDays(daysSince = 2, daysUntil = 1) {
+    function getSinceUntilDays(daysSince = 30, daysUntil = 1) {
       const today = new Date();
       const sinceDate = new Date(today);
       sinceDate.setDate(today.getDate() - daysSince);
