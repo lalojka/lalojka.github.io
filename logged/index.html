@@ -31,6 +31,27 @@
       return response.json();
     }
 
+    async function fetchInstagramInsights(instagramBusinessId, accessToken) {
+      // Fechas de ejemplo (puedes parametrizarlo si querés)
+      // Usa los mismos valores que en tu ejemplo
+      const since = 1748459970;
+      const until = 1748546370;
+      const metrics = [
+        'views',
+        'profile_views',
+        'reach',
+        'website_clicks',
+        'likes',
+        'comments',
+        'shares',
+        'replies',
+        'accounts_engaged'
+      ].join(',');
+      const endpoint = `https://graph.facebook.com/v20.0/${instagramBusinessId}/insights?metric=${metrics}&period=day&since=${since}&until=${until}&metric_type=total_value&access_token=${accessToken}`;
+      const response = await fetch(endpoint);
+      return response.json();
+    }
+
     async function main() {
       const resultsDiv = document.getElementById('results');
       const params = getHashParams();
@@ -53,10 +74,34 @@
         if (data.error) {
           resultsDiv.innerHTML = `<span class="error">Error al consultar la API:</span>
           <pre>${JSON.stringify(data.error, null, 2)}</pre>`;
-        } else {
-          resultsDiv.innerHTML = `<b>Respuesta de la API:</b>
-          <pre>${JSON.stringify(data, null, 2)}</pre>`;
+          return;
         }
+
+        resultsDiv.innerHTML = `<b>Respuesta de la API (Facebook Pages):</b>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+          <hr>`;
+
+        // Busca el primer instagram_business_account disponible
+        const account = (data.data && data.data.length > 0) ? data.data[0] : null;
+        const igBusinessId = account && account.instagram_business_account && account.instagram_business_account.id;
+
+        if (!igBusinessId) {
+          resultsDiv.innerHTML += `<span class="error">No se encontró una cuenta de Instagram Business vinculada.</span>`;
+          return;
+        }
+
+        resultsDiv.innerHTML += `Consultando insights de Instagram Business (ID: <b>${igBusinessId}</b>)...`;
+
+        const insights = await fetchInstagramInsights(igBusinessId, accessToken);
+
+        if (insights.error) {
+          resultsDiv.innerHTML += `<br><span class="error">Error al consultar insights:</span>
+          <pre>${JSON.stringify(insights.error, null, 2)}</pre>`;
+        } else {
+          resultsDiv.innerHTML += `<br><b>Respuesta de insights:</b>
+          <pre>${JSON.stringify(insights, null, 2)}</pre>`;
+        }
+
       } catch (err) {
         resultsDiv.innerHTML = `<span class="error">Error de red o inesperado:</span>
         <pre>${err.message}</pre>`;
