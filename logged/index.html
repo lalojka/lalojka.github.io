@@ -8,13 +8,15 @@
     #results { margin-top: 2em; }
     pre { background: #f4f4f4; padding: 1em; border-radius: 5px; }
     .error { color: red; }
+    table { border-collapse: collapse; margin: 1em 0; }
+    th, td { border: 1px solid #ccc; padding: 0.5em 1em; text-align: left; }
+    th { background: #f0f0f0; }
   </style>
 </head>
 <body>
   <h1>Instagram Business Dashboard</h1>
   <div id="results">Procesando autenticación...</div>
   <script>
-    // Extrae parámetros del hash de la URL
     function getHashParams() {
       const hash = window.location.hash.substr(1);
       const params = {};
@@ -32,8 +34,6 @@
     }
 
     async function fetchInstagramInsights(instagramBusinessId, accessToken) {
-      // Fechas de ejemplo (puedes parametrizarlo si querés)
-      // Usa los mismos valores que en tu ejemplo
       const since = 1748459970;
       const until = 1748546370;
       const metrics = [
@@ -50,6 +50,37 @@
       const endpoint = `https://graph.facebook.com/v20.0/${instagramBusinessId}/insights?metric=${metrics}&period=day&since=${since}&until=${until}&metric_type=total_value&access_token=${accessToken}`;
       const response = await fetch(endpoint);
       return response.json();
+    }
+
+    // Construye una tabla HTML a partir de un array de objetos
+    function buildTableFromData(dataArr) {
+      if (!Array.isArray(dataArr) || dataArr.length === 0) {
+        return "<em>No hay datos para mostrar.</em>";
+      }
+      // Armar set con todas las claves que aparecen en cualquier objeto
+      const allKeysSet = new Set();
+      dataArr.forEach(row => Object.keys(row).forEach(k => allKeysSet.add(k)));
+      const allKeys = Array.from(allKeysSet);
+
+      // Crear headers
+      let html = "<table><thead><tr>";
+      allKeys.forEach(key => { html += `<th>${key}</th>`; });
+      html += "</tr></thead><tbody>";
+
+      // Crear filas
+      dataArr.forEach(row => {
+        html += "<tr>";
+        allKeys.forEach(key => {
+          let val = row[key];
+          if (typeof val === "object" && val !== null) val = JSON.stringify(val);
+          if (val === undefined) val = "";
+          html += `<td>${val}</td>`;
+        });
+        html += "</tr>";
+      });
+
+      html += "</tbody></table>";
+      return html;
     }
 
     async function main() {
@@ -77,13 +108,11 @@
           return;
         }
 
-        resultsDiv.innerHTML = `<b>Respuesta de la API (Facebook Pages):</b>
-          <pre>${JSON.stringify(data, null, 2)}</pre>
-          <hr>`;
-
-        // Busca el primer instagram_business_account disponible
+        // Mostrar info de la página y el IG Business ID
         const account = (data.data && data.data.length > 0) ? data.data[0] : null;
         const igBusinessId = account && account.instagram_business_account && account.instagram_business_account.id;
+
+        resultsDiv.innerHTML = `<b>Página conectada:</b> <pre>${account ? JSON.stringify(account, null, 2) : 'No encontrada'}</pre>`;
 
         if (!igBusinessId) {
           resultsDiv.innerHTML += `<span class="error">No se encontró una cuenta de Instagram Business vinculada.</span>`;
@@ -98,8 +127,12 @@
           resultsDiv.innerHTML += `<br><span class="error">Error al consultar insights:</span>
           <pre>${JSON.stringify(insights.error, null, 2)}</pre>`;
         } else {
-          resultsDiv.innerHTML += `<br><b>Respuesta de insights:</b>
-          <pre>${JSON.stringify(insights, null, 2)}</pre>`;
+          resultsDiv.innerHTML += `<br><b>Tabla de insights:</b><br>
+            ${buildTableFromData(insights.data)}
+            <details>
+              <summary>Ver respuesta cruda</summary>
+              <pre>${JSON.stringify(insights, null, 2)}</pre>
+            </details>`;
         }
 
       } catch (err) {
