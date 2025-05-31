@@ -16,6 +16,7 @@
 <body>
   <h1>Instagram Business Dashboard</h1>
   <div id="results">Procesando autenticación...</div>
+  <table id="insights-table" style="display:none"></table>
   <script>
     // MÉTRICAS a consultar
     const METRICS = [
@@ -63,7 +64,6 @@
     }
 
     async function fetchInstagramInsightsForDay(instagramBusinessId, accessToken, since, until) {
-      // Consulta todas las métricas de un día (period=day, metric_type=total_value)
       const metricParams = `metric=${METRICS.join(',')}`;
       const url =
         `https://graph.facebook.com/v20.0/${instagramBusinessId}/insights?` +
@@ -72,19 +72,35 @@
       return response.json();
     }
 
-    // Construye la tabla como en Google Sheets
-    function buildDailyTable(rows, metrics) {
-      let html = "<table><thead><tr>";
-      html += "<th>From</th><th>Fecha</th>";
-      metrics.forEach(m => html += `<th>${m}</th>`);
-      html += "</tr></thead><tbody>";
-      rows.forEach(row => {
-        html += "<tr>";
-        row.forEach(cell => html += `<td>${cell !== undefined ? cell : ""}</td>`);
-        html += "</tr>";
+    // Inicializa la tabla solo con los headers
+    function initTable(metrics) {
+      const table = document.getElementById("insights-table");
+      table.innerHTML = "";
+      table.style.display = "table";
+      let thead = document.createElement("thead");
+      let tr = document.createElement("tr");
+      ["From", "Fecha", ...metrics].forEach(h => {
+        let th = document.createElement("th");
+        th.textContent = h;
+        tr.appendChild(th);
       });
-      html += "</tbody></table>";
-      return html;
+      thead.appendChild(tr);
+      table.appendChild(thead);
+      let tbody = document.createElement("tbody");
+      table.appendChild(tbody);
+    }
+
+    // Agrega una fila a la tabla
+    function appendRowToTable(row) {
+      const table = document.getElementById("insights-table");
+      let tbody = table.querySelector("tbody");
+      let tr = document.createElement("tr");
+      row.forEach(cell => {
+        let td = document.createElement("td");
+        td.textContent = cell !== undefined ? cell : "";
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
     }
 
     async function main() {
@@ -125,41 +141,42 @@
         const daysUntil = 1; // hasta ayer (para excluir el día de hoy)
         const today = new Date();
 
-        resultsDiv.innerHTML = `Consultando insights diarios de Instagram Business (ID: <b>${igBusinessId}</b>)...<br>Esto puede tardar unos segundos.<br><br>`;
+        resultsDiv.innerHTML = `Consultando insights diarios de Instagram Business (ID: <b>${igBusinessId}</b>)...<br>La tabla se irá llenando automáticamente.<br><br>`;
 
-        // Armar las filas
-        let allRows = [];
+        initTable(METRICS);
 
+        // Para mejor UX, dispara todas las requests a la vez (no en serie)
+        // Si prefieres en serie (una por una), usa for (...) await ... como antes
+        let promises = [];
         for (let i = daysSince; i > daysUntil; i--) {
           const { sinceUnix, untilUnix, sinceStr, untilStr } = getSinceUntilForDay(today, i);
-
-          try {
-            // Esperar la petición para cada día
-            const insights = await fetchInstagramInsightsForDay(igBusinessId, accessToken, sinceUnix, untilUnix);
-
-            if (insights.error) {
-              allRows.push([sinceStr, untilStr].concat(METRICS.map(() => "Error")));
-              continue;
-            }
-
-            // Armar la fila: fechas y cada métrica buscada
-            const row = [sinceStr, untilStr];
-            METRICS.forEach(metricName => {
-              const metricData = insights.data?.find(item => item.name === metricName);
-              if (metricData && metricData.total_value && metricData.total_value.value !== undefined) {
-                row.push(metricData.total_value.value);
-              } else {
-                row.push(""); // Si no hay datos, deja la celda vacía
+          promises.push(
+            (async () => {
+              try {
+                const insights = await fetchInstagramInsightsForDay(igBusinessId, accessToken, sinceUnix, untilUnix);
+                let row = [sinceStr, untilStr];
+                if (insights.error) {
+                  row = row.concat(METRICS.map(() => "Error"));
+                } else {
+                  METRICS.forEach(metricName => {
+                    const metricData = insights.data?.find(item => item.name === metricName);
+                    if (metricData && metricData.total_value && metricData.total_value.value !== undefined) {
+                      row.push(metricData.total_value.value);
+                    } else {
+                      row.push("");
+                    }
+                  });
+                }
+                appendRowToTable(row);
+              } catch (e) {
+                let row = [sinceStr, untilStr].concat(METRICS.map(() => "Error"));
+                appendRowToTable(row);
               }
-            });
-            allRows.push(row);
-
-          } catch (e) {
-            allRows.push([sinceStr, untilStr].concat(METRICS.map(() => "Error")));
-          }
+            })()
+          );
         }
-
-        resultsDiv.innerHTML += buildDailyTable(allRows, METRICS);
+        // Espera a que terminen todas (para saber que está completa la tabla, si quisieras)
+        await Promise.all(promises);
 
       } catch (err) {
         resultsDiv.innerHTML = `<span class="error">Error de red o inesperado:</span>
