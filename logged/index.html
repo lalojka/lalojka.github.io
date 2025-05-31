@@ -9,7 +9,7 @@
     pre { background: #f4f4f4; padding: 1em; border-radius: 5px; }
     .error { color: red; }
     table { border-collapse: collapse; margin: 1em 0; }
-    th, td { border: 1px solid #ccc; padding: 0.5em 1em; text-align: left; }
+    th, td { border: 1px solid #ccc; padding: 0.5em 1em; text-align: center; }
     th { background: #f0f0f0; }
   </style>
 </head>
@@ -34,10 +34,11 @@
     }
 
     async function fetchInstagramInsights(instagramBusinessId, accessToken) {
+      // Fechas y métricas de ejemplo (puedes parametrizarlo)
       const since = 1748459970;
       const until = 1748546370;
       const metrics = [
-        'views',
+        'impressions', // <-- agregué impressions, asegúrate de pedirla en el endpoint
         'profile_views',
         'reach',
         'website_clicks',
@@ -52,33 +53,38 @@
       return response.json();
     }
 
-    // Construye una tabla HTML a partir de un array de objetos
-    function buildTableFromData(dataArr) {
-      if (!Array.isArray(dataArr) || dataArr.length === 0) {
-        return "<em>No hay datos para mostrar.</em>";
-      }
-      // Armar set con todas las claves que aparecen en cualquier objeto
-      const allKeysSet = new Set();
-      dataArr.forEach(row => Object.keys(row).forEach(k => allKeysSet.add(k)));
-      const allKeys = Array.from(allKeysSet);
-
-      // Crear headers
+    // Transforma insights.data en una tabla pivoteada por fechas
+    function buildPivotInsightsTable(insightsData) {
+      // 1. Obtener todas las métricas devueltas
+      const metrics = insightsData.map(d => d.name);
+      // 2. Construir mapa fecha => { metric1: value1, metric2: value2, ... }
+      const dateMap = {};
+      insightsData.forEach(metricObj => {
+        if (!Array.isArray(metricObj.values)) return;
+        metricObj.values.forEach(v => {
+          // Puede venir 'end_time' (fin de periodo) y a veces 'start_time'
+          const from = v.start_time ? v.start_time.slice(0,10) : '';
+          const to = v.end_time ? v.end_time.slice(0,10) : '';
+          const key = from + '_' + to;
+          if (!dateMap[key]) dateMap[key] = { From: from, Fecha: to }; // Columnas para fechas
+          dateMap[key][metricObj.name] = (typeof v.value === "object" && v.value !== null) ? JSON.stringify(v.value) : v.value;
+        });
+      });
+      // 3. Ordenar las fechas
+      const rows = Object.values(dateMap).sort((a,b) => (a.From > b.From ? 1 : -1));
+      // 4. Construir la tabla
       let html = "<table><thead><tr>";
-      allKeys.forEach(key => { html += `<th>${key}</th>`; });
+      html += "<th>From</th><th>Fecha</th>";
+      metrics.forEach(m => { html += `<th>${m}</th>`; });
       html += "</tr></thead><tbody>";
-
-      // Crear filas
-      dataArr.forEach(row => {
+      rows.forEach(row => {
         html += "<tr>";
-        allKeys.forEach(key => {
-          let val = row[key];
-          if (typeof val === "object" && val !== null) val = JSON.stringify(val);
-          if (val === undefined) val = "";
-          html += `<td>${val}</td>`;
+        html += `<td>${row.From}</td><td>${row.Fecha}</td>`;
+        metrics.forEach(m => {
+          html += `<td>${row[m] !== undefined ? row[m] : ""}</td>`;
         });
         html += "</tr>";
       });
-
       html += "</tbody></table>";
       return html;
     }
@@ -108,18 +114,15 @@
           return;
         }
 
-        // Mostrar info de la página y el IG Business ID
         const account = (data.data && data.data.length > 0) ? data.data[0] : null;
         const igBusinessId = account && account.instagram_business_account && account.instagram_business_account.id;
 
-        resultsDiv.innerHTML = `<b>Página conectada:</b> <pre>${account ? JSON.stringify(account, null, 2) : 'No encontrada'}</pre>`;
-
         if (!igBusinessId) {
-          resultsDiv.innerHTML += `<span class="error">No se encontró una cuenta de Instagram Business vinculada.</span>`;
+          resultsDiv.innerHTML = `<span class="error">No se encontró una cuenta de Instagram Business vinculada.</span>`;
           return;
         }
 
-        resultsDiv.innerHTML += `Consultando insights de Instagram Business (ID: <b>${igBusinessId}</b>)...`;
+        resultsDiv.innerHTML = `Consultando insights de Instagram Business (ID: <b>${igBusinessId}</b>)...`;
 
         const insights = await fetchInstagramInsights(igBusinessId, accessToken);
 
@@ -128,7 +131,7 @@
           <pre>${JSON.stringify(insights.error, null, 2)}</pre>`;
         } else {
           resultsDiv.innerHTML += `<br><b>Tabla de insights:</b><br>
-            ${buildTableFromData(insights.data)}
+            ${buildPivotInsightsTable(insights.data)}
             <details>
               <summary>Ver respuesta cruda</summary>
               <pre>${JSON.stringify(insights, null, 2)}</pre>
