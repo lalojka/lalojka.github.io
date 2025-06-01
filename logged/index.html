@@ -7,19 +7,7 @@
   <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-    <div class="container header-content">
-      <img src="../img/logo.png" alt="EPM APP Logo" class="logo">
-      <nav>
-        <a href="../index.html">Home</a>
-        <a href="#logout" id="logout-link">Logout</a>
-      </nav>
-    </div>
-  </header>
-
   <div class="dashboard-main">
-    <!-- Sidebar -->
     <aside class="dashboard-sidebar">
       <nav>
         <a href="index.html" class="active">Resumen</a>
@@ -28,7 +16,6 @@
         <a href="#" class="disabled" tabindex="-1" aria-disabled="true" title="Próximamente">Configuración</a>
       </nav>
     </aside>
-    <!-- Panel principal -->
     <section class="dashboard-content">
       <h2>¡Bienvenido al dashboard EPM APP!</h2>
       <p>Desde aquí podrás acceder a todas tus métricas y funcionalidades.</p>
@@ -51,17 +38,13 @@
       </div>
     </section>
   </div>
+  <!-- Header y Footer se insertan por JS -->
 
-  <footer class="footer">
-    <div class="container footer-content">
-      <img src="../img/logo.png" alt="EPM APP Logo" class="logo-footer">
-      <div>
-        <a href="../terms.html" target="_blank">Terms of Service</a> | 
-        <a href="../privacy-policy.html" target="_blank">Privacy Policy</a>
-      </div>
-      <div class="footer-note">© 2025 EPM APP</div>
-    </div>
-  </footer>
-  <script src="js/hub.js"></script>
+  <script type="module">
+    import { insertHeaderFooter, enableLogout } from './js/layout.js';
+    insertHeaderFooter();
+    enableLogout();
+    // Si querés lógica extra del hub, la importás acá
+  </script>
 </body>
 </html>
