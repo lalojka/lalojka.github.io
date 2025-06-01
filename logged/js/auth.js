@@ -2,7 +2,7 @@
 
 export function getAccessToken() {
   // 1. Buscar en el fragmento de la URL
-  const hash = window.location.hash.substr(1);
+  const hash = window.location.hash.substring(1);
   let token = null;
   hash.split('&').forEach(pair => {
     const [key, value] = pair.split('=');
