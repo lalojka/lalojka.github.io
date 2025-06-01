@@ -1,0 +1,94 @@
+/* Importa tu styles.css principal aquí si quieres, o copia los estilos que ya usabas */
+/* ...Pega aquí los estilos de tu styles.css... */
+@import url('../styles.css');
+
+/* Dashboard-specific */
+.dashboard-main { display: flex; min-height: 80vh; }
+.dashboard-sidebar {
+  width: 220px;
+  background: var(--blue);
+  color: var(--white);
+  padding: 32px 0 0 0;
+  min-height: 80vh;
+  box-shadow: 2px 0 12px rgba(8,57,99,0.07);
+  position: relative;
+  z-index: 1;
+}
+.dashboard-sidebar nav {
+  display: flex; flex-direction: column; gap: 18px; margin-top: 40px;
+  padding-left: 28px;
+}
+.dashboard-sidebar a {
+  color: var(--white);
+  text-decoration: none;
+  padding: 8px 0 8px 10px;
+  border-left: 4px solid transparent;
+  font-weight: 500;
+  transition: background 0.13s, border-color 0.13s;
+}
+.dashboard-sidebar a.active,
+.dashboard-sidebar a:hover {
+  background: rgba(93,169,221,0.13);
+  border-left: 4px solid var(--orange);
+  color: var(--orange);
+}
+.dashboard-sidebar a.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  color: #fff !important;
+  cursor: not-allowed;
+}
+.dashboard-content {
+  flex: 1; padding: 36px 30px 20px 30px; background: var(--cream); min-height: 80vh;
+}
+.dashboard-cards {
+  display: flex; gap: 32px; margin-top: 28px; flex-wrap: wrap;
+}
+.dashboard-card {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 24px 18px 18px 18px;
+  box-shadow: 0 1px 6px rgba(8,57,99,0.06);
+  min-width: 220px; max-width: 270px;
+  flex: 1 1 200px;
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+.dashboard-card-disabled {
+  opacity: 0.6; filter: grayscale(0.12);
+}
+.dashboard-btn {
+  background: var(--orange);
+  color: var(--white);
+  border-radius: 5px;
+  padding: 8px 20px;
+  margin-top: 18px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.18s;
+  font-size: 1em;
+  border: none;
+  display: inline-block;
+}
+.dashboard-btn.disabled {
+  background: #999; color: #eee; cursor: not-allowed;
+  pointer-events: none;
+}
+.epm-empty {
+  background: #f7f7f7;
+  color: #888;
+  border-radius: 6px;
+  padding: 32px 18px;
+  text-align: center;
+  margin-top: 24px;
+  font-size: 1.1em;
+}
+@media (max-width: 750px) {
+  .dashboard-main { flex-direction: column; }
+  .dashboard-sidebar { width: 100%; min-height: unset; box-shadow: none; padding: 12px 0 0 0; }
+  .dashboard-content { padding: 22px 4vw 18px 4vw; }
+  .dashboard-sidebar nav { flex-direction: row; gap: 0; margin: 0; padding: 0 6vw; }
+  .dashboard-sidebar a { border: none; padding: 8px 16px; border-bottom: 2px solid transparent; }
+  .dashboard-sidebar a.active, .dashboard-sidebar a:hover { border-bottom: 2px solid var(--orange); border-left: none; }
+  .dashboard-cards { flex-direction: column; gap: 18px; }
+}

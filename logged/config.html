@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>EPM APP – Dashboard</title>
+  <title>EPM APP – Configuración</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="../css/dashboard.css">
 </head>
@@ -13,45 +13,25 @@
       <img src="../img/logo.png" alt="EPM APP Logo" class="logo">
       <nav>
         <a href="../index.html">Home</a>
+        <a href="index.html">Dashboard</a>
         <a href="#logout" id="logout-link">Logout</a>
       </nav>
     </div>
   </header>
-
   <div class="dashboard-main">
-    <!-- Sidebar -->
     <aside class="dashboard-sidebar">
       <nav>
-        <a href="index.html" class="active">Resumen</a>
+        <a href="index.html">Resumen</a>
         <a href="metrics.html">Métricas Orgánicas</a>
         <a href="#" class="disabled" tabindex="-1" aria-disabled="true" title="Próximamente">Publicaciones</a>
-        <a href="#" class="disabled" tabindex="-1" aria-disabled="true" title="Próximamente">Configuración</a>
+        <a href="#" class="active disabled" tabindex="-1" aria-disabled="true" title="Próximamente">Configuración</a>
       </nav>
     </aside>
-    <!-- Panel principal -->
     <section class="dashboard-content">
-      <h2>¡Bienvenido al dashboard EPM APP!</h2>
-      <p>Desde aquí podrás acceder a todas tus métricas y funcionalidades.</p>
-      <div class="dashboard-cards">
-        <div class="dashboard-card">
-          <h3>Métricas Orgánicas</h3>
-          <p>Revisa el detalle de tus métricas diarias de Instagram.</p>
-          <a class="dashboard-btn" href="metrics.html">Ver métricas &rarr;</a>
-        </div>
-        <div class="dashboard-card dashboard-card-disabled">
-          <h3>Publicaciones</h3>
-          <p>Próximamente: Analiza el rendimiento de tus publicaciones.</p>
-          <span class="dashboard-btn disabled">Próximamente</span>
-        </div>
-        <div class="dashboard-card dashboard-card-disabled">
-          <h3>Configuración</h3>
-          <p>Próximamente: Gestiona tus cuentas y preferencias.</p>
-          <span class="dashboard-btn disabled">Próximamente</span>
-        </div>
-      </div>
+      <h2>Configuración</h2>
+      <div class="epm-empty">Esta sección estará disponible próximamente.</div>
     </section>
   </div>
-
   <footer class="footer">
     <div class="container footer-content">
       <img src="../img/logo.png" alt="EPM APP Logo" class="logo-footer">
@@ -62,6 +42,5 @@
       <div class="footer-note">© 2025 EPM APP</div>
     </div>
   </footer>
-  <script src="js/hub.js"></script>
 </body>
 </html>
