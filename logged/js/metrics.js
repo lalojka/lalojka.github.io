@@ -1,4 +1,4 @@
-import { getAccessToken } from './auth.js';
+import { getAccessToken, fetchFacebookAPI } from './auth.js';
 
 export function main() {
   const METRICS = [
@@ -30,8 +30,7 @@ export function main() {
 
   async function fetchFacebookAccounts(accessToken) {
     const endpoint = `https://graph.facebook.com/v23.0/me/accounts?fields=id,name,access_token,instagram_business_account&access_token=${accessToken}`;
-    const response = await fetch(endpoint);
-    return response.json();
+    return await fetchFacebookAPI(endpoint);
   }
 
   async function fetchInstagramInsightsForDay(instagramBusinessId, accessToken, since, until) {
@@ -39,8 +38,7 @@ export function main() {
     const url =
       `https://graph.facebook.com/v20.0/${instagramBusinessId}/insights?` +
       `${metricParams}&period=day&since=${since}&until=${until}&metric_type=total_value&access_token=${accessToken}`;
-    const response = await fetch(url);
-    return response.json();
+    return await fetchFacebookAPI(url);
   }
 
   function initTable(metrics) {
