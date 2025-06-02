@@ -273,18 +273,24 @@ body { padding-top: 72px; }
   .about-img { max-width: 260px; }
 }
 
-/* Facebook Login Button Fix */
-.fb-login-button {
-  min-width: 300px !important;
-  width: 300px !important;
-  display: inline-block !important;
-  margin: 0 auto 18px auto !important;
-  /* El !important es necesario porque Facebook usa estilos inline */
+
+/* Estilo para el botón de Facebook login */
+#fb-login-btn {
+  display: inline-block;
+  background-color: #1877F2; /* Azul clásico de Facebook */
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-/* Contenedor directo del botón, si lo usas */
-#fb-login-container {
-  width: 320px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
+
+/* Hover effect */
+#fb-login-btn:hover {
+  background-color: #145DBF; /* Un poco más oscuro para el hover */
 }
+
