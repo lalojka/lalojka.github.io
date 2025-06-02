@@ -6,20 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="../css/dashboard.css">
   <script type="module">
-  import { getAccessToken } from './js/auth.js';
-  getAccessToken(); // Esto guarda el token si está en la URL
-</script>
+    import { getAccessToken } from './js/auth.js';
+    getAccessToken(); // Esto guarda el token si está en la URL
+  </script>
 </head>
 <body>
   <div class="dashboard-main">
-    <aside class="dashboard-sidebar">
-      <nav>
-        <a href="index.html" class="active">Summary</a>
-        <a href="metrics.html">Organic data</a>
-        <a href="#" class="disabled" tabindex="-1" aria-disabled="true" title="Próximamente">Posts</a>
-        <a href="#" class="disabled" tabindex="-1" aria-disabled="true" title="Próximamente">Settings</a>
-      </nav>
-    </aside>
     <section class="dashboard-content">
       <h2>¡Welcome to EPM APP dashboard!</h2>
       <p>Here you can access your business metrics.</p>
@@ -42,11 +34,11 @@
       </div>
     </section>
   </div>
-  <!-- Header y Footer se insertan por JS -->
-
+  <!-- Header, Sidebar y Footer se insertan por JS -->
   <script type="module">
-    import { insertHeaderFooter, enableLogout } from './js/layout.js';
+    import { insertHeaderFooter, insertSidebar, enableLogout } from './js/layout.js';
     insertHeaderFooter();
+    insertSidebar("index");
     enableLogout();
     // Si querés lógica extra del hub, la importás acá
   </script>

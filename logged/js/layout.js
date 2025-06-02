@@ -40,3 +40,31 @@ export function enableLogout() {
     }
   });
 }
+
+export function insertSidebar(active = "") {
+  const sections = [
+    { id: "index", label: "Resumen", href: "index.html" },
+    { id: "metrics", label: "Métricas Orgánicas", href: "metrics.html" },
+    { id: "posts", label: "Publicaciones", href: "posts.html" },
+    { id: "settings", label: "Configuración", href: "#", disabled: true }
+  ];
+
+  const navLinks = sections.map(section => {
+    let cls = "";
+    if (section.disabled) cls += " disabled";
+    if (active === section.id) cls += " active";
+    return `<a href="${section.href}" class="${cls.trim()}"${section.disabled ? ' tabindex="-1" aria-disabled="true" title="Próximamente"' : ""}>${section.label}</a>`;
+  }).join("\n");
+
+  const aside = document.createElement("aside");
+  aside.className = "dashboard-sidebar";
+  aside.innerHTML = `<nav>${navLinks}</nav>`;
+
+  // Inserta después del header, antes del main/section
+  const header = document.querySelector("header");
+  if (header && header.nextSibling) {
+    header.parentNode.insertBefore(aside, header.nextSibling);
+  } else {
+    document.body.insertAdjacentElement('afterbegin', aside);
+  }
+}

@@ -2,20 +2,12 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>EPM APP – Métricas Orgánicas</title>
+  <title>EPM APP – Organic data</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
   <div class="dashboard-main">
-    <aside class="dashboard-sidebar">
-      <nav>
-        <a href="index.html">Resumen</a>
-        <a href="metrics.html" class="active">Métricas Orgánicas</a>
-        <a href="#" class="disabled" tabindex="-1" aria-disabled="true" title="Próximamente">Publicaciones</a>
-        <a href="#" class="disabled" tabindex="-1" aria-disabled="true" title="Próximamente">Configuración</a>
-      </nav>
-    </aside>
     <section class="dashboard-content">
       <h2>Métricas Orgánicas (últimos 30 días)</h2>
       <div id="progress-bar-container" style="display:none">
@@ -26,13 +18,12 @@
       <table id="insights-table" style="display:none"></table>
     </section>
   </div>
-  <!-- Header y Footer se insertan por JS -->
-
+  <!-- Header, Sidebar y Footer se insertan por JS -->
   <script type="module">
-    import { insertHeaderFooter, enableLogout } from './js/layout.js';
+    import { insertHeaderFooter, insertSidebar, enableLogout } from './js/layout.js';
     import { main } from './js/metrics.js';
-
     insertHeaderFooter();
+    insertSidebar("metrics");
     enableLogout();
     main();
   </script>
