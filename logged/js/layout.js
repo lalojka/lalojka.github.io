@@ -60,11 +60,8 @@ export function insertSidebar(active = "") {
   aside.className = "dashboard-sidebar";
   aside.innerHTML = `<nav>${navLinks}</nav>`;
 
-  // Inserta después del header, antes del main/section
-  const header = document.querySelector("header");
-  if (header && header.nextSibling) {
-    header.parentNode.insertBefore(aside, header.nextSibling);
-  } else {
-    document.body.insertAdjacentElement('afterbegin', aside);
-  }
+  // Insertar sidebar DENTRO de .dashboard-main, antes de .dashboard-content
+  const dashboardMain = document.querySelector(".dashboard-main");
+  const dashboardContent = dashboardMain.querySelector(".dashboard-content");
+  dashboardMain.insertBefore(aside, dashboardContent);
 }
