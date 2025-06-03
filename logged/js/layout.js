@@ -46,7 +46,7 @@ export function insertSidebar(active = "") {
     { id: "index", label: "Resumen", href: "index.html" },
     { id: "metrics", label: "Métricas Orgánicas", href: "metrics.html" },
     { id: "posts", label: "Publicaciones", href: "posts.html" },
-    { id: "settings", label: "Configuración", href: "#", disabled: true }
+    { id: "settings", label: "Configuración", href: "config.html"}
   ];
 
   const navLinks = sections.map(section => {

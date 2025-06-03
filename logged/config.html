@@ -2,45 +2,30 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>EPM APP – Configuración</title>
+  <title>EPM APP – Organic data</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-    <div class="container header-content">
-      <img src="../img/logo.png" alt="EPM APP Logo" class="logo">
-      <nav>
-        <a href="../index.html">Home</a>
-        <a href="index.html">Dashboard</a>
-        <a href="#logout" id="logout-link">Logout</a>
-      </nav>
-    </div>
-  </header>
   <div class="dashboard-main">
-    <aside class="dashboard-sidebar">
-      <nav>
-        <a href="index.html">Resumen</a>
-        <a href="metrics.html">Métricas Orgánicas</a>
-        <a href="#" class="disabled" tabindex="-1" aria-disabled="true" title="Próximamente">Publicaciones</a>
-        <a href="#" class="active disabled" tabindex="-1" aria-disabled="true" title="Próximamente">Configuración</a>
-      </nav>
-    </aside>
     <section class="dashboard-content">
-      <h2>Configuración</h2>
-      <div class="epm-empty">Esta sección estará disponible próximamente.</div>
+      <h2>Métricas Orgánicas (últimos 30 días)</h2>
+      <div id="progress-bar-container" style="display:none">
+        <div id="progress-bar">0%</div>
+      </div>
+      <div id="progress-text"></div>
+      <div id="results">Procesando autenticación...</div>
+      <table id="insights-table" style="display:none"></table>
     </section>
   </div>
-  <footer class="footer">
-    <div class="container footer-content">
-      <img src="../img/logo.png" alt="EPM APP Logo" class="logo-footer">
-      <div>
-        <a href="../terms.html" target="_blank">Terms of Service</a> | 
-        <a href="../privacy-policy.html" target="_blank">Privacy Policy</a>
-      </div>
-      <div class="footer-note">© 2025 EPM APP</div>
-    </div>
-  </footer>
+  <!-- Header, Sidebar y Footer se insertan por JS -->
+  <script type="module">
+    import { insertHeaderFooter, insertSidebar, enableLogout } from './js/layout.js';
+    import { main } from './js/metrics.js';
+    insertHeaderFooter();
+    insertSidebar("metrics");
+    enableLogout();
+    main();
+  </script>
 </body>
 </html>
