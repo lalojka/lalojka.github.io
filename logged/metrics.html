@@ -2,30 +2,55 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>EPM APP – Organic data</title>
+  <title>Instagram Metrics – EPM APP</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
   <div class="dashboard-main">
     <section class="dashboard-content">
-      <h2>Your account's organic data (last 30 days)</h2>
-      <div id="progress-bar-container" style="display:none">
-        <div id="progress-bar">0%</div>
+      <div id="ig-account-header"></div>
+      <h2 id="metrics-title">Instagram Metrics</h2>
+      <div id="metrics-loading">Cargando métricas...</div>
+      <div id="progress-bar-container" style="display:none;">
+        <div id="progress-text"></div>
+        <div class="progress-bar-bg">
+          <div id="progress-bar" class="progress-bar"></div>
+        </div>
       </div>
-      <div id="progress-text"></div>
-      <div id="results">Processing authentication...</div>
-      <table id="insights-table" style="display:none"></table>
+      <div id="results"></div>
+      <table id="insights-table" style="display:none;"></table>
+      <div id="metrics-content" style="display:none;"></div>
     </section>
   </div>
-  <!-- Header, Sidebar y Footer se insertan por JS -->
   <script type="module">
     import { insertHeaderFooter, insertSidebar, enableLogout } from './js/layout.js';
-    import { main } from './js/metrics.js';
+    import { getInstagramAccounts, getSelectedInstagramId } from './js/auth.js';
     insertHeaderFooter();
     insertSidebar("metrics");
     enableLogout();
-    main();
+
+    // Mostrar info IG seleccionada
+    const igId = getSelectedInstagramId();
+    const allAccounts = getInstagramAccounts();
+    const selected = allAccounts.find(acc => acc.id === igId);
+
+    if (!igId || !selected) {
+      window.location.href = "index.html";
+    } else {
+      document.getElementById('ig-account-header').innerHTML = `
+        <div class="ig-account-header-card">
+          <img src="${selected.profile_picture_url || '../img/ig_default.png'}" alt="${selected.username}" class="ig-account-img">
+          <div>
+            <div class="ig-account-username">@${selected.username}</div>
+            <div class="ig-account-name">${selected.name || ''}</div>
+          </div>
+        </div>
+      `;
+      document.getElementById('metrics-title').textContent = `Metrics for @${selected.username}`;
+    }
   </script>
+  <script type="module" src="./js/metrics.js"></script>
 </body>
 </html>
