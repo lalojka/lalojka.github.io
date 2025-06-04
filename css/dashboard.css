@@ -92,17 +92,45 @@
 }
 
 /* Loader/Table (igual que antes) */
+.progress-bar-bg {
+  width: 100%;
+  height: 18px;
+  background: #eee;
+  border-radius: 6px;
+  margin-top: 0.3em;
+  margin-bottom: 1em;
+  overflow: hidden;
+}
+.progress-bar {
+  background: var(--blue, #083963);
+  height: 100%;
+  border-radius: 6px 0 0 6px;
+  color: #fff;
+  text-align: center;
+  line-height: 18px;
+  font-size: 0.95em;
+  transition: width 0.25s;
+}
 #progress-bar-container {
-  width: 100%; background: #eee; border-radius: 8px; height: 24px; margin-bottom: 18px; overflow: hidden;
+  width: 100%; 
+  background: #eee;
+  border-radius: 8px;
+  height: 24px;
+  margin-bottom: 18px;
+  overflow: hidden;
 }
 #progress-bar {
-  height: 100%; width: 0; background: #4caf50; transition: width 0.3s; color: #fff; font-weight: bold; display: flex; align-items: center; justify-content: center;
+  height: 100%; 
+  width: 0; 
+  background: #4caf50; 
+  transition: width 0.3s; 
+  color: #fff; 
+  font-weight: bold; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
 }
 #progress-text { margin-top: 3px; font-size: 0.95em; color: #555; }
-table { border-collapse: collapse; margin: 1em 0; }
-th, td { border: 1px solid #ccc; padding: 0.5em 1em; text-align: center; }
-th { background: #f0f0f0; }
-.error { color: red; }
 
 /* Styles para metrics.html*/
 
