@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>EPM APP – Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <script type="module">
+    import { getAccessToken } from './js/auth.js';
+    getAccessToken(); // Guarda el token si está en la URL
+  </script>
+</head>
+<body>
+  <div class="dashboard-main">
+    <section class="dashboard-content">
+      <div id="ig-account-header"></div>
+      <h2 id="welcome-title">Welcome!</h2>
+      <p>Here you can access your business metrics and reports.</p>
+      <div class="dashboard-cards">
+        <div class="dashboard-card">
+          <h3>Organic data</h3>
+          <p>Check your daily general data of your Instagram account.</p>
+          <a class="dashboard-btn" href="metrics.html">See data &rarr;</a>
+        </div>
+        <div class="dashboard-card ">
+          <h3>Posts</h3>
+          <p>Analyze your posts performance.</p>
+          <a class="dashboard-btn" href="posts.html">See posts &rarr;</a>
+        </div>
+        <div class="dashboard-card">
+          <h3>Settings</h3>
+          <p>Soon: Manage your accounts and preferences.</p>
+          <a class="dashboard-btn" href="config.html">See settings &rarr;</a>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!-- Popup Facebook Expirado -->
+  <div id="fb-expired-popup" style="display:none;">
+    <div class="fb-popup-content">
+      <h2>Expired session</h2>
+      <p>Your Facebook session expires after 1 hour. Please log in.</p>
+      <button id="fb-popup-ok">Log In</button>
+    </div>
+  </div>
+  <!-- Header, Sidebar y Footer se insertan por JS -->
+  <script type="module">
+    import { insertHeaderFooter, insertSidebar, enableLogout } from './js/layout.js';
+    import { getInstagramAccounts, getSelectedInstagramId } from './js/auth.js';
+
+    insertHeaderFooter();
+    insertSidebar("index");
+    enableLogout();
+
+    // Mostrar nombre y foto IG seleccionada arriba del dashboard
+    const igId = getSelectedInstagramId();
+    const allAccounts = getInstagramAccounts();
+    const selected = allAccounts.find(acc => acc.id === igId);
+
+    if (!igId || !selected) {
+      // Si no hay cuenta seleccionada, volver a index.html
+      window.location.href = "index.html";
+    } else {
+      // Render info Instagram en cabecera
+      document.getElementById('ig-account-header').innerHTML = `
+        <div class="ig-account-header-card">
+          <img src="${selected.profile_picture_url || '../img/ig_default.png'}" alt="${selected.username}" class="ig-account-img">
+          <div>
+            <div class="ig-account-username">@${selected.username}</div>
+            <div class="ig-account-name">${selected.name || ''}</div>
+          </div>
+        </div>
+      `;
+      document.getElementById('welcome-title').textContent = `Welcome, @${selected.username}!`;
+    }
+  </script>
+</body>
+</html>

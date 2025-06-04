@@ -294,3 +294,130 @@ body { padding-top: 72px; }
   background-color: #145DBF; /* Un poco más oscuro para el hover */
 }
 
+/* Estilo para el pop up de sesión expirada de Facebook */
+#fb-expired-popup {
+  position: fixed;
+  z-index: 10000;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(8,57,99,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fb-popup-content {
+  background: var(--white, #fff);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(8,57,99,0.13);
+  padding: 2rem 2.5rem 1.5rem 2.5rem;
+  max-width: 90vw;
+  width: 350px;
+  text-align: center;
+  color: var(--text, #1a2330);
+  border: 2px solid var(--blue, #083963);
+}
+.fb-popup-content h2 {
+  color: var(--blue, #083963);
+  margin-bottom: 0.6em;
+}
+.fb-popup-content p {
+  margin-bottom: 1.5em;
+}
+#fb-popup-ok {
+  background: var(--blue, #083963);
+  color: var(--white, #fff);
+  border: none;
+  padding: 0.7em 2em;
+  border-radius: 7px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#fb-popup-ok:hover {
+  background: var(--light-blue, #5DA9DD);
+  color: var(--blue, #083963);
+}
+
+/* Estilo para el header de las paginas del usuario con foto de perfil */
+.header-user {
+  display: flex;
+  align-items: center;
+  margin-left: 1.5em;
+  gap: 0.6em;
+}
+.header-user-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.header-user-name {
+  color: var(--text, #1a2330);
+  font-weight: 500;
+  font-size: 1.1em;
+}
+
+/* Estilo para las tarjetas de instagram disponibles para el usuario */
+.ig-accounts-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2em;
+  margin-top: 1.5em;
+}
+.ig-account-card {
+  display: flex;
+  align-items: center;
+  background: var(--cream, #EBE4DD);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(8,57,99,0.09);
+  padding: 1em 1.5em;
+  cursor: pointer;
+  transition: background 0.17s, box-shadow 0.2s;
+  min-width: 250px;
+  max-width: 340px;
+  gap: 1em;
+}
+.ig-account-card:hover, .ig-account-card:focus {
+  background: var(--light-blue, #5DA9DD);
+  box-shadow: 0 4px 12px rgba(8,57,99,0.15);
+}
+.ig-account-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.ig-account-username {
+  font-weight: 600;
+  color: var(--blue, #083963);
+  font-size: 1.1em;
+}
+.ig-account-name {
+  color: var(--text, #1a2330);
+  font-size: 0.98em;
+}
+
+/* Estilo para dashboard.html de las tarjetas de reportes disponibles */
+.ig-account-header-card {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  margin-bottom: 1.5em;
+  background: var(--cream, #EBE4DD);
+  border-radius: 12px;
+  padding: 0.8em 1.5em;
+  box-shadow: 0 2px 8px rgba(8,57,99,0.09);
+  width: fit-content;
+}
+.ig-account-header-card .ig-account-img {
+  width: 52px;
+  height: 52px;
+}
+.ig-account-header-card .ig-account-username {
+  font-weight: 600;
+  color: var(--blue, #083963);
+  font-size: 1.08em;
+}
+.ig-account-header-card .ig-account-name {
+  color: var(--text, #1a2330);
+  font-size: 0.98em;
+}

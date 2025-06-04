@@ -2,45 +2,57 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>EPM APP – Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="../css/dashboard.css">
-  <script type="module">
-    import { getAccessToken } from './js/auth.js';
-    getAccessToken(); // Esto guarda el token si está en la URL
-  </script>
+  <title>Selecciona una cuenta de Instagram</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../styles.css">
+  <script type="module" src="js/layout.js"></script>
+  <script type="module" src="js/auth.js"></script>
 </head>
 <body>
-  <div class="dashboard-main">
+  <main class="dashboard-main">
     <section class="dashboard-content">
-      <h2>¡Welcome to EPM APP dashboard!</h2>
-      <p>Here you can access your business metrics.</p>
-      <div class="dashboard-cards">
-        <div class="dashboard-card">
-          <h3>Organic data</h3>
-          <p>Check on you daily general data of your Instagram account.</p>
-          <a class="dashboard-btn" href="metrics.html">See data &rarr;</a>
-        </div>
-        <div class="dashboard-card ">
-          <h3>Posts</h3>
-          <p>Analyze your posts performance.</p>
-          <a class="dashboard-btn" href="posts.html">See posts &rarr;</a>
-        </div>
-        <div class="dashboard-card">
-          <h3>Settings</h3>
-          <p>Próximamente: Gestiona tus cuentas y preferencias.</p>
-          <a class="dashboard-btn" href="config.html">See settings &rarr;</a>
-        </div>
-      </div>
+      <h1>Selecciona una cuenta de Instagram</h1>
+      <div id="instagram-accounts-list" class="ig-accounts-list"></div>
     </section>
-  </div>
-  <!-- Header, Sidebar y Footer se insertan por JS -->
+  </main>
+
   <script type="module">
-    import { insertHeaderFooter, insertSidebar, enableLogout } from './js/layout.js';
+    import { insertHeaderFooter, enableLogout } from './js/layout.js';
+    import { getInstagramAccounts, setSelectedInstagramId, fetchAndStoreInstagramAccounts } from './js/auth.js';
+
     insertHeaderFooter();
-    insertSidebar("index");
     enableLogout();
-    // Si querés lógica extra del hub, la importás acá
+
+    async function mostrarCuentasInstagram() {
+      let cuentas = getInstagramAccounts();
+      if (!cuentas.length) {
+        // Intentamos refrescar las cuentas desde la API
+        cuentas = await fetchAndStoreInstagramAccounts();
+      }
+      const contenedor = document.getElementById('instagram-accounts-list');
+      if (!cuentas.length) {
+        contenedor.innerHTML = '<p>No se encontraron cuentas de Instagram asociadas a tu usuario de Facebook.</p>';
+      } else {
+        contenedor.innerHTML = cuentas.map(acc => `
+          <div class="ig-account-card" data-id="${acc.id}" tabindex="0">
+            <img src="${acc.profile_picture_url || '../img/ig_default.png'}" alt="${acc.username}" class="ig-account-img">
+            <div class="ig-account-info">
+              <div class="ig-account-username">@${acc.username}</div>
+              <div class="ig-account-name">${acc.name || ''}</div>
+            </div>
+          </div>
+        `).join('');
+        // Click handler para seleccionar cuenta
+        contenedor.querySelectorAll('.ig-account-card').forEach(card => {
+          card.addEventListener('click', () => {
+            setSelectedInstagramId(card.getAttribute('data-id'));
+            window.location.href = 'dashboard.html';
+          });
+        });
+      }
+    }
+
+    mostrarCuentasInstagram();
   </script>
 </body>
 </html>

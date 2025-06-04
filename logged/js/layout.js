@@ -1,8 +1,18 @@
-// Inserta header y footer, y habilita el logout
-
-import { clearAccessToken } from './auth.js';
+import { clearAccessToken, getFacebookProfile } from './auth.js';
 
 export function insertHeaderFooter(options = {}) {
+  // Obtener datos del usuario de Facebook (si existen)
+  const profile = getFacebookProfile();
+  let userHTML = '';
+  if (profile && profile.picture && profile.picture.data && profile.picture.data.url) {
+    userHTML = `
+      <div class="header-user">
+        <img src="${profile.picture.data.url}" alt="${profile.name}" class="header-user-img">
+        <span class="header-user-name">${profile.name}</span>
+      </div>
+    `;
+  }
+
   // Header
   document.body.insertAdjacentHTML('afterbegin', `
     <header class="header">
@@ -13,9 +23,11 @@ export function insertHeaderFooter(options = {}) {
           <a href="index.html">Dashboard</a>
           <a href="#logout" id="logout-link">Logout</a>
         </nav>
+        ${userHTML}
       </div>
     </header>
   `);
+
   // Footer
   document.body.insertAdjacentHTML('beforeend', `
     <footer class="footer">
