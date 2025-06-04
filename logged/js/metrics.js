@@ -31,7 +31,7 @@ export function main() {
   async function fetchInstagramInsightsForDay(instagramBusinessId, accessToken, since, until) {
     const metricParams = `metric=${METRICS.join(',')}`;
     const url =
-      `https://graph.facebook.com/v20.0/${instagramBusinessId}/insights?` +
+      `https://graph.facebook.com/v22.0/${instagramBusinessId}/insights?` +
       `${metricParams}&period=day&since=${since}&until=${until}&metric_type=total_value&access_token=${accessToken}`;
     return await fetchFacebookAPI(url);
   }
@@ -82,7 +82,6 @@ export function main() {
   // --- INICIO DEL PROGRAMA ---
   const resultsDiv = document.getElementById('results');
   const accessToken = getAccessToken();
-
   const igBusinessId = getSelectedInstagramId();
 
   if (!accessToken || !igBusinessId) {
@@ -133,6 +132,7 @@ export function main() {
               }
               rows.push(row);
             } catch (e) {
+              // Error al pedir ese día: solo poner "Error" en esa fila
               let row = [sinceStr, untilStr].concat(METRICS.map(() => "Error"));
               rows.push(row);
             } finally {
@@ -149,11 +149,52 @@ export function main() {
       renderTableRows(rows);
 
     } catch (err) {
-      resultsDiv.innerHTML = `<span class="error">Error de red o inesperado:</span>
-      <pre>${err.message}</pre>`;
+      // --- Mensaje de error amigable y botón copiar ---
+      let fbApiError = false;
+      // Chequeo si es error típico de Facebook API (OAuthException)
+      if (
+        (err && err.message && err.message.includes("OAuthException")) ||
+        (err && err.error && err.error.type === "OAuthException")
+      ) {
+        fbApiError = true;
+      }
+      let errorMsg = "";
+      if (fbApiError) {
+        // Mostrar mensaje especial y botón copiar
+        errorMsg = `
+          <div class="error fb-api-error">
+            <b>¡Ups! Hubo un error al consultar la API de Facebook/Instagram.</b><br>
+            Es probable que la aplicación necesite ser actualizada.<br>
+            <br>
+            Por favor, <b>haz clic en el botón para copiar el error</b> y envíamelo por DM de Instagram:<br>
+            <a href="https://ig.me/m/leacouretot/" target="_blank" class="contact-link">Enviar mensaje a Leandro Couretot</a>
+            <br><br>
+            <button id="copy-error-btn">Copiar error</button>
+            <pre id="error-message" style="max-width: 100%; white-space: pre-wrap;">${(err && err.message) ? err.message : JSON.stringify(err, null, 2)}</pre>
+          </div>
+        `;
+      } else {
+        // Otros errores
+        errorMsg = `<span class="error">Error de red o inesperado:</span>
+          <pre>${err && err.message ? err.message : JSON.stringify(err, null, 2)}</pre>`;
+      }
+      resultsDiv.innerHTML = errorMsg;
+
+      // Habilitar botón copiar (si existe)
+      setTimeout(() => {
+        const btn = document.getElementById('copy-error-btn');
+        const pre = document.getElementById('error-message');
+        if (btn && pre) {
+          btn.onclick = () => {
+            navigator.clipboard.writeText(pre.textContent)
+              .then(() => btn.textContent = "¡Copiado!")
+              .catch(() => btn.textContent = "Error al copiar");
+          };
+        }
+      }, 100);
     }
   })();
 }
 
-// Si querés que cargue automáticamente:
+// Autoejecutar al importar
 main();
