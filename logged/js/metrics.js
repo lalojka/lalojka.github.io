@@ -36,47 +36,37 @@ export function main() {
     return await fetchFacebookAPI(url);
   }
 
-  function initTable(metrics) {
-    const table = document.getElementById("insights-table");
-    table.innerHTML = "";
-    table.style.display = "table";
-    let thead = document.createElement("thead");
-    let tr = document.createElement("tr");
-    ["From", "To", ...metrics].forEach(h => {
-      let th = document.createElement("th");
-      th.textContent = h;
-      tr.appendChild(th);
-    });
-    thead.appendChild(tr);
-    table.appendChild(thead);
-    let tbody = document.createElement("tbody");
-    table.appendChild(tbody);
-  }
+  function showApiErrorMessage(errorObj) {
+    const resultsDiv = document.getElementById('results');
+    const errorText = (errorObj && errorObj.error && errorObj.error.message)
+      ? errorObj.error.message
+      : (errorObj && errorObj.message)
+        ? errorObj.message
+        : JSON.stringify(errorObj, null, 2);
 
-  function renderTableRows(rows) {
-    const table = document.getElementById("insights-table");
-    let tbody = table.querySelector("tbody");
-    tbody.innerHTML = "";
-    rows.forEach(row => {
-      let tr = document.createElement("tr");
-      row.forEach(cell => {
-        let td = document.createElement("td");
-        td.textContent = cell !== undefined ? cell : "";
-        tr.appendChild(td);
-      });
-      tbody.appendChild(tr);
-    });
-  }
-
-  function updateProgressBar(current, total) {
-    const barContainer = document.getElementById('progress-bar-container');
-    const bar = document.getElementById('progress-bar');
-    const text = document.getElementById('progress-text');
-    barContainer.style.display = "block";
-    let percent = Math.round((current / total) * 100);
-    bar.style.width = percent + "%";
-    bar.textContent = percent + "%";
-    text.textContent = `Días cargados: ${current} / ${total}`;
+    resultsDiv.innerHTML = `
+      <div class="error fb-api-error">
+        <b>¡Ups! Hubo un error con la API de Facebook/Instagram.</b><br>
+        Es probable que la aplicación necesite ser actualizada.<br>
+        <br>
+        Por favor, <b>haz clic en el botón para copiar el error</b> y envíamelo por DM de Instagram:<br>
+        <a href="https://ig.me/m/leacouretot/" target="_blank" class="contact-link">Enviar mensaje a Leandro Couretot</a>
+        <br><br>
+        <button id="copy-error-btn">Copiar error</button>
+        <pre id="error-message" style="max-width: 100%; white-space: pre-wrap;">${errorText}</pre>
+      </div>
+    `;
+    setTimeout(() => {
+      const btn = document.getElementById('copy-error-btn');
+      const pre = document.getElementById('error-message');
+      if (btn && pre) {
+        btn.onclick = () => {
+          navigator.clipboard.writeText(pre.textContent)
+            .then(() => btn.textContent = "¡Copiado!")
+            .catch(() => btn.textContent = "Error al copiar");
+        };
+      }
+    }, 100);
   }
 
   // --- INICIO DEL PROGRAMA ---
@@ -100,98 +90,52 @@ export function main() {
       const daysSince = 30;
       const daysUntil = 1;
       const today = new Date();
-      const totalDays = daysSince - daysUntil;
 
       resultsDiv.innerHTML = `Consultando insights diarios de Instagram Business (ID: <b>${igBusinessId}</b>)...<br>La tabla se llenará en orden.<br><br>`;
 
-      initTable(METRICS);
-
       let rows = [];
       let completed = 0;
-
-      let promises = [];
+      let errorDetected = false;
       for (let i = daysSince; i > daysUntil; i--) {
         const { sinceUnix, untilUnix, sinceStr, untilStr } = getSinceUntilForDay(today, i);
-
-        promises.push(
-          (async () => {
-            try {
-              const insights = await fetchInstagramInsightsForDay(igBusinessId, accessToken, sinceUnix, untilUnix);
-              let row = [sinceStr, untilStr];
-              if (insights.error) {
-                row = row.concat(METRICS.map(() => "Error"));
-              } else {
-                METRICS.forEach(metricName => {
-                  const metricData = insights.data?.find(item => item.name === metricName);
-                  if (metricData && metricData.total_value && metricData.total_value.value !== undefined) {
-                    row.push(metricData.total_value.value);
-                  } else {
-                    row.push("");
-                  }
-                });
-              }
-              rows.push(row);
-            } catch (e) {
-              // Error al pedir ese día: solo poner "Error" en esa fila
-              let row = [sinceStr, untilStr].concat(METRICS.map(() => "Error"));
-              rows.push(row);
-            } finally {
-              completed++;
-              updateProgressBar(completed, totalDays);
+        try {
+          const insights = await fetchInstagramInsightsForDay(igBusinessId, accessToken, sinceUnix, untilUnix);
+          if (insights.error) {
+            // Si la API de Facebook devuelve error, mostramos mensaje y salimos
+            showApiErrorMessage(insights);
+            errorDetected = true;
+            break;
+          }
+          let row = [sinceStr, untilStr];
+          METRICS.forEach(metricName => {
+            const metricData = insights.data?.find(item => item.name === metricName);
+            if (metricData && metricData.total_value && metricData.total_value.value !== undefined) {
+              row.push(metricData.total_value.value);
+            } else {
+              row.push("");
             }
-          })()
-        );
-      }
-      await Promise.all(promises);
-
-      // ORDENAR por fecha ASC (columna 0, "From")
-      rows.sort((a, b) => a[0].localeCompare(b[0]));
-      renderTableRows(rows);
-
-    } catch (err) {
-      // --- Mensaje de error amigable y botón copiar ---
-      let fbApiError = false;
-      // Chequeo si es error típico de Facebook API (OAuthException)
-      if (
-        (err && err.message && err.message.includes("OAuthException")) ||
-        (err && err.error && err.error.type === "OAuthException")
-      ) {
-        fbApiError = true;
-      }
-      let errorMsg = "";
-      if (fbApiError) {
-        // Mostrar mensaje especial y botón copiar
-        errorMsg = `
-          <div class="error fb-api-error">
-            <b>¡Ups! Hubo un error al consultar la API de Facebook/Instagram.</b><br>
-            Es probable que la aplicación necesite ser actualizada.<br>
-            <br>
-            Por favor, <b>haz clic en el botón para copiar el error</b> y envíamelo por DM de Instagram:<br>
-            <a href="https://ig.me/m/leacouretot/" target="_blank" class="contact-link">Enviar mensaje a Leandro Couretot</a>
-            <br><br>
-            <button id="copy-error-btn">Copiar error</button>
-            <pre id="error-message" style="max-width: 100%; white-space: pre-wrap;">${(err && err.message) ? err.message : JSON.stringify(err, null, 2)}</pre>
-          </div>
-        `;
-      } else {
-        // Otros errores
-        errorMsg = `<span class="error">Error de red o inesperado:</span>
-          <pre>${err && err.message ? err.message : JSON.stringify(err, null, 2)}</pre>`;
-      }
-      resultsDiv.innerHTML = errorMsg;
-
-      // Habilitar botón copiar (si existe)
-      setTimeout(() => {
-        const btn = document.getElementById('copy-error-btn');
-        const pre = document.getElementById('error-message');
-        if (btn && pre) {
-          btn.onclick = () => {
-            navigator.clipboard.writeText(pre.textContent)
-              .then(() => btn.textContent = "¡Copiado!")
-              .catch(() => btn.textContent = "Error al copiar");
-          };
+          });
+          rows.push(row);
+        } catch (e) {
+          // Error de red u otro
+          showApiErrorMessage(e);
+          errorDetected = true;
+          break;
+        } finally {
+          completed++;
+          updateProgressBar(completed, daysSince - daysUntil);
         }
-      }, 100);
+      }
+
+      if (!errorDetected) {
+        // Si no hubo error, mostrar la tabla
+        initTable(METRICS);
+        // ORDENAR por fecha ASC (columna 0, "From")
+        rows.sort((a, b) => a[0].localeCompare(b[0]));
+        renderTableRows(rows);
+      }
+    } catch (err) {
+      showApiErrorMessage(err);
     }
   })();
 }
