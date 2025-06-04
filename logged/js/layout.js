@@ -1,4 +1,4 @@
-import { clearAccessToken, getFacebookProfile } from './auth.js';
+import { clearAccessToken, getFacebookProfile, getInstagramAccounts, getSelectedInstagramId } from './auth.js';
 
 export function insertHeaderFooter(options = {}) {
   // Obtener datos del usuario de Facebook (si existen)
@@ -68,6 +68,7 @@ export function insertSidebar(active = "") {
     return `<a href="${section.href}" class="${cls.trim()}"${section.disabled ? ' tabindex="-1" aria-disabled="true" title="Próximamente"' : ""}>${section.label}</a>`;
   }).join("\n");
 
+  // Crea el aside y navega
   const aside = document.createElement("aside");
   aside.className = "dashboard-sidebar";
   aside.innerHTML = `<nav>${navLinks}</nav>`;
@@ -76,4 +77,40 @@ export function insertSidebar(active = "") {
   const dashboardMain = document.querySelector(".dashboard-main");
   const dashboardContent = dashboardMain.querySelector(".dashboard-content");
   dashboardMain.insertBefore(aside, dashboardContent);
+
+  // Mostrar la cuenta IG seleccionada en el sidebar
+  insertIgAccountSidebar();
+}
+
+export function insertIgAccountSidebar() {
+  const sidebar = document.querySelector('.dashboard-sidebar');
+  if (!sidebar) return;
+
+  // Elimina el bloque anterior si existe
+  const old = sidebar.querySelector('#ig-account-sidebar');
+  if (old) old.remove();
+
+  // Crea el bloque de cuenta
+  const igAccounts = getInstagramAccounts();
+  const selectedId = getSelectedInstagramId();
+  const selected = igAccounts.find(acc => acc.id === selectedId);
+
+  // Creamos el contenedor
+  const div = document.createElement('div');
+  div.id = "ig-account-sidebar";
+  div.style.margin = "30px 0 18px 0";
+  if (!selected) {
+    div.innerHTML = `<div class="ig-account-header-card" style="opacity:0.7;text-align:center;">No hay cuenta IG seleccionada</div>`;
+  } else {
+    div.innerHTML = `
+      <div class="ig-account-header-card" style="display:flex;align-items:center;gap:10px;">
+        <img src="${selected.profile_picture_url || '../img/ig_default.png'}" alt="${selected.username}" class="ig-account-img" style="width:42px;height:42px;border-radius:50%;">
+        <div>
+          <div class="ig-account-username" style="font-weight:600;">@${selected.username}</div>
+          <div class="ig-account-name" style="font-size:0.98em;color:#fffa;">${selected.name || ''}</div>
+        </div>
+      </div>
+    `;
+  }
+  sidebar.insertBefore(div, sidebar.firstChild);
 }

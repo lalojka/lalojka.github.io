@@ -1,4 +1,4 @@
-import { getAccessToken, fetchFacebookAPI } from './auth.js';
+import { getAccessToken, fetchFacebookAPI, getSelectedInstagramId } from './auth.js';
 
 export function main() {
   const cardsContainer = document.getElementById("posts-cards");
@@ -6,17 +6,44 @@ export function main() {
   if (!cardsContainer) return;
 
   cardsContainer.innerHTML = "Cargando publicaciones...";
+  if (emptyDiv) emptyDiv.style.display = "none";
 
   const accessToken = getAccessToken();
+  const igBusinessId = getSelectedInstagramId();
 
-  if (!accessToken) {
-    cardsContainer.innerHTML = "No se encontró el token de acceso. Por favor inicia sesión nuevamente.";
-    return;
-  }
+  function showApiErrorMessage(errorObj) {
+    // Oculta el mensaje de carga si hay error
+    cardsContainer.innerHTML = "";
+    if (emptyDiv) emptyDiv.style.display = "none";
+    const errorText = (errorObj && errorObj.error && errorObj.error.message)
+      ? errorObj.error.message
+      : (errorObj && errorObj.message)
+        ? errorObj.message
+        : JSON.stringify(errorObj, null, 2);
 
-  async function fetchFacebookAccounts(accessToken) {
-    const endpoint = `https://graph.facebook.com/v23.0/me/accounts?fields=id,name,access_token,instagram_business_account&access_token=${accessToken}`;
-    return await fetchFacebookAPI(endpoint);
+    cardsContainer.innerHTML = `
+      <div class="error fb-api-error">
+        <b>¡Ups! Hubo un error con la API de Facebook/Instagram.</b><br>
+        Es probable que la aplicación necesite ser actualizada.<br>
+        <br>
+        Por favor, <b>haz clic en el botón para copiar el error</b> y envíamelo por DM de Instagram:<br>
+        <a href="https://ig.me/m/leacouretot/" target="_blank" class="contact-link">Enviar mensaje a Leandro Couretot</a>
+        <br><br>
+        <button id="copy-error-btn">Copiar error</button>
+        <pre id="error-message" style="max-width: 100%; white-space: pre-wrap;">${errorText}</pre>
+      </div>
+    `;
+    setTimeout(() => {
+      const btn = document.getElementById('copy-error-btn');
+      const pre = document.getElementById('error-message');
+      if (btn && pre) {
+        btn.onclick = () => {
+          navigator.clipboard.writeText(pre.textContent)
+            .then(() => btn.textContent = "¡Copiado!")
+            .catch(() => btn.textContent = "Error al copiar");
+        };
+      }
+    }, 100);
   }
 
   async function fetchInstagramPosts(igBusinessId, accessToken) {
@@ -27,28 +54,27 @@ export function main() {
 
   (async () => {
     try {
-      const fbData = await fetchFacebookAccounts(accessToken);
-
-      if (fbData.error) {
-        cardsContainer.innerHTML = `<span style="color:red">${fbData.error.message}</span>`;
+      if (!accessToken) {
+        cardsContainer.innerHTML = "No se encontró el token de acceso. Por favor inicia sesión nuevamente.";
         return;
       }
-
-      const account = (fbData.data && fbData.data.length > 0) ? fbData.data[0] : null;
-      const igBusinessId = account && account.instagram_business_account && account.instagram_business_account.id;
-
       if (!igBusinessId) {
-        cardsContainer.innerHTML = "No se encontró una cuenta de Instagram Business vinculada a tu página.";
+        cardsContainer.innerHTML = "No se encontró una cuenta de Instagram Business seleccionada.";
         return;
       }
 
       const postsData = await fetchInstagramPosts(igBusinessId, accessToken);
 
+      if (postsData.error) {
+        showApiErrorMessage(postsData);
+        return;
+      }
+
       if (!postsData.data || postsData.data.length === 0) {
         cardsContainer.innerHTML = "";
-        emptyDiv.style.display = "";
+        if (emptyDiv) emptyDiv.style.display = "";
         return;
-      } else {
+      } else if (emptyDiv) {
         emptyDiv.style.display = "none";
       }
 
@@ -95,7 +121,7 @@ export function main() {
       });
 
     } catch (err) {
-      cardsContainer.innerHTML = `<span style="color:red">${err.message}</span>`;
+      showApiErrorMessage(err);
     }
   })();
 }
