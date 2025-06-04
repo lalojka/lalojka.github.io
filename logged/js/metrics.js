@@ -2,7 +2,7 @@ import { getAccessToken, fetchFacebookAPI, getSelectedInstagramId } from './auth
 
 export function main() {
   const METRICS = [
-    'impressions',
+    'views',
     'profile_views',
     'reach',
     'website_clicks',
