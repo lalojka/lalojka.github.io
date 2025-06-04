@@ -5,7 +5,6 @@ const APP_ID = '493451440039423';
 const REDIRECT_URI = encodeURIComponent('https://app.epm-marketing.com/logged/');
 const SCOPE = [
   'pages_show_list',
-  'email',
   'instagram_basic',
   'instagram_manage_insights'
 ].join(',');
