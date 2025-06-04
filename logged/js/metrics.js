@@ -36,6 +36,19 @@ export function main() {
     return await fetchFacebookAPI(url);
   }
 
+  function updateProgressBar(current, total) {
+    const barContainer = document.getElementById('progress-bar-container');
+    const bar = document.getElementById('progress-bar');
+    const text = document.getElementById('progress-text');
+    if (barContainer && bar && text) {
+      barContainer.style.display = "block";
+      let percent = Math.round((current / total) * 100);
+      bar.style.width = percent + "%";
+      bar.textContent = percent + "%";
+      text.textContent = `Días cargados: ${current} / ${total}`;
+    }
+  }
+
   function showApiErrorMessage(errorObj) {
     const resultsDiv = document.getElementById('results');
     const errorText = (errorObj && errorObj.error && errorObj.error.message)
@@ -136,6 +149,38 @@ export function main() {
       showApiErrorMessage(err);
     }
   })();
+
+  function initTable(metrics) {
+    const table = document.getElementById("insights-table");
+    table.innerHTML = "";
+    table.style.display = "table";
+    let thead = document.createElement("thead");
+    let tr = document.createElement("tr");
+    ["From", "To", ...metrics].forEach(h => {
+      let th = document.createElement("th");
+      th.textContent = h;
+      tr.appendChild(th);
+    });
+    thead.appendChild(tr);
+    table.appendChild(thead);
+    let tbody = document.createElement("tbody");
+    table.appendChild(tbody);
+  }
+
+  function renderTableRows(rows) {
+    const table = document.getElementById("insights-table");
+    let tbody = table.querySelector("tbody");
+    tbody.innerHTML = "";
+    rows.forEach(row => {
+      let tr = document.createElement("tr");
+      row.forEach(cell => {
+        let td = document.createElement("td");
+        td.textContent = cell !== undefined ? cell : "";
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+  }
 }
 
 // Autoejecutar al importar
