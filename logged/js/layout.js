@@ -1,5 +1,8 @@
 import { clearAccessToken, getFacebookProfile, getInstagramAccounts, getSelectedInstagramId } from './auth.js';
 
+/**
+ * Inserta el header y el footer en el body del documento.
+ */
 export function insertHeaderFooter(options = {}) {
   // Obtener datos del usuario de Facebook (si existen)
   const profile = getFacebookProfile();
@@ -43,6 +46,9 @@ export function insertHeaderFooter(options = {}) {
   `);
 }
 
+/**
+ * Habilita el logout desde el link del header.
+ */
 export function enableLogout() {
   document.addEventListener('click', function(e) {
     if (e.target.matches('#logout-link')) {
@@ -53,6 +59,10 @@ export function enableLogout() {
   });
 }
 
+/**
+ * Inserta el sidebar en el layout del dashboard, incluyendo el bloque de cuenta IG seleccionada.
+ * @param {string} active - sección activa: "index", "metrics", "posts", "settings"
+ */
 export function insertSidebar(active = "") {
   const sections = [
     { id: "index", label: "Resumen", href: "index.html" },
@@ -68,22 +78,32 @@ export function insertSidebar(active = "") {
     return `<a href="${section.href}" class="${cls.trim()}"${section.disabled ? ' tabindex="-1" aria-disabled="true" title="Próximamente"' : ""}>${section.label}</a>`;
   }).join("\n");
 
-  // Crea el aside y navega
-  const aside = document.createElement("aside");
-  aside.className = "dashboard-sidebar";
-  aside.innerHTML = `<nav>${navLinks}</nav>`;
+  // Buscar si ya existe aside (evita duplicados si recargás la sidebar)
+  let aside = document.querySelector(".dashboard-sidebar");
+  if (!aside) {
+    aside = document.createElement("aside");
+    aside.className = "dashboard-sidebar";
+    // Insertar sidebar DENTRO de .dashboard-main, antes de .dashboard-content
+    const dashboardMain = document.querySelector(".dashboard-main");
+    const dashboardContent = dashboardMain.querySelector(".dashboard-content");
+    dashboardMain.insertBefore(aside, dashboardContent);
+  }
+  // Limpia el contenido antes de volver a insertar
+  aside.innerHTML = "";
 
-  // Insertar sidebar DENTRO de .dashboard-main, antes de .dashboard-content
-  const dashboardMain = document.querySelector(".dashboard-main");
-  const dashboardContent = dashboardMain.querySelector(".dashboard-content");
-  dashboardMain.insertBefore(aside, dashboardContent);
+  // --- Bloque cuenta IG seleccionada ---
+  insertIgAccountSidebar(aside);
 
-  // Mostrar la cuenta IG seleccionada en el sidebar
-  insertIgAccountSidebar();
+  // --- Menú de navegación ---
+  aside.innerHTML += `<nav>${navLinks}</nav>`;
 }
 
-export function insertIgAccountSidebar() {
-  const sidebar = document.querySelector('.dashboard-sidebar');
+/**
+ * Inserta el bloque superior de cuenta IG seleccionada en el sidebar.
+ * Si recibe el aside como parámetro, lo usa; si no, lo busca.
+ */
+export function insertIgAccountSidebar(aside = null) {
+  const sidebar = aside || document.querySelector('.dashboard-sidebar');
   if (!sidebar) return;
 
   // Elimina el bloque anterior si existe
@@ -112,5 +132,5 @@ export function insertIgAccountSidebar() {
       </div>
     `;
   }
-  sidebar.insertBefore(div, sidebar.firstChild);
+  sidebar.appendChild(div);
 }

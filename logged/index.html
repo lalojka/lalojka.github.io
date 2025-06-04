@@ -2,26 +2,25 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>EPM APP – Selecciona Cuenta Instagram</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="./styles.css">
-  <link rel="stylesheet" href="./css/dashboard.css">
+  <title>Selecciona una cuenta de Instagram</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../styles.css">
+  <script type="module" src="js/layout.js"></script>
+  <script type="module" src="js/auth.js"></script>
 </head>
 <body>
-  <div class="dashboard-main">
-    <aside class="dashboard-sidebar"></aside>
+  <main class="dashboard-main">
     <section class="dashboard-content">
-      <h2>Selecciona tu cuenta de Instagram</h2>
-      <div id="instagram-accounts-list"></div>
+      <h1>Selecciona una cuenta de Instagram</h1>
+      <div id="instagram-accounts-list" class="ig-accounts-list"></div>
     </section>
-  </div>
+  </main>
+
   <script type="module">
-    import { insertHeaderFooter, insertSidebar, insertIgAccountSidebar, enableLogout } from './js/layout.js';
-    import { getInstagramAccounts, fetchAndStoreInstagramAccounts, setSelectedInstagramId } from './js/auth.js';
+    import { insertHeaderFooter, enableLogout } from './js/layout.js';
+    import { getInstagramAccounts, setSelectedInstagramId, fetchAndStoreInstagramAccounts } from './js/auth.js';
 
     insertHeaderFooter();
-    insertSidebar();
-    insertIgAccountSidebar();
     enableLogout();
 
     async function mostrarCuentasInstagram() {
@@ -36,7 +35,7 @@
       } else {
         contenedor.innerHTML = cuentas.map(acc => `
           <div class="ig-account-card" data-id="${acc.id}" tabindex="0">
-            <img src="${acc.profile_picture_url || './img/ig_default.png'}" alt="${acc.username}" class="ig-account-img">
+            <img src="${acc.profile_picture_url || '../img/ig_default.png'}" alt="${acc.username}" class="ig-account-img">
             <div class="ig-account-info">
               <div class="ig-account-username">@${acc.username}</div>
               <div class="ig-account-name">${acc.name || ''}</div>
@@ -52,6 +51,7 @@
         });
       }
     }
+
     mostrarCuentasInstagram();
   </script>
 </body>
