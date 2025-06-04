@@ -95,16 +95,15 @@ export function main() {
 
       let rows = [];
       let completed = 0;
-      let errorDetected = false;
+
       for (let i = daysSince; i > daysUntil; i--) {
         const { sinceUnix, untilUnix, sinceStr, untilStr } = getSinceUntilForDay(today, i);
         try {
           const insights = await fetchInstagramInsightsForDay(igBusinessId, accessToken, sinceUnix, untilUnix);
           if (insights.error) {
-            // Si la API de Facebook devuelve error, mostramos mensaje y salimos
+            // Si hay error de API, mostramos mensaje y detenemos todo
             showApiErrorMessage(insights);
-            errorDetected = true;
-            break;
+            return;
           }
           let row = [sinceStr, untilStr];
           METRICS.forEach(metricName => {
@@ -119,16 +118,15 @@ export function main() {
         } catch (e) {
           // Error de red u otro
           showApiErrorMessage(e);
-          errorDetected = true;
-          break;
+          return;
         } finally {
           completed++;
           updateProgressBar(completed, daysSince - daysUntil);
         }
       }
 
-      if (!errorDetected) {
-        // Si no hubo error, mostrar la tabla
+      // Si no hubo error, mostrar la tabla
+      if (rows.length > 0) {
         initTable(METRICS);
         // ORDENAR por fecha ASC (columna 0, "From")
         rows.sort((a, b) => a[0].localeCompare(b[0]));
