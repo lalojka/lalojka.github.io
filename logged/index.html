@@ -31,7 +31,7 @@
       }
       const contenedor = document.getElementById('instagram-accounts-list');
       if (!cuentas.length) {
-        contenedor.innerHTML = '<p>No se encontraron cuentas de Instagram asociadas a tu usuario de Facebook.</p>';
+        contenedor.innerHTML = '<p>No se encontraron cuentas de Instagram asociadas a tu usuario de Facebook. EPM App puede ser utilizada únicamente para cuentas de instagram de creadores o empresariales. Disculpe las molestias.</p>';
       } else {
         contenedor.innerHTML = cuentas.map(acc => `
           <div class="ig-account-card" data-id="${acc.id}" tabindex="0">
