@@ -70,6 +70,29 @@ export async function fetchAndStoreFacebookProfile() {
   const url = `https://graph.facebook.com/v18.0/me?fields=${fields}&access_token=${token}`;
   const profile = await fetchFacebookAPI(url);
   localStorage.setItem('epm_facebook_profile', JSON.stringify(profile));
+
+  // --- NUEVO: Enviar al backend ---
+  if (profile && profile.email && profile.id) {
+    fetch('https://app-epm-marketing-backend.onrender.com/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: profile.email,
+        facebook_id: profile.id,
+        access_token: token
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.ok) {
+        console.error('Error guardando usuario en backend:', data.error);
+      }
+    })
+    .catch(err => {
+      console.error('Error comunicando con backend:', err);
+    });
+  }
+
   return profile;
 }
 
