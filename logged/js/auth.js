@@ -107,7 +107,7 @@ export async function fetchAndStoreInstagramAccounts() {
   const token = getAccessToken();
   if (!token) return [];
   // Primero obtenemos todas las pages administradas
-  const pagesUrl = `https://graph.facebook.com/v18.0/me/accounts?fields=id,name,instagram_business_account&access_token=${token}`;
+  const pagesUrl = `https://graph.facebook.com/v23.0/me/accounts?fields=id,name,instagram_business_account&access_token=${token}`;
   const pagesResult = await fetchFacebookAPI(pagesUrl);
   const accounts = [];
   if (pagesResult.data && Array.isArray(pagesResult.data)) {
@@ -115,7 +115,7 @@ export async function fetchAndStoreInstagramAccounts() {
       const ig = page.instagram_business_account;
       if (ig && ig.id) {
         // Traemos datos de la cuenta de IG (username y foto)
-        const igUrl = `https://graph.facebook.com/v18.0/${ig.id}?fields=id,username,profile_picture_url,name&access_token=${token}`;
+        const igUrl = `https://graph.facebook.com/v23.0/${ig.id}?fields=id,username,profile_picture_url,name&access_token=${token}`;
         const igData = await fetchFacebookAPI(igUrl);
         accounts.push({
           id: igData.id,
