@@ -7,9 +7,14 @@ const authenticate = require("./middleware/authenticate");
 
 const app = express();
 app.use(cors({
-  origin: "http://https://lalojka.github.io", // Cambia según tu front
-  credentials: true
-}));
+    origin: [
+      "https://app.epm-marketing.com",
+      "http://localhost:4000", // Si quieres seguir probando local
+      "http://localhost:3000", // (opcional, solo para desarrollo)
+      "https://lalojka.github.io" // (opcional, si usas GitHub Pages)
+    ],
+    credentials: true
+  }));
 app.use(express.json());
 app.use(cookieParser());
 

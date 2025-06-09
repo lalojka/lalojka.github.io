@@ -1,4 +1,4 @@
-import { insertHeaderFooter, insertSidebar, enableLogout } from './layout.js';
+import { insertHeaderFooter } from './layout.js';
 import { getInstagramAccounts, getSelectedInstagramId } from './auth.js';
 
 insertHeaderFooter();
