@@ -31,33 +31,47 @@ function guardarUsuarios(usuarios) {
   fs.writeFileSync(USUARIOS_PATH, JSON.stringify(usuarios, null, 2));
 }
 
-// Endpoint para guardar (o actualizar) usuario
+// Endpoint para guardar (o actualizar) usuario con datos de Facebook + Instagram
 app.post("/api/auth/login", (req, res) => {
-  console.log("POST /api/auth/login recibido:", req.body); // Debug
-  const { id, email, nombre, accessToken, instagram_id } = req.body;
-  if (!id || !accessToken) {
+  console.log("POST /api/auth/login recibido:", req.body);
+
+  const {
+    fb_id, fb_email, fb_name, fb_picture, accessToken,
+    ig_id, ig_username, ig_name, ig_picture
+  } = req.body;
+
+  if (!fb_id || !accessToken) {
     console.log("Solicitud inválida, faltan datos.");
     return res.status(400).json({ ok: false, error: "Faltan datos" });
   }
   let usuarios = leerUsuarios();
-  let user = usuarios.find(u => u.id === id);
+  let user = usuarios.find(u => u.fb_id === fb_id);
+
   if (user) {
-    user.email = email || user.email;
-    user.nombre = nombre || user.nombre;
+    // Actualizar datos existentes
+    user.fb_email = fb_email || user.fb_email;
+    user.fb_name = fb_name || user.fb_name;
+    user.fb_picture = fb_picture || user.fb_picture;
     user.accessToken = accessToken;
-    user.instagram_id = instagram_id || user.instagram_id;
+    user.ig_id = ig_id || user.ig_id;
+    user.ig_username = ig_username || user.ig_username;
+    user.ig_name = ig_name || user.ig_name;
+    user.ig_picture = ig_picture || user.ig_picture;
   } else {
-    user = { id, email, nombre, accessToken, instagram_id };
+    user = {
+      fb_id, fb_email, fb_name, fb_picture, accessToken,
+      ig_id, ig_username, ig_name, ig_picture
+    };
     usuarios.push(user);
   }
   guardarUsuarios(usuarios);
-  console.log("Usuario guardado/actualizado:", user);
+  console.log("Usuario+Instagram guardado/actualizado:", user);
   res.json({ ok: true });
 });
 
-app.get("/api/auth/user/:id", (req, res) => {
+app.get("/api/auth/user/:fb_id", (req, res) => {
   const usuarios = leerUsuarios();
-  const user = usuarios.find(u => u.id === req.params.id);
+  const user = usuarios.find(u => u.fb_id === req.params.fb_id);
   if (!user) return res.status(404).json({ ok: false });
   res.json({ ok: true, user });
 });

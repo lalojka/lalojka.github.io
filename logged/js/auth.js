@@ -30,6 +30,7 @@ export function clearAccessToken() {
   localStorage.removeItem('epm_facebook_profile');
   localStorage.removeItem('epm_instagram_accounts');
   localStorage.removeItem('epm_selected_instagram_id');
+  localStorage.removeItem('epm_instagram_profile');
 }
 
 // --- FETCH CON MANEJO DE TOKEN EXPIRADO ---
@@ -70,55 +71,79 @@ export async function fetchFacebookAPI(url) {
   return data;
 }
 
-// --- PERFIL DE USUARIO FACEBOOK ---
+// --- PERFIL DE USUARIO FACEBOOK + INSTAGRAM ---
 
-export async function fetchAndStoreFacebookProfile() {
+export async function fetchAndStoreFacebookAndInstagramProfile() {
   const token = getAccessToken();
   if (!token) return null;
-  const fields = "id,name,email,picture";
-  const url = `https://graph.facebook.com/v18.0/me?fields=${fields}&access_token=${token}`;
-  const profile = await fetchFacebookAPI(url);
-  localStorage.setItem('epm_facebook_profile', JSON.stringify(profile));
 
-  // --- Enviar al backend LOCAL ---
-  if (profile && profile.email && profile.id) {
-    console.log("Enviando usuario al backend local:", {
-      id: profile.id,
-      email: profile.email,
-      nombre: profile.name,
+  // 1. Traer perfil de Facebook
+  const fbFields = "id,name,email,picture";
+  const fbUrl = `https://graph.facebook.com/v23.0/me?fields=${fbFields}&access_token=${token}`;
+  const fbProfile = await fetchFacebookAPI(fbUrl);
+  localStorage.setItem('epm_facebook_profile', JSON.stringify(fbProfile));
+
+  // 2. Traer cuentas de Instagram asociadas
+  const pagesUrl = `https://graph.facebook.com/v23.0/me/accounts?fields=id,name,instagram_business_account&access_token=${token}`;
+  const pagesResult = await fetchFacebookAPI(pagesUrl);
+  let igProfile = null;
+
+  if (pagesResult.data && Array.isArray(pagesResult.data)) {
+    // Tomar la primera cuenta de Instagram asociada (puedes adaptar para enviar varias)
+    const igAccount = pagesResult.data.find(
+      page => page.instagram_business_account && page.instagram_business_account.id
+    );
+    if (igAccount) {
+      const igId = igAccount.instagram_business_account.id;
+      const igUrl = `https://graph.facebook.com/v23.0/${igId}?fields=id,username,profile_picture_url,name&access_token=${token}`;
+      igProfile = await fetchFacebookAPI(igUrl);
+    }
+  }
+
+  if (igProfile) {
+    localStorage.setItem('epm_instagram_profile', JSON.stringify(igProfile));
+  } else {
+    localStorage.removeItem('epm_instagram_profile');
+  }
+
+  // 3. Enviar ambos al backend local
+  if (fbProfile && fbProfile.id) {
+    const payload = {
+      fb_id: fbProfile.id,
+      fb_email: fbProfile.email,
+      fb_name: fbProfile.name,
+      fb_picture: fbProfile.picture?.data?.url || null,
       accessToken: token,
-      instagram_id: null
-    });
+      // Si hay IG asociado, guarda info, si no, deja null
+      ig_id: igProfile ? igProfile.id : null,
+      ig_username: igProfile ? igProfile.username : null,
+      ig_name: igProfile ? igProfile.name : null,
+      ig_picture: igProfile ? igProfile.profile_picture_url : null
+    };
+
+    console.log("Enviando usuario+instagram al backend local:", payload);
+
     fetch('http://localhost:4000/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id: profile.id,
-        email: profile.email,
-        nombre: profile.name,
-        accessToken: token,
-        instagram_id: null
+      body: JSON.stringify(payload)
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
       })
-    })
-    .then(res => {
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      return res.json();
-    })
-    .then(data => {
-      if (!data.ok) {
-        console.error('Error guardando usuario en backend:', data.error);
-      } else {
-        console.log('Usuario guardado exitosamente en backend local');
-      }
-    })
-    .catch(err => {
-      console.error('Error comunicando con backend:', err);
-    });
-  } else {
-    console.warn('No se obtuvo perfil con email e id válido', profile);
+      .then(data => {
+        if (!data.ok) {
+          console.error('Error guardando en backend:', data.error);
+        } else {
+          console.log('Guardado OK en backend local');
+        }
+      })
+      .catch(err => {
+        console.error('Error comunicando con backend:', err);
+      });
   }
-
-  return profile;
+  return { fbProfile, igProfile };
 }
 
 export function getFacebookProfile() {
@@ -126,7 +151,12 @@ export function getFacebookProfile() {
   return data ? JSON.parse(data) : null;
 }
 
-// --- CUENTAS DE INSTAGRAM ASOCIADAS ---
+export function getInstagramProfile() {
+  const data = localStorage.getItem('epm_instagram_profile');
+  return data ? JSON.parse(data) : null;
+}
+
+// --- CUENTAS DE INSTAGRAM ASOCIADAS (varias) ---
 
 export async function fetchAndStoreInstagramAccounts() {
   const token = getAccessToken();
