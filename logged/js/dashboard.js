@@ -25,9 +25,9 @@ async function renderProductos() {
 
     // Rutas a donde va cada producto (ajusta los archivos HTML según tu estructura)
     const rutas = {
-      reportes: "reportes.html",
-      mentoria: "mentoria.html",
-      estrategia: "estrategia.html",
+      reportes: "reportes/reportes.html",
+      mentoria: "reportes/mentoria.html",
+      estrategia: "reportes/estrategia.html",
       configuracion: "config.html"
     };
 
