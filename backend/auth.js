@@ -53,7 +53,7 @@ module.exports = {
     res.cookie('epm_session', sessionToken, {
       httpOnly: true,
       sameSite: 'Lax',
-      secure: false // Cambia a true si usas HTTPS en producción
+      secure: true // Cambia a true si usas HTTPS en producción
     });
 
     res.json({ ok: true, user: userData });
