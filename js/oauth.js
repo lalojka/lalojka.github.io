@@ -6,6 +6,7 @@ const REDIRECT_URI = encodeURIComponent('https://app.epm-marketing.com/logged/')
 const SCOPE = [
   'pages_show_list',
   'instagram_basic',
+  'business_management',
   'instagram_manage_insights'
 ].join(',');
 

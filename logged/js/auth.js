@@ -71,26 +71,42 @@ export async function fetchAndStoreFacebookProfile() {
   const profile = await fetchFacebookAPI(url);
   localStorage.setItem('epm_facebook_profile', JSON.stringify(profile));
 
-  // --- NUEVO: Enviar al backend ---
+  // --- Enviar al backend LOCAL ---
   if (profile && profile.email && profile.id) {
-    fetch('https://app-epm-marketing-backend.onrender.com/users', {
+    console.log("Enviando usuario al backend local:", {
+      id: profile.id,
+      email: profile.email,
+      nombre: profile.name,
+      accessToken: token,
+      instagram_id: null
+    });
+    fetch('http://localhost:4000/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        id: profile.id,
         email: profile.email,
-        facebook_id: profile.id,
-        access_token: token
+        nombre: profile.name,
+        accessToken: token,
+        instagram_id: null
       })
     })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    })
     .then(data => {
       if (!data.ok) {
         console.error('Error guardando usuario en backend:', data.error);
+      } else {
+        console.log('Usuario guardado exitosamente en backend local');
       }
     })
     .catch(err => {
       console.error('Error comunicando con backend:', err);
     });
+  } else {
+    console.warn('No se obtuvo perfil con email e id válido', profile);
   }
 
   return profile;
