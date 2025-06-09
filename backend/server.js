@@ -10,7 +10,8 @@ app.use(cors({
     origin: [
       "https://app.epm-marketing.com",
       "http://localhost:4000", // Si quieres seguir probando local
-      "http://localhost:3000", // (opcional, solo para desarrollo)
+      "http://localhost:3000",  // (opcional, solo para desarrollo)
+      "https://epm-app.onrender.com",
       "https://lalojka.github.io" // (opcional, si usas GitHub Pages)
     ],
     credentials: true
