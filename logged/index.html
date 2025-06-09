@@ -26,10 +26,13 @@
 
   <script type="module">
     import { insertHeaderFooter, enableLogout } from './js/layout.js';
-    import { getInstagramAccounts, setSelectedInstagramId, fetchAndStoreInstagramAccounts } from './js/auth.js';
+    import { getInstagramAccounts, setSelectedInstagramId, fetchAndStoreFacebookProfile, fetchAndStoreInstagramAccounts } from './js/auth.js';
 
     insertHeaderFooter();
     enableLogout();
+
+    // Llamar primero para obtener perfil y guardar usuario en backend
+  await fetchAndStoreFacebookProfile();
 
     async function mostrarCuentasInstagram() {
       let cuentas = getInstagramAccounts();
