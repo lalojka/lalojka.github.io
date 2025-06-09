@@ -21,7 +21,7 @@ async function renderProductos() {
   container.innerHTML = "<p>Cargando productos...</p>";
 
   try {
-    const res = await fetch("https://app.epm-marketing.com/api/productos");
+    const res = await fetch("http://localhost:4000/api/productos");
     const data = await res.json();
     if (!data.ok) throw new Error("Error del backend");
 

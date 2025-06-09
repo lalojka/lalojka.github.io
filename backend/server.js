@@ -1,10 +1,14 @@
 const express = require("express");
 const cors = require("cors");
+const { login } = require("./auth"); // <--- IMPORTANTE
 const { getInstagramMedia } = require("./facebook");
 
 const app = express();
 app.use(cors({ origin: "*", credentials: true }));
 app.use(express.json());
+
+// --- AUTH ---
+app.post("/api/auth/login", login);
 
 // 1. Endpoint para productos principales
 app.get("/api/productos", (req, res) => {
@@ -27,7 +31,6 @@ app.get("/api/reportes/tipos", (req, res) => {
       { id: "media", nombre: "Publicaciones" },
       { id: "stories", nombre: "Stories" },
       { id: "crecimiento", nombre: "Crecimiento de seguidores" }
-      // Agregá más tipos a medida que amplíes tu sistema
     ]
   });
 });
@@ -45,7 +48,6 @@ app.get("/api/reportes/:ig_id/:tipo", async (req, res) => {
     }
     // if (tipo === "stories") { ... }
     // if (tipo === "crecimiento") { ... }
-    // Agregá lógica para otros tipos de reportes
     return res.status(400).json({ ok: false, error: "Tipo de reporte no soportado aún." });
   } catch (err) {
     res.status(500).json({ ok: false, error: err.message });
