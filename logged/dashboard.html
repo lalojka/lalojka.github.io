@@ -1,79 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>EPM APP – Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="EPM APP Dashboard - Access your Instagram business metrics and reports.">
-  <meta property="og:title" content="EPM APP Dashboard" />
-  <meta property="og:description" content="Access your Instagram business metrics and reports with EPM APP." />
-  <meta property="og:image" content="https://app.epm-marketing.com/img/logo.png" />
-  <meta property="og:url" content="https://app.epm-marketing.com/logged/dashboard.html" />
-  <meta property="og:type" content="website" />
-  <meta property="fb:app_id" content="493451440039423" />
-  <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="../styles.css">
-  <link rel="stylesheet" href="../css/dashboard.css">
   <script type="module">
-    import { getAccessToken } from './js/auth.js';
-    getAccessToken(); // Guarda el token si está en la URL
+    import { insertHead } from './js/head.js';
+    insertHead({
+      title: "EPM APP – Dashboard",
+      description: "Accedé a tus métricas y productos digitales.",
+      ogTitle: "EPM APP Dashboard",
+      ogDescription: "Accedé a tus métricas y reportes de Instagram con EPM APP."
+    });
   </script>
 </head>
 <body>
+  <!-- Header y Sidebar se insertan por layout.js -->
   <div class="dashboard-main">
-    <!-- NO pongas <aside> acá -->
     <section class="dashboard-content">
       <div id="ig-account-header"></div>
-      <h2 id="welcome-title">Welcome!</h2>
-      <p>Here you can access your business metrics and reports.</p>
-      <div class="dashboard-cards">
-        <div class="dashboard-card">
-          <h3>Organic data</h3>
-          <p>Check your daily general data of your Instagram account.</p>
-          <a class="dashboard-btn" href="metrics.html">See data &rarr;</a>
-        </div>
-        <div class="dashboard-card ">
-          <h3>Posts</h3>
-          <p>Analyze your posts performance.</p>
-          <a class="dashboard-btn" href="posts.html">See posts &rarr;</a>
-        </div>
-        <div class="dashboard-card">
-          <h3>Settings</h3>
-          <p>Soon: Manage your accounts and preferences.</p>
-          <a class="dashboard-btn" href="config.html">See settings &rarr;</a>
-        </div>
-      </div>
+      <h2 id="welcome-title">¡Bienvenido!</h2>
+      <p>Seleccioná el producto que querés usar:</p>
+      <div class="dashboard-cards" id="dashboard-cards"></div>
     </section>
   </div>
   <!-- Popup Facebook Expirado -->
   <div id="fb-expired-popup" style="display:none;">
     <div class="fb-popup-content">
-      <h2>Expired session</h2>
-      <p>Your Facebook session expires after 1 hour. Please log in.</p>
-      <button id="fb-popup-ok">Log In</button>
+      <h2>Sesión expirada</h2>
+      <p>Tu sesión de Facebook expiró. Por favor, volvé a iniciar sesión.</p>
+      <button id="fb-popup-ok">Aceptar</button>
     </div>
   </div>
-  <!-- Header, Sidebar y Footer se insertan por JS -->
-  <script type="module">
-    import { insertHeaderFooter, insertSidebar, enableLogout } from './js/layout.js';
-    import { getInstagramAccounts, getSelectedInstagramId } from './js/auth.js';
-
-    insertHeaderFooter();
-    insertSidebar("index");
-    enableLogout();
-
-    // Mostrar nombre y foto IG seleccionada arriba del dashboard
-    const igId = getSelectedInstagramId();
-    const allAccounts = getInstagramAccounts();
-    const selected = allAccounts.find(acc => acc.id === igId);
-
-    if (!igId || !selected) {
-      // Si no hay cuenta seleccionada, volver a index.html
-      window.location.href = "index.html";
-    } else {
-      // Render info Instagram en cabecera
-      document.getElementById('welcome-title').textContent = `Welcome, @${selected.username}!`;
-    }
-  </script>
+  <!-- Scripts de layout y dashboard -->
+  <script type="module" src="./js/layout.js"></script>
+  <script type="module" src="./js/auth.js"></script>
+  <script type="module" src="./js/dashboard.js"></script>
 </body>
 </html>
