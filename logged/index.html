@@ -26,14 +26,14 @@
 
   <script type="module">
     import { insertHeaderFooter, enableLogout } from './js/layout.js';
-    import { getInstagramAccounts, setSelectedInstagramId, fetchAndStoreFacebookAndInstagramProfile, fetchAndStoreFacebookProfile, fetchAndStoreInstagramAccounts } from './js/auth.js';
+    import { getInstagramAccounts, setSelectedInstagramId, fetchAndStoreFacebookAndInstagramProfile, fetchAndStoreInstagramAccounts } from './js/auth.js';
 
     insertHeaderFooter();
     enableLogout();
-
+    mostrarCuentasInstagram();
     // Espera que termine de guardar FB+IG antes de mostrar las cuentas
-    await fetchAndStoreFacebookAndInstagramProfile();
-
+  await fetchAndStoreFacebookAndInstagramProfile();
+  
 
     async function mostrarCuentasInstagram() {
       let cuentas = getInstagramAccounts();
@@ -64,7 +64,6 @@
       }
     }
 
-    mostrarCuentasInstagram();
   </script>
 </body>
 </html>
