@@ -5,10 +5,19 @@
 export function getAccessToken() {
   const hash = window.location.hash.substring(1);
   let token = null;
+  let longLivedToken = null;
+
   hash.split('&').forEach(pair => {
     const [key, value] = pair.split('=');
+    if (key === 'long_lived_token') longLivedToken = decodeURIComponent(value ?? '');
     if (key === 'access_token') token = decodeURIComponent(value ?? '');
   });
+
+  // Prioriza el token de larga duración si está presente
+  if (longLivedToken) {
+    token = longLivedToken;
+  }
+
   if (!token) token = localStorage.getItem('epm_access_token');
   if (token && !localStorage.getItem('epm_access_token')) {
     localStorage.setItem('epm_access_token', token);
