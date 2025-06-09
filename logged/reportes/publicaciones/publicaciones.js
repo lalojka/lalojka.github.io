@@ -8,7 +8,7 @@ async function cargarPublicaciones() {
   try {
     const ig_id = localStorage.getItem('epm_selected_instagram_id');
     const accessToken = localStorage.getItem('epm_access_token');
-    const res = await fetch(`http://localhost:4000/api/reportes/${ig_id}/performance?accessToken=${accessToken}`);
+    const res = await fetch(`https://epm-app.onrender.com/api/reportes/${ig_id}/performance?accessToken=${accessToken}`);
     const data = await res.json();
     // Actualiza la UI con los datos reales
     document.getElementById('publicaciones-container').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;

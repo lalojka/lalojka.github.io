@@ -14,7 +14,7 @@ async function validarYMostrar() {
   container.innerHTML = "<p>Consultando API de reportes...</p>";
 
   try {
-    const res = await fetch(`http://localhost:4000/api/reportes/${ig_id}/insights`, {
+    const res = await fetch(`https://epm-app.onrender.com/api/reportes/${ig_id}/insights`, {
       method: 'GET',
       credentials: 'include', // ¡Envia la cookie de sesión!
     });
