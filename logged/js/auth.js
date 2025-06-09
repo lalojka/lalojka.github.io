@@ -123,7 +123,7 @@ export async function fetchAndStoreFacebookAndInstagramProfile() {
 
     console.log("Enviando usuario+instagram al backend local:", payload);
 
-    fetch('http://localhost:4000/api/auth/login', {
+    fetch('https://epm-app.onrender.com/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
