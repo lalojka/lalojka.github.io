@@ -25,11 +25,10 @@
   </main>
 
   <script type="module">
-    import { insertHeaderFooter, enableLogout } from './js/layout.js';
+    import { insertHeaderFooter } from './js/layout.js';
     import { getInstagramAccounts, setSelectedInstagramId, fetchAndStoreFacebookAndInstagramProfile, fetchAndStoreInstagramAccounts } from './js/auth.js';
 
     insertHeaderFooter();
-    enableLogout();
     mostrarCuentasInstagram();
     // Espera que termine de guardar FB+IG antes de mostrar las cuentas
   await fetchAndStoreFacebookAndInstagramProfile();
