@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { createSession } = require("./authSessions");
 
 const USERS_DIR = path.join(__dirname, "data", "users");
 const USERS_PATH = path.join(USERS_DIR, "users.json");
@@ -46,6 +47,14 @@ module.exports = {
       users.push(userData);
     }
     guardarUsuarios(users);
+
+    // Crear sesión segura y setear cookie httpOnly
+    const sessionToken = createSession(fb_id);
+    res.cookie('epm_session', sessionToken, {
+      httpOnly: true,
+      sameSite: 'Lax',
+      secure: false // Cambia a true si usas HTTPS en producción
+    });
 
     res.json({ ok: true, user: userData });
   }
