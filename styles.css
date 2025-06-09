@@ -421,3 +421,105 @@ body { padding-top: 72px; }
   color: var(--text, #1a2330);
   font-size: 0.98em;
 }
+
+.header {
+  background: var(--blue);
+  color: var(--white);
+  position: sticky; top: 0; z-index: 20;
+  box-shadow: 0 2px 12px #0001;
+}
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.75rem 1.2rem;
+}
+.logo-link { display: flex; align-items: center; }
+.logo { height: 44px; }
+.main-nav {
+  display: flex;
+  gap: 1.5rem;
+  margin-left: 2rem;
+}
+.main-nav a {
+  color: var(--white);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color .2s;
+  font-size: 1.07em;
+}
+.main-nav a:hover {
+  color: var(--orange);
+}
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  position: relative;
+}
+.header-user-img {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 2px solid var(--light-blue);
+  object-fit: cover;
+}
+.header-user-name {
+  font-size: 1em;
+  font-weight: 600;
+  color: var(--cream);
+  letter-spacing: .2px;
+}
+.header-user-menu-btn {
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 1.1em;
+  cursor: pointer;
+}
+.header-user-menu {
+  display: none;
+  position: absolute;
+  right: 0; top: 110%;
+  background: var(--white);
+  box-shadow: 0 3px 18px #0002;
+  border-radius: 0.7em;
+  min-width: 120px;
+  z-index: 100;
+}
+.header-user-menu.open { display: block; }
+.header-user-menu a {
+  display: block;
+  color: var(--blue);
+  padding: 0.7em 1.2em;
+  text-decoration: none;
+  border-bottom: 1px solid #eee;
+  font-size: 1em;
+}
+.header-user-menu a:last-child { border-bottom: none; }
+.header-user-menu a:hover { background: var(--cream); }
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 2.2em;
+  margin-left: 1.2em;
+  cursor: pointer;
+}
+@media (max-width: 800px) {
+  .header-container { flex-wrap: wrap; }
+  .main-nav {
+    position: absolute;
+    background: var(--blue);
+    top: 70px; left: 0; right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 0 1.2em 2em;
+    gap: 1.1em;
+    display: none;
+  }
+  .main-nav.nav-open { display: flex; }
+  .nav-toggle { display: block; }
+}

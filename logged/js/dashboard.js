@@ -2,8 +2,6 @@ import { insertHeaderFooter, insertSidebar, enableLogout } from './layout.js';
 import { getInstagramAccounts, getSelectedInstagramId } from './auth.js';
 
 insertHeaderFooter();
-insertSidebar("dashboard");
-enableLogout();
 
 // Mostrar nombre y foto IG seleccionada arriba del dashboard
 const igId = getSelectedInstagramId();
