@@ -1,3 +1,5 @@
+import { BACKEND_URL } from './config.js';
+
 // Aquí iría la lógica para obtener y mostrar la performance por publicación
 document.getElementById('publicaciones-container').innerHTML = `
   <p>Cargando publicaciones...</p>
@@ -8,7 +10,7 @@ async function cargarPublicaciones() {
   try {
     const ig_id = localStorage.getItem('epm_selected_instagram_id');
     const accessToken = localStorage.getItem('epm_access_token');
-    const res = await fetch(`https://epm-app.onrender.com/api/reportes/${ig_id}/performance?accessToken=${accessToken}`);
+    const res = await fetch(`${BACKEND_URL}/api/reportes/${ig_id}/performance?accessToken=${accessToken}`);
     const data = await res.json();
     // Actualiza la UI con los datos reales
     document.getElementById('publicaciones-container').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;

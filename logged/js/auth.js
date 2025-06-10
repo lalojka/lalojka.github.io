@@ -1,3 +1,7 @@
+// logged/js/auth.js
+
+import { BACKEND_URL } from './config.js';
+
 // Manejo centralizado del access token y datos del usuario para toda la app
 
 // --- ACCESS TOKEN ---
@@ -106,7 +110,7 @@ export async function fetchAndStoreFacebookAndInstagramProfile() {
     localStorage.removeItem('epm_instagram_profile');
   }
 
-  // 3. Enviar ambos al backend local
+  // 3. Enviar ambos al backend
   if (fbProfile && fbProfile.id) {
     const payload = {
       fb_id: fbProfile.id,
@@ -121,9 +125,9 @@ export async function fetchAndStoreFacebookAndInstagramProfile() {
       ig_picture: igProfile ? igProfile.profile_picture_url : null
     };
 
-    console.log("Enviando usuario+instagram al backend local:", payload);
+    console.log("Enviando usuario+instagram al backend:", payload);
 
-    fetch('https://epm-app.onrender.com/api/auth/login', {
+    fetch(`${BACKEND_URL}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -136,7 +140,7 @@ export async function fetchAndStoreFacebookAndInstagramProfile() {
         if (!data.ok) {
           console.error('Error guardando en backend:', data.error);
         } else {
-          console.log('Guardado OK en backend local');
+          console.log('Guardado OK en backend');
         }
       })
       .catch(err => {

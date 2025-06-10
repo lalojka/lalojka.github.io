@@ -1,5 +1,7 @@
 // Lógica para validar sesión y acceso al endpoint seguro de insights
 
+import { BACKEND_URL } from './config.js'; // <-- Importa la URL dinámica
+
 // Selecciona el contenedor donde mostrarás el resultado
 const container = document.getElementById('metricas-container');
 
@@ -14,7 +16,7 @@ async function validarYMostrar() {
   container.innerHTML = "<p>Consultando API de reportes...</p>";
 
   try {
-    const res = await fetch(`https://epm-app.onrender.com/api/reportes/${ig_id}/insights`, {
+    const res = await fetch(`${BACKEND_URL}/api/reportes/${ig_id}/insights`, {
       method: 'GET',
       credentials: 'include', // ¡Envia la cookie de sesión!
     });

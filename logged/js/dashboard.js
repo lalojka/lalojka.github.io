@@ -1,5 +1,6 @@
 import { insertHeaderFooter } from './layout.js';
 import { getInstagramAccounts, getSelectedInstagramId } from './auth.js';
+import { BACKEND_URL } from './config.js'; // <--- IMPORTANTE
 
 insertHeaderFooter();
 
@@ -19,7 +20,8 @@ async function renderProductos() {
   container.innerHTML = "<p>Cargando productos...</p>";
 
   try {
-    const res = await fetch("https://epm-app.onrender.com/api/productos");
+    // Usa el BACKEND_URL en vez de la URL fija
+    const res = await fetch(`${BACKEND_URL}/api/productos`);
     const data = await res.json();
     if (!data.ok) throw new Error("Error del backend");
 

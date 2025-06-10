@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { login } = require("./auth");
@@ -6,16 +7,22 @@ const cookieParser = require("cookie-parser");
 const authenticate = require("./middleware/authenticate");
 
 const app = express();
-app.use(cors({
-    origin: [
+
+// Lee ALLOWED_ORIGINS de .env o variable de entorno
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",")
+  : [
+      "http://localhost:4000",
+      "http://localhost:3000",
       "https://app.epm-marketing.com",
-      "http://localhost:4000", // Si quieres seguir probando local
-      "http://localhost:3000",  // (opcional, solo para desarrollo)
       "https://epm-app.onrender.com",
-      "https://lalojka.github.io" // (opcional, si usas GitHub Pages)
-    ],
-    credentials: true
-  }));
+      "https://lalojka.github.io"
+    ];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -96,6 +103,7 @@ app.get("/api/configuracion", (req, res) => {
   res.json({ ok: true, mensaje: "Aquí va la lógica de configuración" });
 });
 
-app.listen(process.env.PORT || 4000, () => {
-  console.log("Backend corriendo en http://localhost:" + (process.env.PORT || 4000));
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log("Backend corriendo en http://localhost:" + PORT);
 });
