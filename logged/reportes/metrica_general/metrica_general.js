@@ -110,7 +110,7 @@ if (!accessToken || !igBusinessId) {
       let completed = 0;
 
       for (let i = daysSince; i > daysUntil; i--) {
-        const { sinceUnix, untilUnix, sinceStr, untilStr } = getSinceUntilForDay(today, i);
+        const { sinceUnix, untilUnix, untilStr } = getSinceUntilForDay(today, i);
         try {
           const insights = await fetchInstagramInsightsForDay(igBusinessId, accessToken, sinceUnix, untilUnix);
           if (insights.error) {
@@ -118,7 +118,7 @@ if (!accessToken || !igBusinessId) {
             showApiErrorMessage(insights);
             return;
           }
-          let row = [sinceStr, untilStr];
+          let row = [untilStr]; // Solo la fecha "To", ahora llamada "Date"
           METRICS.forEach(metricName => {
             const metricData = insights.data?.find(item => item.name === metricName);
             if (metricData && metricData.total_value && metricData.total_value.value !== undefined) {
@@ -141,7 +141,7 @@ if (!accessToken || !igBusinessId) {
       // Si no hubo error, mostrar la tabla
       if (rows.length > 0) {
         initTable(METRICS);
-        // ORDENAR por fecha ASC (columna 0, "From")
+        // ORDENAR por fecha ASC (columna 0, "Date")
         rows.sort((a, b) => a[0].localeCompare(b[0]));
         renderTableRows(rows);
       }
@@ -157,7 +157,7 @@ function initTable(metrics) {
   table.style.display = "table";
   let thead = document.createElement("thead");
   let tr = document.createElement("tr");
-  ["From", "To", ...metrics].forEach(h => {
+  ["Date", ...metrics].forEach(h => { // Solo "Date" y luego las métricas
     let th = document.createElement("th");
     th.textContent = h;
     tr.appendChild(th);
