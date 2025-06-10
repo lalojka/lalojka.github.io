@@ -5,7 +5,7 @@
   <script type="module">
     import { insertHead } from '/logged/js/head.js';
     insertHead({
-      title: "EPM APP – Metricas Generales",
+      title: "EPM APP – Métricas Generales",
       description: "Accedé a tus métricas y productos digitales.",
       ogTitle: "EPM APP Dashboard",
       ogDescription: "Accedé a tus métricas y reportes de Instagram con EPM APP."
@@ -18,7 +18,14 @@
   <main class="dashboard-main">
     <section class="dashboard-content">
       <h2>Métricas generales (últimos 30 días)</h2>
-      <div id="metricas-container"></div>
+      <div id="metricas-container">
+        <div id="progress-bar-container" style="display:none;">
+          <div id="progress-bar" style="width:0; background:var(--blue); color:#fff; text-align:center; border-radius:4px;">0%</div>
+          <div id="progress-text" style="margin-top:5px;"></div>
+        </div>
+        <div id="results"></div>
+        <table id="insights-table" style="width:100%; margin-top:2rem; display:none;"></table>
+      </div>
     </section>
   </main>
   <script src="/logged/js/propagateDevParam.js"></script>
