@@ -60,7 +60,7 @@ function showPopup(message) {
   const okBtn = document.getElementById('fb-popup-ok');
   okBtn.onclick = function() {
     popup.style.display = 'none';
-    window.location.href = '../index.html';
+    window.location.href = '/index.html';
   };
 }
 
