@@ -1,4 +1,4 @@
-import { BACKEND_URL } from './config.js';
+import { BACKEND_URL } from '/logged/js/config.js';
 
 // Aquí iría la lógica para obtener y mostrar la performance por publicación
 document.getElementById('publicaciones-container').innerHTML = `
