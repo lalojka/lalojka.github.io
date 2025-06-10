@@ -1,4 +1,4 @@
-import { insertHeaderFooter } from './layout.js';
+import { insertHeaderFooter } from '/logged/js/layout.js';
 insertHeaderFooter();
 
 

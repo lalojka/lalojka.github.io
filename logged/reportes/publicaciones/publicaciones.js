@@ -1,5 +1,5 @@
 import { BACKEND_URL } from '/logged/js/config.js';
-import { insertHeaderFooter } from './layout.js';
+import { insertHeaderFooter } from '/logged/js/layout.js';
 
 insertHeaderFooter();
 // Aquí iría la lógica para obtener y mostrar la performance por publicación
