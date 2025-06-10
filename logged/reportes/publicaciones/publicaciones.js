@@ -1,5 +1,7 @@
 import { BACKEND_URL } from '/logged/js/config.js';
+import { insertHeaderFooter } from './layout.js';
 
+insertHeaderFooter();
 // Aquí iría la lógica para obtener y mostrar la performance por publicación
 document.getElementById('publicaciones-container').innerHTML = `
   <p>Cargando publicaciones...</p>

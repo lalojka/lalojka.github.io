@@ -1,3 +1,7 @@
+import { insertHeaderFooter } from './layout.js';
+insertHeaderFooter();
+
+
 const reportes = [
     {
       id: "metrica_general",

@@ -1,6 +1,9 @@
 // Lógica para validar sesión y acceso al endpoint seguro de insights
 
 import { BACKEND_URL } from '/logged/js/config.js';// <-- Importa la URL dinámica
+import { insertHeaderFooter } from './layout.js';
+
+insertHeaderFooter();
 
 // Selecciona el contenedor donde mostrarás el resultado
 const container = document.getElementById('metricas-container');

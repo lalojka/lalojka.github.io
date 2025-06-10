@@ -2,7 +2,16 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Reportes de Instagram</title>
+  <script type="module">
+    import { insertHead } from './js/head.js';
+    insertHead({
+      title: "EPM APP – Reportes",
+      description: "Accedé a tus métricas y productos digitales.",
+      ogTitle: "EPM APP Reportes",
+      ogDescription: "Accedé a tus métricas y reportes de Instagram con EPM APP."
+    });
+  </script>
+</head>
   <link rel="stylesheet" href="../../css/dashboard.css">
   <script type="module" src="reportes.js"></script>
 </head>
@@ -14,5 +23,7 @@
     </section>
   </main>
   <script src="/logged/js/propagateDevParam.js"></script>
+  <script type="module" src="../js/layout.js"></script>
+  <script type="module" src="./js/auth.js"></script>
 </body>
 </html>
