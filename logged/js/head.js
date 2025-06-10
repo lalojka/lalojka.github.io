@@ -18,8 +18,8 @@ export function insertHead({
       <meta property="og:url" content="${ogUrl}" />
       <meta property="og:type" content="${ogType}" />
       <meta property="fb:app_id" content="493451440039423" />
-      <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
-      <link rel="stylesheet" href="../styles.css">
-      <link rel="stylesheet" href="../css/dashboard.css">
+      <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+      <link rel="stylesheet" href="/styles.css">
+      <link rel="stylesheet" href="/css/dashboard.css">
     `;
   }

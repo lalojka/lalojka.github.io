@@ -3,7 +3,7 @@ import {
   getFacebookProfile,
   getInstagramAccounts,
   getSelectedInstagramId
-} from './auth.js';
+} from '/logged/js/auth.js';
 
 export function insertHeaderFooter(options = {}) {
   // 1. Datos IG seleccionada (prioridad IG sobre FB)
@@ -13,22 +13,22 @@ export function insertHeaderFooter(options = {}) {
   const fbProfile = getFacebookProfile();
 
   // 2. Foto y nombre preferentemente de IG, si no FB
-  let userImg = igSelected?.profile_picture_url || fbProfile?.picture?.data?.url || "../img/ig_default.png";
+  let userImg = igSelected?.profile_picture_url || fbProfile?.picture?.data?.url || "/img/ig_default.png";
   let userName = igSelected?.username ? `@${igSelected.username}` : (fbProfile?.name || "Usuario");
 
   // 3. Header HTML
   document.body.insertAdjacentHTML('afterbegin', `
     <header class="header">
       <div class="header-container">
-        <a href="dashboard.html" class="logo-link">
-          <img src="../img/logo.png" alt="EPM APP Logo" class="logo">
+        <a href="/logged/dashboard.html" class="logo-link">
+          <img src="/img/logo.png" alt="EPM APP Logo" class="logo">
         </a>
         <nav class="main-nav">
-          <a href="dashboard.html">Dashboard</a>
-          <a href="reportes.html">Reportes</a>
-          <a href="mentoria.html">Mentoría</a>
-          <a href="estrategia.html">Estrategia</a>
-          <a href="config.html">Configuración</a>
+            <a href="/logged/dashboard.html">Dashboard</a>
+            <a href="/logged/reportes/reportes.html">Reportes</a>
+            <a href="/logged/mentoria.html">Mentoría</a>
+            <a href="/logged/estrategia.html">Estrategia</a>
+            <a href="/logged/config.html">Configuración</a>
         </nav>
         <div class="header-user">
           <img src="${userImg}" alt="${userName}" class="header-user-img">
@@ -47,10 +47,10 @@ export function insertHeaderFooter(options = {}) {
   document.body.insertAdjacentHTML('beforeend', `
     <footer class="footer">
       <div class="container footer-content">
-        <img src="../img/logo.png" alt="EPM APP Logo" class="logo-footer">
+        <img src="/img/logo.png" alt="EPM APP Logo" class="logo-footer">
         <div>
-          <a href="../terms.html" target="_blank">Terms of Service</a> | 
-          <a href="../privacy-policy.html" target="_blank">Privacy Policy</a>
+          <a href="/terms.html" target="_blank">Terms of Service</a> | 
+          <a href="/privacy-policy.html" target="_blank">Privacy Policy</a>
         </div>
         <div class="footer-note">© 2025 EPM APP</div>
       </div>
@@ -83,7 +83,7 @@ export function insertHeaderFooter(options = {}) {
       // Cierra el menú usuario si existe
       const menu = document.getElementById('user-menu');
       if (menu) menu.classList.remove('open');
-      window.location.href = '../index.html';
+      window.location.href = '/index.html';
     }
   });
 }

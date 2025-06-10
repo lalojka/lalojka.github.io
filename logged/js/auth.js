@@ -1,6 +1,6 @@
 // logged/js/auth.js
 
-import { BACKEND_URL } from './config.js';
+import { BACKEND_URL } from '/logged/js/config.js';
 
 // Manejo centralizado del access token y datos del usuario para toda la app
 
