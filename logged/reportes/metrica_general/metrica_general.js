@@ -1,5 +1,6 @@
 import { insertHeaderFooter } from '/logged/js/layout.js';
 import { getAccessToken, fetchFacebookAPI, getSelectedInstagramId } from '/logged/js/auth.js';
+import { renderLineChart } from '/logged/js/chart.js';
 
 insertHeaderFooter();
 
@@ -15,13 +16,38 @@ const METRICS = [
   'accounts_engaged'
 ];
 
+// Paleta de colores de la marca
+const PALETTE = [
+  '#083963', // --blue
+  '#5DA9DD', // --light-blue
+  '#EB8957', // --orange
+  '#EBE4DD', // --cream
+  '#fff',    // --white
+  '#1a2330'  // --text
+];
+
+// Genera un color para cada métrica usando la paleta, repitiendo si hay más métricas que colores
+function getMetricColor(idx, alpha = 1) {
+  const base = PALETTE[idx % PALETTE.length];
+  // Si es blanco o cream y con alpha, hacé el fill más suave
+  if (alpha < 1) {
+    if (base.toLowerCase() === '#fff') return 'rgba(255,255,255,' + alpha + ')';
+    if (base.toLowerCase() === '#ebe4dd') return 'rgba(235,228,221,' + alpha + ')';
+    if (base.toLowerCase() === '#5da9dd') return 'rgba(93,169,221,' + alpha + ')';
+    if (base.toLowerCase() === '#eb8957') return 'rgba(235,137,87,' + alpha + ')';
+    if (base.toLowerCase() === '#083963') return 'rgba(8,57,99,' + alpha + ')';
+    if (base.toLowerCase() === '#1a2330') return 'rgba(26,35,48,' + alpha + ')';
+  }
+  return base;
+}
+
 function getSinceUntilForDay(today, i) {
   const sinceDate = new Date(today);
   sinceDate.setDate(today.getDate() - i);
   const untilDate = new Date(today);
   untilDate.setDate(today.getDate() - (i - 1));
   const pad = n => n.toString().padStart(2, '0');
-  const fmt = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const fmt = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   return {
     sinceUnix: Math.floor(sinceDate.getTime() / 1000),
     untilUnix: Math.floor(untilDate.getTime() / 1000),
@@ -114,11 +140,10 @@ if (!accessToken || !igBusinessId) {
         try {
           const insights = await fetchInstagramInsightsForDay(igBusinessId, accessToken, sinceUnix, untilUnix);
           if (insights.error) {
-            // Si hay error de API, mostramos mensaje y detenemos todo
             showApiErrorMessage(insights);
             return;
           }
-          let row = [untilStr]; // Solo la fecha "To", ahora llamada "Date"
+          let row = [untilStr];
           METRICS.forEach(metricName => {
             const metricData = insights.data?.find(item => item.name === metricName);
             if (metricData && metricData.total_value && metricData.total_value.value !== undefined) {
@@ -129,7 +154,6 @@ if (!accessToken || !igBusinessId) {
           });
           rows.push(row);
         } catch (e) {
-          // Error de red u otro
           showApiErrorMessage(e);
           return;
         } finally {
@@ -138,10 +162,8 @@ if (!accessToken || !igBusinessId) {
         }
       }
 
-      // Si no hubo error, mostrar la tabla
       if (rows.length > 0) {
         initTable(METRICS);
-        // ORDENAR por fecha ASC (columna 0, "Date")
         rows.sort((a, b) => a[0].localeCompare(b[0]));
         renderTableRows(rows);
       }
@@ -157,7 +179,7 @@ function initTable(metrics) {
   table.style.display = "table";
   let thead = document.createElement("thead");
   let tr = document.createElement("tr");
-  ["Date", ...metrics].forEach(h => { // Solo "Date" y luego las métricas
+  ["Date", ...metrics].forEach(h => {
     let th = document.createElement("th");
     th.textContent = h;
     tr.appendChild(th);
@@ -180,5 +202,33 @@ function renderTableRows(rows) {
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
+  });
+
+  // --- Renderizar gráfico de líneas con TODAS las métricas y colores de la paleta ---
+  const fechas = rows.map(row => row[0]);
+  const datasets = METRICS.map((metric, i) => {
+    const idx = i + 1;
+    const values = rows.map(row => {
+      const v = row[idx];
+      return v === "" ? null : Number(v);
+    });
+    return {
+      label: metric,
+      data: values,
+      borderColor: getMetricColor(i, 1),
+      backgroundColor: getMetricColor(i, 0.18),
+      fill: false,
+      tension: 0.35,
+      pointRadius: 2
+    };
+  });
+
+  renderLineChart('chart-metricas', fechas, datasets, {
+    plugins: { legend: { display: true, position: 'top' } },
+    interaction: { mode: 'nearest', intersect: false },
+    scales: {
+      x: { title: { display: true, text: 'Fecha' } },
+      y: { title: { display: true, text: 'Valor' }, beginAtZero: true }
+    }
   });
 }

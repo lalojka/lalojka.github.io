@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  
   <script type="module">
     import { insertHead } from '/logged/js/head.js';
     insertHead({
@@ -11,8 +12,10 @@
       ogDescription: "Accedé a tus métricas y reportes de Instagram con EPM APP."
     });
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="/css/dashboard.css">
   <script type="module" src="metrica_general.js"></script>
+  
 </head>
 <body>
   <main class="dashboard-main">
@@ -23,6 +26,11 @@
           <div id="progress-bar" style="width:0; background:var(--blue); color:#fff; text-align:center; border-radius:4px;">0%</div>
           <div id="progress-text" style="margin-top:5px;"></div>
         </div>
+        /* Contenedor para el gráfico de lineas*/
+        <div style="max-width:900px;margin:2rem auto;">
+          <canvas id="chart-metricas" height="120"></canvas>
+        </div>
+        /* Contenedor para la tabla de datos*/
         <div id="results"></div>
         <table id="insights-table" style="width:100%; margin-top:2rem; display:none;"></table>
       </div>
