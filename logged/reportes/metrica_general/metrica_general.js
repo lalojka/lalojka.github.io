@@ -21,7 +21,6 @@ const PALETTE = [
   '#083963', // --blue
   '#5DA9DD', // --light-blue
   '#EB8957', // --orange
-  '#EBE4DD', // --cream
   '#fff',    // --white
   '#1a2330'  // --text
 ];
@@ -32,7 +31,6 @@ function getMetricColor(idx, alpha = 1) {
   // Si es blanco o cream y con alpha, hacé el fill más suave
   if (alpha < 1) {
     if (base.toLowerCase() === '#fff') return 'rgba(255,255,255,' + alpha + ')';
-    if (base.toLowerCase() === '#ebe4dd') return 'rgba(235,228,221,' + alpha + ')';
     if (base.toLowerCase() === '#5da9dd') return 'rgba(93,169,221,' + alpha + ')';
     if (base.toLowerCase() === '#eb8957') return 'rgba(235,137,87,' + alpha + ')';
     if (base.toLowerCase() === '#083963') return 'rgba(8,57,99,' + alpha + ')';
