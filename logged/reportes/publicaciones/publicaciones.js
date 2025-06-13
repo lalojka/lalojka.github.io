@@ -1,29 +1,32 @@
-import { BACKEND_URL } from '/logged/js/config.js';
 import { insertHeaderFooter } from '/logged/js/layout.js';
-import { fetchPublicaciones } from '/logged/reportes/publicaciones/APIpublicaciones.js';
+import { fetchPublicaciones } from '/lalojka.github.io/logged/reportes/publicaciones/APIpublicaciones.js';
+import { formatearPublicaciones, COLUMN_DEFS } from './formato-publicaciones.js';
+import { renderTable } from '/logged/js/chartTable.js';
 
 insertHeaderFooter();
-// Aquí iría la lógica para obtener y mostrar la performance por publicación
-document.getElementById('publicaciones-container').innerHTML = `
-  <p>Cargando publicaciones...</p>
-`;
 
-// Ejemplo de fetch (ajusta endpoint y lógica a tu backend real)
-async function cargarPublicaciones() {
+async function main() {
+  // 1. Obtener los datos crudos (fetch + cache)
+  let datosCrudos = [];
   try {
-    const ig_id = localStorage.getItem('epm_selected_instagram_id');
-    const accessToken = localStorage.getItem('epm_access_token');
-    const res = await fetch(`${BACKEND_URL}/api/reportes/${ig_id}/performance?accessToken=${accessToken}`);
-    const data = await res.json();
-    // Actualiza la UI con los datos reales
-    document.getElementById('publicaciones-container').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-  } catch (e) {
-    document.getElementById('publicaciones-container').innerText = "Error al cargar publicaciones.";
+    datosCrudos = await fetchPublicaciones();
+  } catch (err) {
+    document.getElementById('publicaciones-container').innerHTML =
+      '<div class="error">No se pudieron obtener los datos de publicaciones.</div>';
+    console.error(err);
+    return;
   }
+  // 2. Formatear los datos (columnas, links, cálculos, etc)
+  const datosFormateados = formatearPublicaciones(datosCrudos);
+
+  // 3. Definir columnas de la tabla (desde formato-publicaciones.js)
+  const columnasTabla = COLUMN_DEFS.tabla;
+
+  // 4. Renderizar la tabla en el div correspondiente
+  renderTable('publicaciones-container', datosFormateados, columnasTabla);
+
+  // (Opcional) Podrías agregar filtros, gráficos, etc aquí
 }
-cargarPublicaciones();
 
 
-
-const publicaciones = await fetchPublicaciones();
-console.log(publicaciones); // Array con los objetos traídos (o cacheados)
+main();
