@@ -1,7 +1,7 @@
 import { insertHeaderFooter } from '/logged/js/layout.js';
 import { fetchPublicaciones } from '/lalojka.github.io/logged/reportes/publicaciones/APIpublicaciones.js';
 import { formatearPublicaciones, COLUMN_DEFS } from './formato-publicaciones.js';
-import { renderTable } from '/logged/js/chartTable.js';
+import { renderTable } from '/lalojka.github.io/logged/js/chartTable.js';
 
 insertHeaderFooter();
 
