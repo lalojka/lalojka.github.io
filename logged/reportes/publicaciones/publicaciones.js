@@ -1,5 +1,6 @@
 import { BACKEND_URL } from '/logged/js/config.js';
 import { insertHeaderFooter } from '/logged/js/layout.js';
+import { fetchPublicaciones } from '/lalojka.github.io/logged/reportes/publicaciones/APIpublicaciones.js';
 
 insertHeaderFooter();
 // Aquí iría la lógica para obtener y mostrar la performance por publicación
@@ -21,3 +22,8 @@ async function cargarPublicaciones() {
   }
 }
 cargarPublicaciones();
+
+
+
+const publicaciones = await fetchPublicaciones();
+console.log(publicaciones); // Array con los objetos traídos (o cacheados)

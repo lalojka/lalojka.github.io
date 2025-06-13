@@ -1,6 +1,6 @@
 import { insertHeaderFooter } from '/logged/js/layout.js';
 import { getAccessToken, fetchFacebookAPI, getSelectedInstagramId } from '/logged/js/auth.js';
-import { renderLineChart } from '/logged/js/chart.js';
+import { renderLineChart } from '/logged/js/chartLine.js';
 
 insertHeaderFooter();
 
