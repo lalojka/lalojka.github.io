@@ -87,6 +87,25 @@
 </script>
 
 <script>
+  // Session info listener (requerido por Meta)
+  window.addEventListener('message', (event) => {
+    if (event.origin !== "https://www.facebook.com") return;
+    try {
+      const data = JSON.parse(event.data);
+      if (data.type === 'WA_EMBEDDED_SIGNUP') {
+        console.log('Session info:', data);
+        if (data.event === 'FINISH') {
+          const { phone_number_id, waba_id } = data.data;
+          showResult('success', 'Proceso completado', {
+            phone_number_id,
+            waba_id,
+            nota: 'Guarda estos IDs para configurar n8n'
+          });
+        }
+      }
+    } catch (e) {}
+  });
+
   function setStatus(msg) {
     document.getElementById('status').innerText = msg;
   }
@@ -98,36 +117,42 @@
     el.innerHTML = '<strong>' + title + '</strong><pre>' + JSON.stringify(data, null, 2) + '</pre>';
   }
 
+  const fbLoginCallback = (response) => {
+    document.getElementById('launch-btn').disabled = false;
+    if (response.authResponse) {
+      const code = response.authResponse.code;
+      setStatus('Autorizacion recibida. Guarda este codigo:');
+      showResult('success', 'Conexion exitosa', {
+        code: code,
+        nota: 'Copia este "code" — lo necesitas para obtener el token permanente'
+      });
+    } else {
+      setStatus('');
+      showResult('error', 'Cancelado o error', response);
+    }
+  };
+
   function launchEmbeddedSignup() {
     document.getElementById('launch-btn').disabled = true;
     setStatus('Abriendo ventana de Meta...');
 
-    FB.login(function(response) {
-      document.getElementById('launch-btn').disabled = false;
-
-      if (response.authResponse) {
-        const code = response.authResponse.code;
-        setStatus('Autorizacion recibida. Guarda estos datos:');
-        showResult('success', 'Conexion exitosa', {
-          code: code,
-          nota: 'Copia este "code" — lo necesitas para obtener el token permanente en n8n'
-        });
-      } else {
-        setStatus('');
-        if (response.status === 'unknown') {
-          showResult('error', 'Cancelado', { mensaje: 'Cerraste la ventana sin completar el proceso.' });
-        } else {
-          showResult('error', 'Error', response);
-        }
-      }
-    }, {
+    FB.login(fbLoginCallback, {
       config_id: '1571481657251929',
       response_type: 'code',
       override_default_response_type: true,
       extras: {
-        setup: {},
-        featureType: 'coexistence',
-        sessionInfoVersion: '3'
+        version: 'v3',
+        setup: {
+          business: {
+            id: null,
+            name: "Pluxow",
+            email: "lcouretot@gmail.com",
+            phone: { code: 54, number: "1140263972" },
+            website: "https://pluxow.com/",
+            address: { state: null, country: "AR" },
+            timezone: null
+          }
+        }
       }
     });
   }
