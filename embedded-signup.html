@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KinesicPro - Conectar WhatsApp</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f0f2f5;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    h1 { color: #1a1a1a; font-size: 22px; margin-bottom: 8px; }
+    p { color: #666; font-size: 14px; margin-bottom: 28px; }
+    #launch-btn {
+      background: #1877F2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+    #launch-btn:hover { background: #166fe5; }
+    #launch-btn:disabled { background: #aaa; cursor: not-allowed; }
+    #result {
+      margin-top: 24px;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      text-align: left;
+      display: none;
+    }
+    #result.success { background: #e6f4ea; color: #2d6a4f; border: 1px solid #95d5b2; }
+    #result.error   { background: #fdecea; color: #b91c1c; border: 1px solid #fca5a5; }
+    #result pre { margin: 8px 0 0; font-size: 12px; overflow-x: auto; white-space: pre-wrap; }
+    .status { font-size: 13px; color: #888; margin-top: 12px; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h1>Conectar WhatsApp a KinesicPro</h1>
+  <p>Hace clic en el boton para iniciar el proceso de registro.<br>
+     Si tu numero ya tiene WhatsApp Business App, vas a ver la opcion de <strong>Coexistence</strong>.</p>
+
+  <button id="launch-btn" onclick="launchEmbeddedSignup()">
+    Conectar con Facebook / WhatsApp
+  </button>
+
+  <div class="status" id="status"></div>
+  <div id="result"></div>
+</div>
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId            : '493451440039423',
+      autoLogAppEvents : true,
+      xfbml            : true,
+      version          : 'v25.0'
+    });
+  };
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<script>
+  function setStatus(msg) {
+    document.getElementById('status').innerText = msg;
+  }
+
+  function showResult(type, title, data) {
+    const el = document.getElementById('result');
+    el.className = 'result ' + type;
+    el.style.display = 'block';
+    el.innerHTML = '<strong>' + title + '</strong><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+  }
+
+  function launchEmbeddedSignup() {
+    document.getElementById('launch-btn').disabled = true;
+    setStatus('Abriendo ventana de Meta...');
+
+    FB.login(function(response) {
+      document.getElementById('launch-btn').disabled = false;
+
+      if (response.authResponse) {
+        const code = response.authResponse.code;
+        setStatus('Autorizacion recibida. Guarda estos datos:');
+        showResult('success', 'Conexion exitosa', {
+          code: code,
+          nota: 'Copia este "code" — lo necesitas para obtener el token permanente en n8n'
+        });
+      } else {
+        setStatus('');
+        if (response.status === 'unknown') {
+          showResult('error', 'Cancelado', { mensaje: 'Cerraste la ventana sin completar el proceso.' });
+        } else {
+          showResult('error', 'Error', response);
+        }
+      }
+    }, {
+      config_id: 'REEMPLAZAR_CON_CONFIG_ID',
+      response_type: 'code',
+      override_default_response_type: true,
+      extras: {
+        setup: {},
+        featureType: 'coexistence',
+        sessionInfoVersion: '3'
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
