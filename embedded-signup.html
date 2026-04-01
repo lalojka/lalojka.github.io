@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KinesicPro - Conectar WhatsApp</title>
-  <!-- v4 -->
+  <!-- v5 -->
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -28,17 +28,18 @@
     h1 { color: #1a1a1a; font-size: 22px; margin-bottom: 8px; }
     p { color: #666; font-size: 14px; margin-bottom: 28px; }
     #launch-btn {
-      background: #1877F2;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 14px 28px;
+      background-color: #1877f2;
+      border: 0;
+      border-radius: 4px;
+      color: #fff;
+      cursor: pointer;
+      font-family: Helvetica, Arial, sans-serif;
       font-size: 16px;
       font-weight: bold;
-      cursor: pointer;
+      height: 40px;
+      padding: 0 24px;
       width: 100%;
     }
-    #launch-btn:hover { background: #166fe5; }
     #launch-btn:disabled { background: #aaa; cursor: not-allowed; }
     #result {
       margin-top: 24px;
@@ -61,89 +62,87 @@
   <p>Hace clic en el boton para iniciar el proceso de registro.<br>
      Si tu numero ya tiene WhatsApp Business App, vas a ver la opcion de <strong>Coexistence</strong>.</p>
 
-  <button id="launch-btn" onclick="launchEmbeddedSignup()">
-    Conectar con Facebook / WhatsApp
-  </button>
+  <button id="launch-btn" onclick="launchWhatsAppSignup()">Login with Facebook</button>
 
-  <div style="font-size:11px;color:#bbb;margin-bottom:16px;">v4</div>
+  <div style="font-size:11px;color:#bbb;margin-top:12px;">v5</div>
   <div class="status" id="status"></div>
   <div id="result"></div>
 </div>
 
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId            : '493451440039423',
-      autoLogAppEvents : true,
-      xfbml            : true,
-      version          : 'v25.0'
-    });
-  };
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "https://connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-</script>
+<!-- SDK loading -->
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
 <script>
-  // Session info listener (requerido por Meta)
+  // SDK initialization
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId: '493451440039423',
+      autoLogAppEvents: true,
+      xfbml: true,
+      version: 'v25.0'
+    });
+  };
+
+  // Session logging message event listener
   window.addEventListener('message', (event) => {
-    if (event.origin !== "https://www.facebook.com") return;
+    if (!event.origin.endsWith('facebook.com')) return;
     try {
       const data = JSON.parse(event.data);
       if (data.type === 'WA_EMBEDDED_SIGNUP') {
-        console.log('Session info:', data);
-        if (data.event === 'FINISH') {
-          const { phone_number_id, waba_id } = data.data;
+        console.log('message event: ', data);
+        if (data.event === 'FINISH' || data.event === 'FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING') {
           showResult('success', 'Proceso completado', {
-            phone_number_id,
-            waba_id,
+            phone_number_id: data.data.phone_number_id,
+            waba_id: data.data.waba_id,
+            business_id: data.data.business_id,
+            event: data.event,
             nota: 'Guarda estos IDs para configurar n8n'
           });
+        } else if (data.event === 'CANCEL') {
+          showResult('error', 'Cancelado en: ' + data.data.current_step, data);
         }
       }
-    } catch (e) {}
+    } catch {
+      console.log('message event: ', event.data);
+    }
   });
 
-  function setStatus(msg) {
-    document.getElementById('status').innerText = msg;
-  }
+  // Response callback
+  const fbLoginCallback = (response) => {
+    document.getElementById('launch-btn').disabled = false;
+    console.log('response: ', response);
+    if (response.authResponse) {
+      const code = response.authResponse.code;
+      document.getElementById('status').innerText = 'Autorizacion recibida. Guarda este codigo:';
+      showResult('success', 'Code recibido', {
+        code: code,
+        nota: 'Tenes 30 segundos para intercambiarlo por un token'
+      });
+    } else {
+      document.getElementById('status').innerText = '';
+      showResult('error', 'Sin autorizacion', response);
+    }
+  };
+
+  // Launch method
+  const launchWhatsAppSignup = () => {
+    document.getElementById('launch-btn').disabled = true;
+    document.getElementById('status').innerText = 'Abriendo ventana de Meta...';
+    FB.login(fbLoginCallback, {
+      config_id: '1009870028122669',
+      response_type: 'code',
+      override_default_response_type: true,
+      extras: {
+        setup: {},
+      }
+    });
+  };
 
   function showResult(type, title, data) {
     const el = document.getElementById('result');
     el.className = 'result ' + type;
     el.style.display = 'block';
     el.innerHTML = '<strong>' + title + '</strong><pre>' + JSON.stringify(data, null, 2) + '</pre>';
-  }
-
-  const fbLoginCallback = (response) => {
-    document.getElementById('launch-btn').disabled = false;
-    if (response.authResponse) {
-      const code = response.authResponse.code;
-      setStatus('Autorizacion recibida. Guarda este codigo:');
-      showResult('success', 'Conexion exitosa', {
-        code: code,
-        nota: 'Copia este "code" — lo necesitas para obtener el token permanente'
-      });
-    } else {
-      setStatus('');
-      showResult('error', 'Cancelado o error', response);
-    }
-  };
-
-  function launchEmbeddedSignup() {
-    document.getElementById('launch-btn').disabled = true;
-    setStatus('Abriendo ventana de Meta...');
-
-    FB.login(fbLoginCallback, {
-      config_id: '1571481657251929',
-      response_type: 'code',
-      override_default_response_type: true,
-      extras: {"version":"v3","setup":{"business":{"id":null,"name":"Pluxow","email":"lcouretot@gmail.com","phone":{"code":54,"number":"1140263972"},"website":"https://pluxow.com/","address":{"state":null,"country":"AR"},"timezone":null},"phone":{"displayName":"Pluxow","category":null,"description":""}},"featureType":"whatsapp_business_app_onboarding","features":[{"name":"app_only_install"}]}
-    });
   }
 </script>
 
