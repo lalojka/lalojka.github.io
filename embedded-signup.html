@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KinesicPro - Conectar WhatsApp</title>
-  <!-- v5 -->
+  <!-- v6 -->
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -64,13 +64,10 @@
 
   <button id="launch-btn" onclick="launchWhatsAppSignup()">Login with Facebook</button>
 
-  <div style="font-size:11px;color:#bbb;margin-top:12px;">v5</div>
+  <div style="font-size:11px;color:#bbb;margin-top:12px;">v6</div>
   <div class="status" id="status"></div>
   <div id="result"></div>
 </div>
-
-<!-- SDK loading -->
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
 <script>
   // SDK initialization
@@ -145,6 +142,9 @@
     el.innerHTML = '<strong>' + title + '</strong><pre>' + JSON.stringify(data, null, 2) + '</pre>';
   }
 </script>
+
+<!-- SDK loading -->
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
 </body>
 </html>
