@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="V4 API EPM conecta WhatsApp Business App y API en el mismo número con Coexistence. Para PyMEs y agencias.">
+  <meta property="og:title" content="V4 API EPM – WhatsApp Coexistence para PyMEs" />
+  <meta property="og:description" content="Gestioná clientes desde tu CRM y tu móvil al mismo tiempo, usando el mismo número de WhatsApp." />
+  <meta property="og:image" content="https://app.epm-marketing.com/img/logo.png" />
+  <meta property="og:url" content="https://app.epm-marketing.com/embedded-whatsapp" />
+  <meta property="og:type" content="website" />
+  <!-- REEMPLAZAR: Tu App ID de Meta -->
+  <meta property="fb:app_id" content="493451440039423" />
+  <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="styles.css">
+  <title>V4 API EPM – WhatsApp Coexistence</title>
+
+  <style>
+    /* ── Page-specific styles ── */
+
+    /* Hero override for this page */
+    .hero-wa {
+      background: linear-gradient(120deg, var(--blue) 60%, #128C7E 100%);
+      color: var(--white);
+      padding: 68px 0 52px;
+      text-align: center;
+    }
+    .hero-wa h1 {
+      font-size: 2.2em;
+      margin-bottom: 0.5em;
+      max-width: 820px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-wa p {
+      font-size: 1.15em;
+      max-width: 640px;
+      margin: 0 auto 28px;
+      opacity: 0.92;
+    }
+    .hero-wa .beta-note {
+      display: block;
+      margin-top: 12px;
+      font-size: 0.88em;
+      opacity: 0.75;
+    }
+
+    /* WA button */
+    #wa-signup-btn {
+      display: inline-block;
+      background: #25D366;
+      color: var(--white);
+      border: none;
+      border-radius: 7px;
+      padding: 14px 38px;
+      font-size: 1.15em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+    #wa-signup-btn:hover { background: #128C7E; }
+    #wa-signup-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+    /* Sections */
+    .section-light { background: var(--white); padding: 70px 0 50px; }
+    .section-cream { background: var(--cream); padding: 70px 0 50px; }
+    .section-blue  { background: var(--blue); color: var(--white); padding: 70px 0 50px; }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .section-title h2 {
+      font-size: 1.85em;
+      margin-bottom: 0.3em;
+    }
+    .section-title p {
+      max-width: 620px;
+      margin: 0 auto;
+      opacity: 0.8;
+    }
+    .section-blue .section-title p { color: var(--cream); }
+
+    /* Steps */
+    .steps-wa {
+      display: flex;
+      gap: 28px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .step-wa {
+      background: var(--cream);
+      border-radius: 10px;
+      padding: 30px 22px;
+      flex: 1 1 220px;
+      max-width: 280px;
+      text-align: center;
+    }
+    .step-icon {
+      font-size: 2.4em;
+      margin-bottom: 14px;
+      display: block;
+    }
+    .step-wa h3 {
+      color: var(--blue);
+      margin: 0 0 10px;
+      font-size: 1.05em;
+    }
+    .step-wa p { margin: 0; font-size: 0.97em; }
+
+    /* Use case */
+    .usecase-grid {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .usecase-text { flex: 1 1 340px; }
+    .usecase-text h2 { color: var(--blue); margin-top: 0; }
+    .usecase-bullets {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0 0;
+    }
+    .usecase-bullets li {
+      padding: 10px 0 10px 32px;
+      border-bottom: 1px solid #e5ddd6;
+      position: relative;
+      font-size: 0.98em;
+    }
+    .usecase-bullets li::before {
+      content: "✓";
+      color: #25D366;
+      font-weight: 700;
+      position: absolute;
+      left: 0;
+    }
+    .usecase-bullets li:last-child { border-bottom: none; }
+
+    /* Limitations table */
+    .limits-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 24px;
+      background: var(--white);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 6px rgba(8,57,99,0.07);
+    }
+    .limits-table th {
+      background: var(--blue);
+      color: var(--white);
+      padding: 14px 18px;
+      text-align: left;
+      font-size: 0.97em;
+    }
+    .limits-table th:first-child { border-right: 1px solid rgba(255,255,255,0.15); }
+    .limits-table td {
+      padding: 11px 18px;
+      border-bottom: 1px solid #ece5de;
+      font-size: 0.96em;
+      vertical-align: top;
+    }
+    .limits-table tr:last-child td { border-bottom: none; }
+    .limits-table td:first-child {
+      border-right: 1px solid #ece5de;
+      color: #1a6644;
+    }
+    .limits-table td:last-child { color: #b84242; }
+    .limits-warning {
+      margin-top: 18px;
+      background: #fff8e1;
+      border-left: 4px solid var(--orange);
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.95em;
+      color: #5a3e00;
+    }
+
+    /* Demo */
+    .demo-grid {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .demo-col {
+      background: var(--white);
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(8,57,99,0.08);
+      padding: 22px;
+      flex: 1 1 300px;
+      max-width: 420px;
+    }
+    .demo-col h3 {
+      margin: 0 0 16px;
+      color: var(--blue);
+      font-size: 1em;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .chat-list { list-style: none; padding: 0; margin: 0; }
+    .chat-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0ebe5;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-radius: 6px;
+      padding-left: 8px;
+    }
+    .chat-item:last-child { border-bottom: none; }
+    .chat-item.active { background: #e8f5fe; }
+    .chat-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: var(--light-blue);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1.1em;
+      flex-shrink: 0;
+    }
+    .chat-info { flex: 1; min-width: 0; }
+    .chat-name { font-weight: 600; font-size: 0.97em; color: var(--blue); }
+    .chat-preview { font-size: 0.86em; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chat-meta { font-size: 0.78em; color: #aaa; text-align: right; }
+    .chat-badge {
+      background: #25D366;
+      color: white;
+      border-radius: 50%;
+      width: 18px; height: 18px;
+      font-size: 0.72em;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 4px;
+      margin-left: auto;
+    }
+
+    .mobile-frame {
+      background: #1a1a2e;
+      border-radius: 20px;
+      padding: 12px 8px 20px;
+      max-width: 240px;
+      margin: 0 auto;
+      box-shadow: 0 8px 32px rgba(8,57,99,0.18);
+    }
+    .mobile-screen {
+      background: #ECE5DD;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .mobile-header {
+      background: #075E54;
+      color: white;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mobile-header-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: #25D366;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9em;
+    }
+    .mobile-header-name { font-size: 0.9em; font-weight: 600; }
+    .mobile-header-status { font-size: 0.72em; opacity: 0.8; }
+    .mobile-messages { padding: 10px; }
+    .msg {
+      max-width: 78%;
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 0.8em;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .msg-in { background: white; margin-right: auto; border-bottom-left-radius: 2px; }
+    .msg-out { background: #DCF8C6; margin-left: auto; border-bottom-right-radius: 2px; }
+    .msg-time { font-size: 0.7em; color: #999; text-align: right; margin-top: 2px; }
+    .demo-caption {
+      text-align: center;
+      margin-top: 22px;
+      font-size: 0.95em;
+      color: #666;
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Result box for signup */
+    #wa-result {
+      margin-top: 18px;
+      padding: 14px 18px;
+      border-radius: 8px;
+      font-size: 0.93em;
+      text-align: left;
+      display: none;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #wa-result.success { background: #e6f9f0; color: #1a6644; border: 1px solid #a8d5b8; }
+    #wa-result.error   { background: #fdecea; color: #b91c1c; border: 1px solid #fca5a5; }
+    #wa-result pre { margin: 8px 0 0; font-size: 0.88em; overflow-x: auto; white-space: pre-wrap; }
+
+    @media (max-width: 700px) {
+      .hero-wa h1 { font-size: 1.6em; }
+      .demo-col { max-width: 100%; }
+      .limits-table th, .limits-table td { padding: 9px 10px; font-size: 0.88em; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-content">
+      <img src="img/logo.png" alt="EPM APP Logo" class="logo">
+      <nav>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#caso-de-uso">Caso de uso</a>
+        <a href="#limitaciones">Limitaciones</a>
+        <a href="#demo">Demo</a>
+        <a href="index.html" class="cta-header">← Volver a EPM APP</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero-wa">
+    <div class="container">
+      <h1>V4 API EPM: Conecta WhatsApp Business App + API con Coexistence</h1>
+      <p>Gestioná clientes desde tu CRM y tu móvil al mismo tiempo, usando el mismo número de WhatsApp.</p>
+      <!-- REEMPLAZAR: asegurate de tener FB_APP_ID y WA_CONFIG_ID correctos en el script de abajo -->
+      <button id="wa-signup-btn" onclick="launchWhatsAppSignup()">Conectar WhatsApp – Embedded Signup</button>
+      <small class="beta-note">Modo desarrollo: permite conectar hasta 5 números de prueba</small>
+      <div id="wa-status" style="margin-top:10px;font-size:0.9em;opacity:0.8;"></div>
+      <div id="wa-result"></div>
+    </div>
+  </section>
+
+  <!-- Cómo funciona -->
+  <section class="section-light" id="como-funciona">
+    <div class="container">
+      <div class="section-title">
+        <h2>Cómo funciona Coexistence</h2>
+        <p>Coexistence de WhatsApp permite que el mismo número opere desde la app móvil y desde la API simultáneamente.</p>
+      </div>
+      <div class="steps-wa">
+        <div class="step-wa">
+          <span class="step-icon">📱</span>
+          <h3>1. Conectá tu número</h3>
+          <p>Vinculá el mismo número que ya usás en WhatsApp Business app. No perdés tus chats ni contactos.</p>
+        </div>
+        <div class="step-wa">
+          <span class="step-icon">💻</span>
+          <h3>2. Respondé desde donde quieras</h3>
+          <p>Tus agentes usan el CRM para plantillas y automatización. Vos seguís usando la app móvil para responder rápido.</p>
+        </div>
+        <div class="step-wa">
+          <span class="step-icon">☁️</span>
+          <h3>3. Mantené todo sincronizado</h3>
+          <p>Los mensajes entrantes llegan a ambos. Mantené la app abierta cada 14 días para que no se desactive.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Caso de uso -->
+  <section class="section-cream" id="caso-de-uso">
+    <div class="container">
+      <div class="usecase-grid">
+        <div class="usecase-text">
+          <h2>¿Para quién es V4 API EPM?</h2>
+          <p>
+            V4 API EPM está diseñado para PyMEs y agencias que ya usan WhatsApp Business app y quieren escalar sin perder la simplicidad.
+          </p>
+          <p>
+            <strong>Caso típico:</strong> un equipo de ventas de 3 personas. El dueño responde desde el móvil cuando está en la calle. Los agentes usan el CRM para enviar catálogos, seguimientos automáticos y asignar chats. Todos usan el mismo número verificado.
+          </p>
+          <ul class="usecase-bullets">
+            <li>Envío de plantillas aprobadas desde CRM sin cambiar de número</li>
+            <li>Respuestas rápidas desde app móvil para el dueño o responsable</li>
+            <li>Historial unificado: un solo número, dos canales de acceso</li>
+          </ul>
+        </div>
+        <div style="flex:1 1 280px; max-width:360px;">
+          <div style="background:var(--white);border-radius:10px;padding:28px;box-shadow:0 2px 10px rgba(8,57,99,0.08);">
+            <h4 style="color:var(--blue);margin-top:0;">Flujo típico de uso</h4>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px;">
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <span style="background:var(--blue);color:white;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:700;flex-shrink:0;">1</span>
+                <span style="font-size:0.95em;">Cliente escribe al número de WhatsApp</span>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <span style="background:var(--blue);color:white;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:700;flex-shrink:0;">2</span>
+                <span style="font-size:0.95em;">El CRM lo recibe y asigna al agente disponible</span>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <span style="background:var(--blue);color:white;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:700;flex-shrink:0;">3</span>
+                <span style="font-size:0.95em;">El agente responde desde el CRM con una plantilla</span>
+              </div>
+              <div style="display:flex;gap:12px;align-items:flex-start;">
+                <span style="background:#25D366;color:white;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:700;flex-shrink:0;">4</span>
+                <span style="font-size:0.95em;">El dueño sigue la conversación desde su móvil si lo necesita</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Limitaciones -->
+  <section class="section-light" id="limitaciones">
+    <div class="container">
+      <div class="section-title">
+        <h2>Limitaciones importantes de Coexistence</h2>
+        <p>Meta requiere que estas limitaciones se declaren explícitamente. Son comportamientos esperados de la plataforma.</p>
+      </div>
+      <table class="limits-table">
+        <thead>
+          <tr>
+            <th>✅ Funciona en Coexistence</th>
+            <th>❌ No funciona en Coexistence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mensajes 1:1, plantillas aprobadas, notas de voz</td>
+            <td>Listas de difusión desde la app móvil</td>
+          </tr>
+          <tr>
+            <td>Catálogo de WhatsApp Business</td>
+            <td>Mensajes que desaparecen, ubicación en vivo</td>
+          </tr>
+          <tr>
+            <td>Llamadas desde la app móvil</td>
+            <td>Chats grupales gestionados desde la API</td>
+          </tr>
+          <tr>
+            <td>Historial de chats visible en ambos lados</td>
+            <td>Respuestas automatizadas a grupos</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="limits-warning">
+        ⚠️ <strong>Nota sobre la insignia verde:</strong> la cuenta verificada se desactiva temporalmente durante Coexistence. Esto es comportamiento esperado de Meta y no indica un problema con tu cuenta.
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo -->
+  <section class="section-cream" id="demo">
+    <div class="container">
+      <div class="section-title">
+        <h2>Demo interactiva</h2>
+        <p>Así se ve una conversación con Coexistence activo: el agente la inicia desde el CRM, y el dueño puede continuar desde su móvil.</p>
+      </div>
+      <div class="demo-grid">
+
+        <!-- CRM view -->
+        <div class="demo-col">
+          <h3>Vista CRM</h3>
+          <ul class="chat-list">
+            <li class="chat-item active">
+              <div class="chat-avatar">ML</div>
+              <div class="chat-info">
+                <div class="chat-name">María López</div>
+                <div class="chat-preview">¿Tienen disponibilidad para el lunes?</div>
+              </div>
+              <div>
+                <div class="chat-meta">10:32</div>
+                <div class="chat-badge">2</div>
+              </div>
+            </li>
+            <li class="chat-item">
+              <div class="chat-avatar" style="background:var(--orange);">CR</div>
+              <div class="chat-info">
+                <div class="chat-name">Carlos Ruiz</div>
+                <div class="chat-preview">Gracias por el presupuesto 👍</div>
+              </div>
+              <div>
+                <div class="chat-meta">09:15</div>
+              </div>
+            </li>
+            <li class="chat-item">
+              <div class="chat-avatar" style="background:#5DA9DD;">SA</div>
+              <div class="chat-info">
+                <div class="chat-name">Sofía Arce</div>
+                <div class="chat-preview">Enviando datos de la empresa...</div>
+              </div>
+              <div>
+                <div class="chat-meta">Ayer</div>
+              </div>
+            </li>
+          </ul>
+          <div style="margin-top:16px;padding:10px 14px;background:var(--cream);border-radius:8px;font-size:0.88em;color:#666;">
+            <strong style="color:var(--blue);">Agente:</strong> responde con plantilla "Consulta_Disponibilidad" → enviada vía API
+          </div>
+        </div>
+
+        <!-- Mobile view -->
+        <div class="demo-col" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <h3 style="text-align:center;">Vista App Móvil (mismo número)</h3>
+          <div class="mobile-frame">
+            <div class="mobile-screen">
+              <div class="mobile-header">
+                <div class="mobile-header-avatar">ML</div>
+                <div>
+                  <div class="mobile-header-name">María López</div>
+                  <div class="mobile-header-status">en línea</div>
+                </div>
+              </div>
+              <div class="mobile-messages">
+                <div class="msg msg-in">
+                  ¿Tienen disponibilidad para el lunes?
+                  <div class="msg-time">10:32</div>
+                </div>
+                <div class="msg msg-out">
+                  ¡Hola María! Sí, tenemos turno disponible el lunes a las 10hs. ¿Te viene bien?
+                  <div class="msg-time">10:33 ✓✓</div>
+                </div>
+                <div class="msg msg-in">
+                  Perfecto, lo tomo 🙌
+                  <div class="msg-time">10:35</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p style="font-size:0.82em;color:#888;text-align:center;margin-top:12px;">El dueño ve y puede responder la misma conversación desde su móvil</p>
+        </div>
+
+      </div>
+      <p class="demo-caption">
+        Los mensajes enviados desde el CRM vía API y los enviados desde la app móvil aparecen en el mismo hilo. El cliente siempre escribe al mismo número.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <img src="img/logo.png" alt="EPM APP Logo" class="logo-footer">
+      <div style="margin: 10px 0 4px;">
+        <a href="privacy-policy.html">Política de Privacidad</a> |
+        <a href="terms.html">Términos de Servicio</a> |
+        <a href="#data-deletion">Eliminación de datos</a> |
+        <a href="mailto:soporte@v4apiepm.com">soporte@v4apiepm.com</a>
+      </div>
+      <div id="data-deletion" style="margin-top:14px;background:rgba(255,255,255,0.07);border-radius:6px;padding:10px 18px;font-size:0.88em;max-width:540px;color:#cce;">
+        <strong>Eliminación de datos:</strong> enviá un email a <a href="mailto:soporte@v4apiepm.com">soporte@v4apiepm.com</a> con asunto <em>"Eliminar datos WhatsApp"</em> y tu número. Procesamos la solicitud en 72 horas.
+      </div>
+      <div class="footer-note">© 2025 EPM APP · V4 API EPM · <a href="https://app.epm-marketing.com" style="color:var(--light-blue);">app.epm-marketing.com</a></div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Facebook SDK Init ──────────────────────────────────────────────
+    // REEMPLAZAR: cambiá los valores por los de tu app en Meta for Developers
+    // Variables: NEXT_PUBLIC_FB_APP_ID y NEXT_PUBLIC_WA_CONFIG_ID
+    const FB_APP_ID    = '493451440039423'; // REEMPLAZAR con tu appId
+    const WA_CONFIG_ID = '1009870028122669'; // REEMPLAZAR con tu config_id de Coexistence
+
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: FB_APP_ID,
+        autoLogAppEvents: true,
+        xfbml: true,
+        version: 'v25.0'
+      });
+    };
+
+    // ── Message listener (Embedded Signup events) ──────────────────────
+    window.addEventListener('message', (event) => {
+      if (!event.origin.endsWith('facebook.com')) return;
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === 'WA_EMBEDDED_SIGNUP') {
+          console.log('[WA Coexistence] event:', data);
+          if (data.event === 'FINISH' || data.event === 'FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING') {
+            showResult('success', '✅ Número conectado correctamente', {
+              phone_number_id: data.data.phone_number_id,
+              waba_id: data.data.waba_id,
+              business_id: data.data.business_id,
+              event: data.event,
+              nota: 'Guardá estos IDs para configurar tu CRM o n8n'
+            });
+          } else if (data.event === 'CANCEL') {
+            showResult('error', 'Proceso cancelado en: ' + data.data.current_step, data);
+          }
+        }
+      } catch {
+        console.log('[WA Coexistence] raw message:', event.data);
+      }
+    });
+
+    // ── Launch Embedded Signup ─────────────────────────────────────────
+    function launchWhatsAppSignup() {
+      const btn = document.getElementById('wa-signup-btn');
+      btn.disabled = true;
+      document.getElementById('wa-status').innerText = 'Abriendo ventana de Meta...';
+      FB.login(
+        function (response) {
+          btn.disabled = false;
+          document.getElementById('wa-status').innerText = '';
+          console.log('[WA Coexistence] login response:', response);
+          if (response.authResponse) {
+            showResult('success', '✅ Autorización recibida', {
+              code: response.authResponse.code,
+              nota: 'El code expira en 30 segundos. Intercambialo por un token en tu backend.'
+            });
+          } else {
+            showResult('error', 'Sin autorización', response);
+          }
+        },
+        {
+          config_id: WA_CONFIG_ID,
+          response_type: 'code',
+          override_default_response_type: true,
+          extras: { setup: {} }
+        }
+      );
+    }
+
+    function showResult(type, title, data) {
+      const el = document.getElementById('wa-result');
+      el.className = type;
+      el.style.display = 'block';
+      el.innerHTML = '<strong>' + title + '</strong><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+    }
+  </script>
+
+  <!-- Facebook JS SDK -->
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+  <script src="/logged/js/propagateDevParam.js"></script>
+
+</body>
+</html>
