@@ -581,8 +581,7 @@
     // ── Facebook SDK Init ──────────────────────────────────────────────
     // UPDATE: replace with your app values from Meta for Developers
     // Env vars: NEXT_PUBLIC_FB_APP_ID and NEXT_PUBLIC_WA_CONFIG_ID
-    const FB_APP_ID    = '493451440039423'; // UPDATE with your appId
-    const WA_CONFIG_ID = '1009870028122669'; // UPDATE with your Coexistence config_id
+    const FB_APP_ID = '493451440039423'; // App ID
 
     window.fbAsyncInit = function () {
       FB.init({
@@ -637,11 +636,15 @@
           }
         },
         {
-          config_id: WA_CONFIG_ID,
+          config_id: '1426718075324963',
           response_type: 'code',
           override_default_response_type: true,
           scope: 'whatsapp_business_management,whatsapp_business_messaging',
-          extras: { setup: {} }
+          extras: {
+            featureType: 'whatsapp_business_app_onboarding',
+            version: 'v4',
+            sessionInfoVersion: '3'
+          }
         }
       );
     }
