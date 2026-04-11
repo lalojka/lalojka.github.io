@@ -9,7 +9,8 @@
   <meta property="og:image" content="https://app.epm-marketing.com/img/logo.png" />
   <meta property="og:url" content="https://app.epm-marketing.com/embedded-whatsapp" />
   <meta property="og:type" content="website" />
-  <!-- REEMPLAZAR: Tu App ID de Meta -->
+  <!-- Domain verified in Meta Business Manager: YES -->
+  <!-- fb:app_id verified ✅ -->
   <meta property="fb:app_id" content="493451440039423" />
   <link rel="icon" href="img/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="styles.css">
@@ -333,7 +334,7 @@
   <!-- Hero -->
   <section class="hero-wa">
     <div class="container">
-      <h1>V4 API EPM: Conecta WhatsApp Business App + API con Coexistence</h1>
+      <h1>V4 API EPM: Conecta WhatsApp Business App + API con Coexistence<br><small style="font-size:0.6em;opacity:0.85;">English: Connect WhatsApp Business App + API with Coexistence — manage customers from your CRM and mobile at the same time, using the same WhatsApp number.</small></h1>
       <p>Gestioná clientes desde tu CRM y tu móvil al mismo tiempo, usando el mismo número de WhatsApp.</p>
       <!-- REEMPLAZAR: asegurate de tener FB_APP_ID y WA_CONFIG_ID correctos en el script de abajo -->
       <button id="wa-signup-btn" onclick="launchWhatsAppSignup()">Conectar WhatsApp – Embedded Signup</button>
@@ -378,9 +379,11 @@
           <h2>¿Para quién es V4 API EPM?</h2>
           <p>
             V4 API EPM está diseñado para PyMEs y agencias que ya usan WhatsApp Business app y quieren escalar sin perder la simplicidad.
+            <br><small><em>English: V4 API EPM is designed for SMBs and agencies already using WhatsApp Business app who want to scale without losing simplicity.</em></small>
           </p>
           <p>
             <strong>Caso típico:</strong> un equipo de ventas de 3 personas. El dueño responde desde el móvil cuando está en la calle. Los agentes usan el CRM para enviar catálogos, seguimientos automáticos y asignar chats. Todos usan el mismo número verificado.
+            <br><small><em>English — Typical case: a 3-person sales team. The owner replies from mobile while out. Agents use the CRM to send catalogs, automated follow-ups, and assign chats. Everyone uses the same verified number.</em></small>
           </p>
           <ul class="usecase-bullets">
             <li>Envío de plantillas aprobadas desde CRM sin cambiar de número</li>
@@ -425,31 +428,36 @@
       <table class="limits-table">
         <thead>
           <tr>
-            <th>✅ Funciona en Coexistence</th>
-            <th>❌ No funciona en Coexistence</th>
+            <th>✅ Funciona en Coexistence<br><small>Works in Coexistence</small></th>
+            <th>❌ No funciona en Coexistence<br><small>Does NOT work in Coexistence</small></th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Mensajes 1:1, plantillas aprobadas, notas de voz</td>
-            <td>Listas de difusión desde la app móvil</td>
+            <td>Mensajes 1:1, plantillas aprobadas, notas de voz<br><small>1:1 messages, approved templates, voice notes</small></td>
+            <td>Listas de difusión desde la app móvil<br><small>Broadcast lists from the mobile app</small></td>
           </tr>
           <tr>
-            <td>Catálogo de WhatsApp Business</td>
-            <td>Mensajes que desaparecen, ubicación en vivo</td>
+            <td>Catálogo de WhatsApp Business<br><small>WhatsApp Business catalog</small></td>
+            <td>Mensajes que desaparecen<br><small>Disappearing messages</small></td>
           </tr>
           <tr>
-            <td>Llamadas desde la app móvil</td>
-            <td>Chats grupales gestionados desde la API</td>
+            <td>Llamadas desde la app móvil<br><small>Calls from the mobile app</small></td>
+            <td>Ubicación en vivo<br><small>Live location sharing</small></td>
           </tr>
           <tr>
-            <td>Historial de chats visible en ambos lados</td>
-            <td>Respuestas automatizadas a grupos</td>
+            <td>Historial de chats visible en ambos lados<br><small>Chat history visible on both sides</small></td>
+            <td>Chats grupales gestionados desde la API<br><small>Group chats managed via API</small></td>
           </tr>
         </tbody>
       </table>
       <div class="limits-warning">
-        ⚠️ <strong>Nota sobre la insignia verde:</strong> la cuenta verificada se desactiva temporalmente durante Coexistence. Esto es comportamiento esperado de Meta y no indica un problema con tu cuenta.
+        ⚠️ <strong>Nota sobre la insignia verde / Green verified badge:</strong> la cuenta verificada se desactiva temporalmente durante Coexistence. Esto es comportamiento esperado de Meta y no indica un problema con tu cuenta.<br>
+        <small><em>The green verified badge is temporarily disabled during Coexistence. This is expected Meta platform behavior and does not indicate an issue with your account.</em></small>
+      </div>
+      <div class="limits-warning" style="margin-top:10px;">
+        ⚠️ <strong>Regla de 14 días / 14-day rule:</strong> Para mantener Coexistence activo, la WhatsApp Business app debe abrirse al menos una vez cada 14 días.<br>
+        <small><em>To keep Coexistence active, the WhatsApp Business app must be opened at least once every 14 days. Failure to do so will deactivate the Coexistence mode.</em></small>
       </div>
     </div>
   </section>
@@ -542,14 +550,36 @@
     </div>
   </section>
 
+  <!-- App Review Screencast Guide -->
+  <section class="section-blue" id="screencast-guide">
+    <div class="container">
+      <div class="section-title">
+        <h2 style="color:var(--white);">App Review Screencast Guide</h2>
+        <p style="color:var(--cream);opacity:1;">For Meta reviewers: This page shows a visual mock of the Coexistence use case. The required video screencast must show the real Embedded Signup flow + CRM dashboard. Static images alone are insufficient per Meta App Review policy.</p>
+      </div>
+      <div style="background:rgba(255,255,255,0.08);border-radius:10px;padding:28px 32px;max-width:720px;margin:0 auto;">
+        <ol style="color:var(--cream);line-height:2;padding-left:20px;">
+          <li>Show this page loading at <strong>app.epm-marketing.com/embedded-whatsapp.html</strong></li>
+          <li>Click "Conectar WhatsApp – Embedded Signup" and show the real Meta popup opening</li>
+          <li>Complete or partially complete the Embedded Signup flow to demonstrate real API integration</li>
+          <li>Show the CRM dashboard receiving a WhatsApp message via the API</li>
+          <li>Show the same conversation visible on a mobile WhatsApp Business app (Coexistence in action)</li>
+          <li>Scroll through the Limitations section — confirm all 4 restricted features are visible</li>
+          <li>Show the Privacy Policy page with the WhatsApp data collection section</li>
+          <li>Show the Terms of Service page with the WhatsApp Business Policy compliance clause</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="footer">
     <div class="container footer-content">
       <img src="img/logo.png" alt="EPM APP Logo" class="logo-footer">
       <div style="margin: 10px 0 4px;">
-        <a href="privacy-policy.html">Política de Privacidad</a> |
-        <a href="terms.html">Términos de Servicio</a> |
-        <a href="#data-deletion">Eliminación de datos</a> |
+        <a href="privacy-policy.html">Política de Privacidad / Privacy Policy</a> |
+        <a href="terms.html">Términos de Servicio / Terms of Service</a> |
+        <a href="#data-deletion">Eliminación de datos / Data Deletion</a> |
         <a href="mailto:soporte@v4apiepm.com">soporte@v4apiepm.com</a>
       </div>
       <div id="data-deletion" style="margin-top:14px;background:rgba(255,255,255,0.07);border-radius:6px;padding:10px 18px;font-size:0.88em;max-width:540px;color:#cce;">
