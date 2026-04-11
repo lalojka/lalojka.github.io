@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="V4 API EPM conecta WhatsApp Business App y API en el mismo número con Coexistence. Para PyMEs y agencias.">
-  <meta property="og:title" content="V4 API EPM – WhatsApp Coexistence para PyMEs" />
-  <meta property="og:description" content="Gestioná clientes desde tu CRM y tu móvil al mismo tiempo, usando el mismo número de WhatsApp." />
+  <meta name="description" content="V4 API EPM connects WhatsApp Business App and API on the same number using Coexistence. For SMBs and agencies.">
+  <meta property="og:title" content="V4 API EPM – WhatsApp Coexistence for SMBs" />
+  <meta property="og:description" content="Manage customers from your CRM and mobile at the same time, using the same WhatsApp number." />
   <meta property="og:image" content="https://app.epm-marketing.com/img/logo.png" />
   <meta property="og:url" content="https://app.epm-marketing.com/embedded-whatsapp" />
   <meta property="og:type" content="website" />
@@ -322,11 +322,11 @@
     <div class="container header-content">
       <img src="img/logo.png" alt="EPM APP Logo" class="logo">
       <nav>
-        <a href="#como-funciona">Cómo funciona</a>
-        <a href="#caso-de-uso">Caso de uso</a>
-        <a href="#limitaciones">Limitaciones</a>
+        <a href="#how-it-works">How it Works</a>
+        <a href="#use-case">Use Case</a>
+        <a href="#limitations">Limitations</a>
         <a href="#demo">Demo</a>
-        <a href="index.html" class="cta-header">← Volver a EPM APP</a>
+        <a href="index.html" class="cta-header">← Back to EPM APP</a>
       </nav>
     </div>
   </header>
@@ -334,82 +334,79 @@
   <!-- Hero -->
   <section class="hero-wa">
     <div class="container">
-      <h1>V4 API EPM: Conecta WhatsApp Business App + API con Coexistence<br><small style="font-size:0.6em;opacity:0.85;">English: Connect WhatsApp Business App + API with Coexistence — manage customers from your CRM and mobile at the same time, using the same WhatsApp number.</small></h1>
-      <p>Gestioná clientes desde tu CRM y tu móvil al mismo tiempo, usando el mismo número de WhatsApp.</p>
-      <!-- REEMPLAZAR: asegurate de tener FB_APP_ID y WA_CONFIG_ID correctos en el script de abajo -->
-      <button id="wa-signup-btn" onclick="launchWhatsAppSignup()">Conectar WhatsApp – Embedded Signup</button>
-      <small class="beta-note">Modo desarrollo: permite conectar hasta 5 números de prueba</small>
+      <h1>V4 API EPM: Connect WhatsApp Business App + API with Coexistence</h1>
+      <p>Manage customers from your CRM and mobile at the same time, using the same WhatsApp number.</p>
+      <!-- UPDATE: make sure FB_APP_ID and WA_CONFIG_ID are set correctly in the script below -->
+      <button id="wa-signup-btn" onclick="launchWhatsAppSignup()">Connect WhatsApp – Embedded Signup</button>
+      <small class="beta-note">Development mode: allows connecting up to 5 test numbers</small>
       <div id="wa-status" style="margin-top:10px;font-size:0.9em;opacity:0.8;"></div>
       <div id="wa-result"></div>
     </div>
   </section>
 
-  <!-- Cómo funciona -->
-  <section class="section-light" id="como-funciona">
+  <section class="section-light" id="how-it-works">
     <div class="container">
       <div class="section-title">
-        <h2>Cómo funciona Coexistence</h2>
-        <p>Coexistence de WhatsApp permite que el mismo número opere desde la app móvil y desde la API simultáneamente.</p>
+        <h2>How Coexistence Works</h2>
+        <p>WhatsApp Coexistence allows the same phone number to operate from the mobile app and the API simultaneously.</p>
       </div>
       <div class="steps-wa">
         <div class="step-wa">
           <span class="step-icon">📱</span>
-          <h3>1. Conectá tu número</h3>
-          <p>Vinculá el mismo número que ya usás en WhatsApp Business app. No perdés tus chats ni contactos.</p>
+          <h3>1. Connect your number</h3>
+          <p>Link the same number you already use in WhatsApp Business app. Your chats and contacts are preserved.</p>
         </div>
         <div class="step-wa">
           <span class="step-icon">💻</span>
-          <h3>2. Respondé desde donde quieras</h3>
-          <p>Tus agentes usan el CRM para plantillas y automatización. Vos seguís usando la app móvil para responder rápido.</p>
+          <h3>2. Reply from anywhere</h3>
+          <p>Your agents use the CRM for templates and automation. You keep using the mobile app to reply quickly.</p>
         </div>
         <div class="step-wa">
           <span class="step-icon">☁️</span>
-          <h3>3. Mantené todo sincronizado</h3>
-          <p>Los mensajes entrantes llegan a ambos. Mantené la app abierta cada 14 días para que no se desactive.</p>
+          <h3>3. Stay in sync</h3>
+          <p>Incoming messages arrive on both sides. Keep the app open at least once every 14 days to avoid deactivation.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Caso de uso -->
-  <section class="section-cream" id="caso-de-uso">
+  <!-- Use Case -->
+  <section class="section-cream" id="use-case">
     <div class="container">
       <div class="usecase-grid">
         <div class="usecase-text">
-          <h2>¿Para quién es V4 API EPM?</h2>
+          <h2>Who is V4 API EPM for?</h2>
           <p>
-            V4 API EPM está diseñado para PyMEs y agencias que ya usan WhatsApp Business app y quieren escalar sin perder la simplicidad.
-            <br><small><em>English: V4 API EPM is designed for SMBs and agencies already using WhatsApp Business app who want to scale without losing simplicity.</em></small>
+            V4 API EPM is designed for SMBs and agencies already using WhatsApp Business app who want to scale without losing simplicity.
           </p>
           <p>
-            <strong>Caso típico:</strong> un equipo de ventas de 3 personas. El dueño responde desde el móvil cuando está en la calle. Los agentes usan el CRM para enviar catálogos, seguimientos automáticos y asignar chats. Todos usan el mismo número verificado.
-            <br><small><em>English — Typical case: a 3-person sales team. The owner replies from mobile while out. Agents use the CRM to send catalogs, automated follow-ups, and assign chats. Everyone uses the same verified number.</em></small>
+            <strong>Typical case:</strong> a 3-person sales team. The owner replies from mobile while out in the field. Agents use the CRM to send catalogs, automated follow-ups, and assign chats. Everyone uses the same verified number.
           </p>
           <ul class="usecase-bullets">
-            <li>Envío de plantillas aprobadas desde CRM sin cambiar de número</li>
-            <li>Respuestas rápidas desde app móvil para el dueño o responsable</li>
-            <li>Historial unificado: un solo número, dos canales de acceso</li>
+            <li>Send approved templates from CRM without changing phone numbers</li>
+            <li>Quick replies from mobile app for the owner or manager</li>
+            <li>Unified history: one number, two access channels</li>
           </ul>
         </div>
         <div style="flex:1 1 280px; max-width:360px;">
           <div style="background:var(--white);border-radius:10px;padding:28px;box-shadow:0 2px 10px rgba(8,57,99,0.08);">
-            <h4 style="color:var(--blue);margin-top:0;">Flujo típico de uso</h4>
+            <h4 style="color:var(--blue);margin-top:0;">Typical workflow</h4>
             <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px;">
               <div style="display:flex;gap:12px;align-items:flex-start;">
                 <span style="background:var(--blue);color:white;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:700;flex-shrink:0;">1</span>
-                <span style="font-size:0.95em;">Cliente escribe al número de WhatsApp</span>
+                <span style="font-size:0.95em;">Customer sends a message to your WhatsApp number</span>
               </div>
               <div style="display:flex;gap:12px;align-items:flex-start;">
                 <span style="background:var(--blue);color:white;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:700;flex-shrink:0;">2</span>
-                <span style="font-size:0.95em;">El CRM lo recibe y asigna al agente disponible</span>
+                <span style="font-size:0.95em;">CRM receives it and assigns to the available agent</span>
               </div>
               <div style="display:flex;gap:12px;align-items:flex-start;">
                 <span style="background:var(--blue);color:white;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:700;flex-shrink:0;">3</span>
-                <span style="font-size:0.95em;">El agente responde desde el CRM con una plantilla</span>
+                <span style="font-size:0.95em;">Agent replies from CRM using an approved template</span>
               </div>
               <div style="display:flex;gap:12px;align-items:flex-start;">
                 <span style="background:#25D366;color:white;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:700;flex-shrink:0;">4</span>
-                <span style="font-size:0.95em;">El dueño sigue la conversación desde su móvil si lo necesita</span>
+                <span style="font-size:0.95em;">Owner follows and continues the conversation from mobile if needed</span>
               </div>
             </div>
           </div>
@@ -418,46 +415,44 @@
     </div>
   </section>
 
-  <!-- Limitaciones -->
-  <section class="section-light" id="limitaciones">
+  <!-- Limitations -->
+  <section class="section-light" id="limitations">
     <div class="container">
       <div class="section-title">
-        <h2>Limitaciones importantes de Coexistence</h2>
-        <p>Meta requiere que estas limitaciones se declaren explícitamente. Son comportamientos esperados de la plataforma.</p>
+        <h2>Important Limitations of Coexistence</h2>
+        <p>Meta requires these limitations to be explicitly declared. These are expected platform behaviors.</p>
       </div>
       <table class="limits-table">
         <thead>
           <tr>
-            <th>✅ Funciona en Coexistence<br><small>Works in Coexistence</small></th>
-            <th>❌ No funciona en Coexistence<br><small>Does NOT work in Coexistence</small></th>
+            <th>✅ Works in Coexistence</th>
+            <th>❌ Does NOT work in Coexistence</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Mensajes 1:1, plantillas aprobadas, notas de voz<br><small>1:1 messages, approved templates, voice notes</small></td>
-            <td>Listas de difusión desde la app móvil<br><small>Broadcast lists from the mobile app</small></td>
+            <td>1:1 messages, approved templates, voice notes</td>
+            <td>Broadcast lists from the mobile app</td>
           </tr>
           <tr>
-            <td>Catálogo de WhatsApp Business<br><small>WhatsApp Business catalog</small></td>
-            <td>Mensajes que desaparecen<br><small>Disappearing messages</small></td>
+            <td>WhatsApp Business catalog</td>
+            <td>Disappearing messages</td>
           </tr>
           <tr>
-            <td>Llamadas desde la app móvil<br><small>Calls from the mobile app</small></td>
-            <td>Ubicación en vivo<br><small>Live location sharing</small></td>
+            <td>Calls from the mobile app</td>
+            <td>Live location sharing</td>
           </tr>
           <tr>
-            <td>Historial de chats visible en ambos lados<br><small>Chat history visible on both sides</small></td>
-            <td>Chats grupales gestionados desde la API<br><small>Group chats managed via API</small></td>
+            <td>Chat history visible on both sides</td>
+            <td>Group chats managed via API</td>
           </tr>
         </tbody>
       </table>
       <div class="limits-warning">
-        ⚠️ <strong>Nota sobre la insignia verde / Green verified badge:</strong> la cuenta verificada se desactiva temporalmente durante Coexistence. Esto es comportamiento esperado de Meta y no indica un problema con tu cuenta.<br>
-        <small><em>The green verified badge is temporarily disabled during Coexistence. This is expected Meta platform behavior and does not indicate an issue with your account.</em></small>
+        ⚠️ <strong>Green verified badge:</strong> The green verified badge is temporarily disabled during Coexistence. This is expected Meta platform behavior and does not indicate an issue with your account.
       </div>
       <div class="limits-warning" style="margin-top:10px;">
-        ⚠️ <strong>Regla de 14 días / 14-day rule:</strong> Para mantener Coexistence activo, la WhatsApp Business app debe abrirse al menos una vez cada 14 días.<br>
-        <small><em>To keep Coexistence active, the WhatsApp Business app must be opened at least once every 14 days. Failure to do so will deactivate the Coexistence mode.</em></small>
+        ⚠️ <strong>14-day rule:</strong> To keep Coexistence active, the WhatsApp Business app must be opened at least once every 14 days. Failure to do so will deactivate Coexistence mode.
       </div>
     </div>
   </section>
@@ -466,20 +461,20 @@
   <section class="section-cream" id="demo">
     <div class="container">
       <div class="section-title">
-        <h2>Demo interactiva</h2>
-        <p>Así se ve una conversación con Coexistence activo: el agente la inicia desde el CRM, y el dueño puede continuar desde su móvil.</p>
+        <h2>Interactive Demo</h2>
+        <p>This is what a conversation looks like with Coexistence active: the agent starts it from the CRM, and the owner can continue from mobile.</p>
       </div>
       <div class="demo-grid">
 
         <!-- CRM view -->
         <div class="demo-col">
-          <h3>Vista CRM</h3>
+          <h3>CRM View</h3>
           <ul class="chat-list">
             <li class="chat-item active">
               <div class="chat-avatar">ML</div>
               <div class="chat-info">
-                <div class="chat-name">María López</div>
-                <div class="chat-preview">¿Tienen disponibilidad para el lunes?</div>
+                <div class="chat-name">Maria Lopez</div>
+                <div class="chat-preview">Do you have availability on Monday?</div>
               </div>
               <div>
                 <div class="chat-meta">10:32</div>
@@ -490,7 +485,7 @@
               <div class="chat-avatar" style="background:var(--orange);">CR</div>
               <div class="chat-info">
                 <div class="chat-name">Carlos Ruiz</div>
-                <div class="chat-preview">Gracias por el presupuesto 👍</div>
+                <div class="chat-preview">Thanks for the quote 👍</div>
               </div>
               <div>
                 <div class="chat-meta">09:15</div>
@@ -499,53 +494,53 @@
             <li class="chat-item">
               <div class="chat-avatar" style="background:#5DA9DD;">SA</div>
               <div class="chat-info">
-                <div class="chat-name">Sofía Arce</div>
-                <div class="chat-preview">Enviando datos de la empresa...</div>
+                <div class="chat-name">Sofia Arce</div>
+                <div class="chat-preview">Sending company details...</div>
               </div>
               <div>
-                <div class="chat-meta">Ayer</div>
+                <div class="chat-meta">Yesterday</div>
               </div>
             </li>
           </ul>
           <div style="margin-top:16px;padding:10px 14px;background:var(--cream);border-radius:8px;font-size:0.88em;color:#666;">
-            <strong style="color:var(--blue);">Agente:</strong> responde con plantilla "Consulta_Disponibilidad" → enviada vía API
+            <strong style="color:var(--blue);">Agent:</strong> replies with template "Check_Availability" → sent via API
           </div>
         </div>
 
         <!-- Mobile view -->
         <div class="demo-col" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
-          <h3 style="text-align:center;">Vista App Móvil (mismo número)</h3>
+          <h3 style="text-align:center;">Mobile App View (same number)</h3>
           <div class="mobile-frame">
             <div class="mobile-screen">
               <div class="mobile-header">
                 <div class="mobile-header-avatar">ML</div>
                 <div>
-                  <div class="mobile-header-name">María López</div>
-                  <div class="mobile-header-status">en línea</div>
+                  <div class="mobile-header-name">Maria Lopez</div>
+                  <div class="mobile-header-status">online</div>
                 </div>
               </div>
               <div class="mobile-messages">
                 <div class="msg msg-in">
-                  ¿Tienen disponibilidad para el lunes?
+                  Do you have availability on Monday?
                   <div class="msg-time">10:32</div>
                 </div>
                 <div class="msg msg-out">
-                  ¡Hola María! Sí, tenemos turno disponible el lunes a las 10hs. ¿Te viene bien?
+                  Hi Maria! Yes, we have a slot on Monday at 10am. Does that work for you?
                   <div class="msg-time">10:33 ✓✓</div>
                 </div>
                 <div class="msg msg-in">
-                  Perfecto, lo tomo 🙌
+                  Perfect, I'll take it 🙌
                   <div class="msg-time">10:35</div>
                 </div>
               </div>
             </div>
           </div>
-          <p style="font-size:0.82em;color:#888;text-align:center;margin-top:12px;">El dueño ve y puede responder la misma conversación desde su móvil</p>
+          <p style="font-size:0.82em;color:#888;text-align:center;margin-top:12px;">The owner can see and reply to the same conversation from mobile</p>
         </div>
 
       </div>
       <p class="demo-caption">
-        Los mensajes enviados desde el CRM vía API y los enviados desde la app móvil aparecen en el mismo hilo. El cliente siempre escribe al mismo número.
+        Messages sent from the CRM via API and messages sent from the mobile app appear in the same thread. The customer always writes to the same number.
       </p>
     </div>
   </section>
@@ -555,13 +550,13 @@
     <div class="container footer-content">
       <img src="img/logo.png" alt="EPM APP Logo" class="logo-footer">
       <div style="margin: 10px 0 4px;">
-        <a href="privacy-policy.html">Política de Privacidad / Privacy Policy</a> |
-        <a href="terms.html">Términos de Servicio / Terms of Service</a> |
-        <a href="#data-deletion">Eliminación de datos / Data Deletion</a> |
+        <a href="privacy-policy.html">Privacy Policy</a> |
+        <a href="terms.html">Terms of Service</a> |
+        <a href="#data-deletion">Data Deletion</a> |
         <a href="mailto:soporte@v4apiepm.com">soporte@v4apiepm.com</a>
       </div>
       <div id="data-deletion" style="margin-top:14px;background:rgba(255,255,255,0.07);border-radius:6px;padding:10px 18px;font-size:0.88em;max-width:540px;color:#cce;">
-        <strong>Eliminación de datos:</strong> enviá un email a <a href="mailto:soporte@v4apiepm.com">soporte@v4apiepm.com</a> con asunto <em>"Eliminar datos WhatsApp"</em> y tu número. Procesamos la solicitud en 72 horas.
+        <strong>Data deletion:</strong> send an email to <a href="mailto:soporte@v4apiepm.com">soporte@v4apiepm.com</a> with subject <em>"Delete WhatsApp Data"</em> and your phone number. Requests are processed within 72 hours.
       </div>
       <div class="footer-note">© 2025 EPM APP · V4 API EPM · <a href="https://app.epm-marketing.com" style="color:var(--light-blue);">app.epm-marketing.com</a></div>
     </div>
@@ -569,10 +564,10 @@
 
   <script>
     // ── Facebook SDK Init ──────────────────────────────────────────────
-    // REEMPLAZAR: cambiá los valores por los de tu app en Meta for Developers
-    // Variables: NEXT_PUBLIC_FB_APP_ID y NEXT_PUBLIC_WA_CONFIG_ID
-    const FB_APP_ID    = '493451440039423'; // REEMPLAZAR con tu appId
-    const WA_CONFIG_ID = '1009870028122669'; // REEMPLAZAR con tu config_id de Coexistence
+    // UPDATE: replace with your app values from Meta for Developers
+    // Env vars: NEXT_PUBLIC_FB_APP_ID and NEXT_PUBLIC_WA_CONFIG_ID
+    const FB_APP_ID    = '493451440039423'; // UPDATE with your appId
+    const WA_CONFIG_ID = '1009870028122669'; // UPDATE with your Coexistence config_id
 
     window.fbAsyncInit = function () {
       FB.init({
@@ -591,15 +586,15 @@
         if (data.type === 'WA_EMBEDDED_SIGNUP') {
           console.log('[WA Coexistence] event:', data);
           if (data.event === 'FINISH' || data.event === 'FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING') {
-            showResult('success', '✅ Número conectado correctamente', {
+            showResult('success', '✅ Number connected successfully', {
               phone_number_id: data.data.phone_number_id,
               waba_id: data.data.waba_id,
               business_id: data.data.business_id,
               event: data.event,
-              nota: 'Guardá estos IDs para configurar tu CRM o n8n'
+              note: 'Save these IDs to configure your CRM or n8n'
             });
           } else if (data.event === 'CANCEL') {
-            showResult('error', 'Proceso cancelado en: ' + data.data.current_step, data);
+            showResult('error', 'Process cancelled at: ' + data.data.current_step, data);
           }
         }
       } catch {
@@ -611,19 +606,19 @@
     function launchWhatsAppSignup() {
       const btn = document.getElementById('wa-signup-btn');
       btn.disabled = true;
-      document.getElementById('wa-status').innerText = 'Abriendo ventana de Meta...';
+      document.getElementById('wa-status').innerText = 'Opening Meta window...';
       FB.login(
         function (response) {
           btn.disabled = false;
           document.getElementById('wa-status').innerText = '';
           console.log('[WA Coexistence] login response:', response);
           if (response.authResponse) {
-            showResult('success', '✅ Autorización recibida', {
+            showResult('success', '✅ Authorization received', {
               code: response.authResponse.code,
-              nota: 'El code expira en 30 segundos. Intercambialo por un token en tu backend.'
+              note: 'The code expires in 30 seconds. Exchange it for a token in your backend.'
             });
           } else {
-            showResult('error', 'Sin autorización', response);
+            showResult('error', 'No authorization', response);
           }
         },
         {
