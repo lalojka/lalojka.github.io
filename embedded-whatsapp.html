@@ -461,20 +461,25 @@
   <section class="section-cream" id="demo">
     <div class="container">
       <div class="section-title">
-        <h2>Interactive Demo</h2>
-        <p>This is what a conversation looks like with Coexistence active: the agent starts it from the CRM, and the owner can continue from mobile.</p>
+        <h2>Interactive Demo – Visual Mockup</h2>
+        <p>This shows what a conversation looks like post-approval with Coexistence active. The agent would start it from the V4 API EPM dashboard using approved templates via WhatsApp API, and the owner can continue from mobile. Same verified number.</p>
       </div>
       <div class="demo-grid">
 
         <!-- CRM view -->
         <div class="demo-col">
-          <h3>CRM View</h3>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+            <img src="img/logo.png" alt="V4 API EPM" style="height:24px;">
+            <h3 style="margin:0;">V4 API EPM Dashboard</h3>
+            <span style="background:#fff3cd;color:#856404;border:1px solid #ffc107;border-radius:4px;padding:2px 8px;font-size:0.78em;font-weight:600;">VISUAL MOCKUP</span>
+          </div>
+
           <ul class="chat-list">
             <li class="chat-item active">
               <div class="chat-avatar">ML</div>
               <div class="chat-info">
                 <div class="chat-name">Maria Lopez</div>
-                <div class="chat-preview">Do you have availability on Monday?</div>
+                <div class="chat-preview">Do you have availability on...</div>
               </div>
               <div>
                 <div class="chat-meta">10:32</div>
@@ -502,8 +507,14 @@
               </div>
             </li>
           </ul>
-          <div style="margin-top:16px;padding:10px 14px;background:var(--cream);border-radius:8px;font-size:0.88em;color:#666;">
-            <strong style="color:var(--blue);">Agent:</strong> replies with template "Check_Availability" → sent via API
+
+          <div style="margin-top:16px;">
+            <button disabled style="width:100%;padding:12px;background:#aaa;color:white;border:none;border-radius:6px;font-size:0.95em;cursor:not-allowed;font-weight:600;">
+              Send Template "Check_Availability" → Requires API approval
+            </button>
+            <div style="margin-top:8px;padding:10px 14px;background:#f5f5f5;border-left:3px solid var(--blue);border-radius:4px;font-size:0.85em;color:#555;">
+              <strong>Development Mode:</strong> This is a visual mockup. Template sending will be enabled via WhatsApp API after Meta grants Advanced Access to V4 API EPM.
+            </div>
           </div>
         </div>
 
@@ -540,7 +551,7 @@
 
       </div>
       <p class="demo-caption">
-        Messages sent from the CRM via API and messages sent from the mobile app appear in the same thread. The customer always writes to the same number.
+        Messages sent from the CRM via API post-approval and messages sent from the mobile app appear in the same thread. The customer always writes to the same number.
       </p>
     </div>
   </section>
