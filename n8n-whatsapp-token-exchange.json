@@ -1,0 +1,135 @@
+{
+  "name": "WhatsApp Token Exchange - V4 API EPM",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-exchange",
+        "responseMode": "lastNode",
+        "options": {
+          "allowedOrigins": "https://app.epm-marketing.com"
+        }
+      },
+      "id": "1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "whatsapp-exchange"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v25.0/oauth/access_token",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "client_id", "value": "493451440039423" },
+            { "name": "client_secret", "value": "={{ $env.META_APP_SECRET }}" },
+            { "name": "code", "value": "={{ $json.body.code }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2",
+      "name": "Get Access Token",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://graph.facebook.com/v25.0/me",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "fields", "value": "id,name" }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $json.access_token }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3",
+      "name": "Get WABA ID",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://graph.facebook.com/v25.0/{{ $json.id }}/phone_numbers",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $('Get Access Token').item.json.access_token }}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4",
+      "name": "Get Phone Numbers",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "a1", "name": "success", "value": true, "type": "boolean" },
+            { "id": "a2", "name": "waba_id", "value": "={{ $('Get WABA ID').item.json.id }}", "type": "string" },
+            { "id": "a3", "name": "phone_number_id", "value": "={{ $json.data[0].id }}", "type": "string" },
+            { "id": "a4", "name": "phone_number", "value": "={{ $json.data[0].display_phone_number }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "6",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1340, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "Get Access Token", "type": "main", "index": 0 }]]
+    },
+    "Get Access Token": {
+      "main": [[{ "node": "Get WABA ID", "type": "main", "index": 0 }]]
+    },
+    "Get WABA ID": {
+      "main": [[{ "node": "Get Phone Numbers", "type": "main", "index": 0 }]]
+    },
+    "Get Phone Numbers": {
+      "main": [[{ "node": "Format Response", "type": "main", "index": 0 }]]
+    },
+    "Format Response": {
+      "main": [[{ "node": "Respond to Webhook", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

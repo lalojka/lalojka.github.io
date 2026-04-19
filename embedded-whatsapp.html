@@ -600,15 +600,10 @@
         if (data.type === 'WA_EMBEDDED_SIGNUP') {
           console.log('[WA Coexistence] event:', data);
           if (data.event === 'FINISH' || data.event === 'FINISH_WHATSAPP_BUSINESS_APP_ONBOARDING') {
-            showResult('success', '✅ Number connected successfully', {
-              phone_number_id: data.data.phone_number_id,
-              waba_id: data.data.waba_id,
-              business_id: data.data.business_id,
-              event: data.event,
-              note: 'Save these IDs to configure your CRM or n8n'
-            });
+            console.log('[WA Coexistence] onboarding complete:', data.data);
           } else if (data.event === 'CANCEL') {
-            showResult('error', 'Process cancelled at: ' + data.data.current_step, data);
+            document.getElementById('wa-status').innerText = '';
+            showError('Process cancelled at: ' + data.data.current_step);
           }
         }
       } catch {
@@ -621,18 +616,48 @@
       const btn = document.getElementById('wa-signup-btn');
       btn.disabled = true;
       document.getElementById('wa-status').innerText = 'Opening Meta window...';
+
       FB.login(
         function (response) {
           btn.disabled = false;
           document.getElementById('wa-status').innerText = '';
-          console.log('[WA Coexistence] login response:', response);
+
           if (response.authResponse) {
-            showResult('success', '✅ Authorization received', {
-              code: response.authResponse.code,
-              note: 'The code expires in 30 seconds. Exchange it for a token in your backend.'
+            const code = response.authResponse.code;
+
+            // Show loading state
+            document.getElementById('wa-result').style.display = 'block';
+            document.getElementById('wa-result').className = '';
+            document.getElementById('wa-result').innerHTML =
+              '<div style="padding:16px;background:#FEF3C7;color:#92400E;border-radius:8px;">⏳ Connecting to WhatsApp...</div>';
+
+            // Exchange code for token via n8n
+            fetch('https://leacouretot.app.n8n.cloud/webhook/whatsapp-exchange', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ code: code })
+            })
+            .then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                document.getElementById('wa-result').innerHTML = `
+                  <div style="padding:20px;background:#D1FAE5;color:#065F46;border-radius:8px;">
+                    <h3 style="margin:0 0 10px 0;">✅ WhatsApp Business Connected</h3>
+                    <p style="margin:0 0 4px;font-size:0.95em;">WABA ID: <strong>${data.waba_id}</strong></p>
+                    <p style="margin:0 0 4px;font-size:0.95em;">Phone Number ID: <strong>${data.phone_number_id}</strong></p>
+                    <p style="margin:0 0 4px;font-size:0.95em;">Number: <strong>${data.phone_number}</strong></p>
+                    <p style="margin:10px 0 0;font-size:0.85em;opacity:0.8;">Coexistence active. You can now use the mobile app + API on the same number.</p>
+                  </div>`;
+              } else {
+                throw new Error(data.error || 'Unknown error');
+              }
+            })
+            .catch(err => {
+              showError('Connection error: ' + err.message);
             });
+
           } else {
-            showResult('error', 'No authorization', response);
+            showError('Authorization not granted. Please try again.');
           }
         },
         {
@@ -649,11 +674,10 @@
       );
     }
 
-    function showResult(type, title, data) {
+    function showError(msg) {
       const el = document.getElementById('wa-result');
-      el.className = type;
       el.style.display = 'block';
-      el.innerHTML = '<strong>' + title + '</strong><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+      el.innerHTML = '<div style="padding:16px;background:#FEE2E2;color:#991B1B;border-radius:8px;">❌ ' + msg + '</div>';
     }
   </script>
 
