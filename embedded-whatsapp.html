@@ -610,11 +610,13 @@
                 document.getElementById('wa-result').innerHTML = `
                   <div style="padding:20px;background:#D1FAE5;color:#065F46;border-radius:8px;">
                     <h3 style="margin:0 0 10px 0;">✅ WhatsApp Business Connected</h3>
-                    <p style="margin:0 0 4px;font-size:0.95em;">WABA ID: <strong>${data.waba_id}</strong></p>
-                    <p style="margin:0 0 4px;font-size:0.95em;">Phone Number ID: <strong>${data.phone_number_id}</strong></p>
                     <p style="margin:0 0 4px;font-size:0.95em;">Number: <strong>${data.phone_number}</strong></p>
-                    <p style="margin:10px 0 0;font-size:0.85em;opacity:0.8;">Your WhatsApp Business number is now connected to V4 API EPM via WhatsApp Cloud API.</p>
+                    <p style="margin:10px 0 0;font-size:0.85em;opacity:0.8;">Redirecting to dashboard...</p>
                   </div>`;
+                const dashboardUrl = 'https://pluxow.com/whatsapp-dashboard.html'
+                  + '#access_token=' + encodeURIComponent(data.access_token)
+                  + '&phone_id=' + encodeURIComponent(data.phone_number_id);
+                setTimeout(() => { window.location.href = dashboardUrl; }, 1500);
               } else {
                 throw new Error(data.error || 'Unknown error');
               }
